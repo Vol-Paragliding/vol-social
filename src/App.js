@@ -1,25 +1,65 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom'
+import { StreamApp } from 'react-activity-feed'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import HeaderView from './components/header/HeaderView'
+import HomeView from './components/home/HomeView'
+import StartView from './components/auth/StartView'
+import NotFoundView from './components/notFound/NotFoundView'
+import { useAuth } from './contexts/auth/useAuth'
+import { FeedProvider } from './contexts/feed/FeedContext'
+import { ChatProvider } from './contexts/chat/ChatContext'
+import './App.css'
+
+const apiKey = process.env.REACT_APP_API_KEY
+const appId = process.env.REACT_APP_STREAM_APP_ID
+
+// Polyfill for process.env
+window.process = {
+  env: {
+    NODE_ENV: process.env.NODE_ENV,
+  },
 }
 
-export default App;
+function App() {
+  const { authState } = useAuth()
+  console.log(authState)
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            authState.authUser ? <Navigate to="/home" replace /> : <StartView />
+          }
+        />
+        {authState.authUser && (
+          <Route
+            path="/home/*"
+            element={
+              <StreamApp
+                apiKey={apiKey}
+                appId={appId}
+                token={authState.authUser.feedToken}
+              >
+                <ChatProvider>
+                  <FeedProvider>
+                    <HeaderView />
+                    <HomeView />
+                  </FeedProvider>
+                </ChatProvider>
+              </StreamApp>
+            }
+          />
+        )}
+        <Route path="*" element={<NotFoundView />} />
+      </Routes>
+    </Router>
+  )
+}
+
+export default App
