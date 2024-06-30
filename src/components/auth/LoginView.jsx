@@ -1,40 +1,40 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { useAuth } from "../../contexts/auth/useAuth";
-import { login } from "../../contexts/auth/AuthSlice";
-import appIcon from "../../assets/appIcon.png";
-import styles from "./auth.module.css";
+import { useAuth } from '../../contexts/auth/useAuth'
+import { login } from '../../contexts/auth/AuthSlice'
+import appIcon from '../../assets/appIcon.png'
+import styles from './auth.module.css'
 
 const LogInView = ({ onClose }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const { dispatch } = useAuth();
-  const navigate = useNavigate();
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const { dispatch } = useAuth()
+  const navigate = useNavigate()
 
-  const usernameRef = useRef(null);
+  const usernameRef = useRef(null)
 
   useEffect(() => {
     if (usernameRef.current) {
-      usernameRef.current.focus();
+      usernameRef.current.focus()
     }
-  }, []);
+  }, [])
 
   const handleLogin = async (event) => {
-    event.preventDefault();
-    setError("");
+    event.preventDefault()
+    setError('')
 
     try {
-      const user = await login({ username, password });
+      const user = await login({ username, password })
 
-      dispatch({ type: "SET_USER", payload: user });
-      navigate("/home");
+      dispatch({ type: 'SET_USER', payload: user })
+      navigate('/home')
     } catch (error) {
-      console.error("Login Error:", error);
-      setError((error).message || "An error occurred during login.");
+      console.error('Login Error:', error)
+      setError(error.message || 'An error occurred during login.')
     }
-  };
+  }
 
   return (
     <div className={styles.authFormContainer}>
@@ -78,7 +78,7 @@ const LogInView = ({ onClose }) => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LogInView;
+export default LogInView
