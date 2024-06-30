@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [authState, dispatch] = useReducer(authReducer, initialState, () => {
     const storedUser = sessionStorage.getItem('authUser')
     const user = storedUser ? JSON.parse(storedUser) : null
-    console.log('user',user, storedUser)
+
     return {
       ...initialState,
       authUser: user,
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     } else {
       sessionStorage.removeItem('authUser')
     }
-  }, [authState, authState.authUser])
+  }, [authState.authUser])
 
   return (
     <AuthContext.Provider value={{ authState, dispatch }}>

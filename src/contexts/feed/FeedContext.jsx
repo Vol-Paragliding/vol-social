@@ -11,7 +11,7 @@ import { useAuth } from '../auth/useAuth'
 
 const apiKey = process.env.REACT_APP_API_KEY
 const appId = process.env.REACT_APP_STREAM_APP_ID
-console.log(apiKey, appId)
+
 export const FeedContext = createContext(null)
 
 export const FeedProvider = ({ children }) => {

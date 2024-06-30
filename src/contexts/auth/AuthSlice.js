@@ -38,26 +38,9 @@ export async function login({ username, password }) {
   if (!response.ok) {
     throw new Error(data.message || 'Failed to log in')
   }
-console.log('data',data)
+
   return data
 }
-
-// export async function signup({ username, password }) {
-//   const response = await fetch(`${API_ENDPOINT}/auth/delete`, {
-//     method: 'DELETE',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ username }),
-//   });
-
-//   if (!response.ok) {
-//     const data = await response.json();
-//     throw new Error(data.message || 'Failed to delete user');
-//   }
-
-//   return true;
-// }
 
 export async function signup({ username, password }) {
   const response = await fetch(`${API_ENDPOINT}/auth/signup`, {

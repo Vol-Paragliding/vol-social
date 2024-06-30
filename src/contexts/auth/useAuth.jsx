@@ -8,6 +8,6 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider')
   }
   const { authState, dispatch } = context
-  console.log('authState', authState, 'dispatch', dispatch)
+
   return { authState, dispatch }
 }
