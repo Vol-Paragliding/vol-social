@@ -6,17 +6,17 @@ import {
 } from 'react-router-dom'
 import { StreamApp } from 'react-activity-feed'
 
-import HeaderView from './components/header/HeaderView'
-import HomeView from './components/home/HomeView'
-import StartView from './components/auth/StartView'
-import NotFoundView from './components/notFound/NotFoundView'
 import { useAuth } from './contexts/auth/useAuth'
-import { FeedProvider } from './contexts/feed/FeedContext'
-import { ChatProvider } from './contexts/chat/ChatContext'
-import './App.css'
+import StartView from './components/auth/StartView'
+import HomeContent from './components/homeContent/HomeContent'
+import Layout from './components/layout/Layout'
+import NotificationContent from './components/notifications/NotificationContent'
+import ProfileContent from './components/profile/ProfileContent'
+import ThreadContent from './components/thread/ThreadContent'
+import ScrollToTop from './components/ScrollToTop'
 
-const apiKey = process.env.REACT_APP_API_KEY
-const appId = process.env.REACT_APP_STREAM_APP_ID
+const APP_ID = process.env.REACT_APP_STREAM_APP_ID
+const API_KEY = process.env.REACT_APP_API_KEY
 
 // Polyfill for process.env
 window.process = {
@@ -25,41 +25,87 @@ window.process = {
   },
 }
 
-function App() {
+export default function App() {
   const { authState } = useAuth()
-  console.log(authState)
+  // console.log('App authState', authState)
+
+  if (!authState.isAuthenticated) {
+    return (
+      <Router>
+        <StartView />
+      </Router>
+    )
+  }
+
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            authState.authUser ? <Navigate to="/home" replace /> : <StartView />
-          }
-        />
-        {authState.authUser && (
+    <StreamApp
+      token={authState.authUser.feedToken}
+      appId={APP_ID}
+      apiKey={API_KEY}
+    >
+      <Router>
+        <ScrollToTop />
+        <Routes>
           <Route
-            path="/home/*"
+            path="/"
             element={
-              <StreamApp
-                apiKey={apiKey}
-                appId={appId}
-                token={authState.authUser.feedToken}
-              >
-                <ChatProvider>
-                  <FeedProvider>
-                    <HeaderView />
-                    <HomeView />
-                  </FeedProvider>
-                </ChatProvider>
-              </StreamApp>
+              !authState.isAuthenticated ? (
+                <StartView />
+              ) : (
+                <Navigate to="/home" replace />
+              )
             }
           />
-        )}
-        <Route path="*" element={<NotFoundView />} />
-      </Routes>
-    </Router>
+          <Route
+            path="/home"
+            element={
+              authState.isAuthenticated ? (
+                <Layout>
+                  <HomeContent />
+                </Layout>
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+          <Route
+            path="/profile/:userId"
+            element={
+              authState.isAuthenticated ? (
+                <Layout>
+                  <ProfileContent />
+                </Layout>
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+          <Route
+            path="/thread/:userId/status/:id"
+            element={
+              authState.isAuthenticated ? (
+                <Layout>
+                  <ThreadContent />
+                </Layout>
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              authState.isAuthenticated ? (
+                <Layout>
+                  <NotificationContent />
+                </Layout>
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+        </Routes>
+      </Router>
+    </StreamApp>
   )
 }
-
-export default App
