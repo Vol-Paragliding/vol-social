@@ -47,12 +47,12 @@ const Container = styled.div`
 
 const tabs = [
   {
-    id: 'tweets',
-    label: 'Tweets',
+    id: 'posts',
+    label: 'Posts',
   },
   {
-    id: 'tweet-replies',
-    label: 'Tweets & replies',
+    id: 'post-replies',
+    label: 'Posts & replies',
   },
   {
     id: 'media',

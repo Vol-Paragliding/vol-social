@@ -1,4 +1,4 @@
-export default function Retweet({ color = 'block', size = 18 }) {
+export default function Repost({ color = 'block', size = 18 }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

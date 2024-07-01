@@ -15,7 +15,7 @@ export default function useComment() {
     })
 
     if (actor.id !== user.id) {
-      // then it is not the logged in user commenting on their own tweet
+      // then it is not the logged in user commenting on their own post
 
       createNotification(
         actor.id,
@@ -23,7 +23,7 @@ export default function useComment() {
         {
           text,
         },
-        `SO:tweet:${activity.object.id}`
+        `SO:post:${activity.object.id}`
       )
     }
   }

@@ -7,7 +7,7 @@ import ProfileHeader from './ProfileHeader'
 import LoadingIndicator from '../loading/LoadingIndicator'
 import ProfileBio from './ProfileBio'
 import TabList from './TabList'
-import ProfileTweets from './ProfileTweets'
+import ProfilePosts from './ProfilePosts'
 
 const Container = styled.div`
   --profile-image-size: 120px;
@@ -46,7 +46,7 @@ export default function ProfileContent() {
           <div className="tab-list">
             <TabList />
           </div>
-          <ProfileTweets />
+          <ProfilePosts />
         </main>
       </Container>
     </ProfileContext.Provider>

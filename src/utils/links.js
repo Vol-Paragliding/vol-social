@@ -1,3 +1,3 @@
-export function generateTweetLink(actorId, tweetActivityId) {
-  return `/${actorId}/status/${tweetActivityId}`
+export function generatePostLink(actorId, postActivityId) {
+  return `/${actorId}/status/${postActivityId}`
 }

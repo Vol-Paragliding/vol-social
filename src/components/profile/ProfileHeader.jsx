@@ -23,7 +23,7 @@ const Header = styled.header`
         font-size: 20px;
       }
 
-      &__tweets-count {
+      &__posts-count {
         font-size: 14px;
         margin-top: 2px;
         color: #888;
@@ -76,7 +76,7 @@ export default function ProfileHeader() {
         </button>
         <div className="info">
           <h1>{user.data.name}</h1>
-          <span className="info__tweets-count">{activitiesCount} Tweets</span>
+          <span className="info__posts-count">{activitiesCount} Posts</span>
         </div>
       </div>
       <div className="cover">

@@ -7,14 +7,14 @@ export default function useLike() {
   const { createNotification } = useNotification()
   const { user } = useStreamContext()
 
-  const toggleLike = async (activity, hasLikedTweet) => {
+  const toggleLike = async (activity, hasLikedPost) => {
     const actor = activity.actor
 
     await feed.onToggleReaction('like', activity)
 
-    if (!hasLikedTweet && actor.id !== user.id) {
-      // then it is not the logged in user liking their own tweet
-      createNotification(actor.id, 'like', {}, `SO:tweet:${activity.object.id}`)
+    if (!hasLikedPost && actor.id !== user.id) {
+      // then it is not the logged in user liking their own post
+      createNotification(actor.id, 'like', {}, `SO:post:${activity.object.id}`)
     }
   }
 
