@@ -6,7 +6,6 @@ import MainHeader from '../header/MainHeader'
 import Timeline from './Timeline'
 import LoadingIndicator from '../loading/LoadingIndicator'
 import { FeedProvider } from '../../contexts/feed/FeedContext'
-import HeaderView from '../header/HeaderView'
 
 const Container = styled.div`
   .header {
@@ -50,7 +49,6 @@ const HomeContent = () => {
       <div className="header">
         <MainHeader />
         <FeedProvider>
-          <HeaderView />
         </FeedProvider>
       </div>
       <Feed feedGroup="user">

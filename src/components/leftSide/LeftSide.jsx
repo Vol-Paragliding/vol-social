@@ -4,6 +4,8 @@ import { useStreamContext } from 'react-activity-feed'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { useAuth } from '../../contexts/auth/useAuth'
+import { logout } from '../../contexts/auth/AuthSlice'
 import LoadingIndicator from '../loading/LoadingIndicator'
 import UserImage from '../profile/UserImage'
 import Bell from '../Icons/Bell'
@@ -126,6 +128,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: space-between;
     border-radius: 30px;
+    position: relative;
 
     &:hover {
       background-color: #333;
@@ -168,11 +171,42 @@ const Container = styled.div`
   }
 `
 
+const Menu = styled.div`
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  background: black;
+  border: 1px solid #555;
+  border-radius: 30px;
+  overflow: hidden;
+  width: 240px;
+  padding: 10px;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 1.5);
+
+  &:hover {
+    background: #333;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    color: white;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+  }
+`
+
 export default function LeftSide({ onClickPost }) {
   const location = useLocation()
   const { client, userData } = useStreamContext()
-
+  const { dispatch } = useAuth()
   const [newNotifications, setNewNotifications] = useState(0)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   useEffect(() => {
     if (!userData || location.pathname === `/notifications`) return
@@ -244,6 +278,10 @@ export default function LeftSide({ onClickPost }) {
     },
   ]
 
+  const handleLogout = () => {
+    logout(dispatch)
+  }
+
   return (
     <Container>
       <Link to="/" className="header">
@@ -253,8 +291,7 @@ export default function LeftSide({ onClickPost }) {
         {menus.map((m) => {
           const isActiveLink =
             location.pathname === `/${m.id}` ||
-            (m.id === 'profile' &&
-              location.pathname === `/${userData.id}`)
+            (m.id === 'profile' && location.pathname === `/${userData.id}`)
 
           return (
             <Link
@@ -288,7 +325,10 @@ export default function LeftSide({ onClickPost }) {
       <button onClick={onClickPost} className="post-btn">
         Post
       </button>
-      <button className="profile-section">
+      <div
+        className="profile-section"
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+      >
         <div className="details">
           <div className="details__img">
             <UserImage src={userData?.image} alt={userData.name} />
@@ -301,7 +341,12 @@ export default function LeftSide({ onClickPost }) {
         <div>
           <More color="white" />
         </div>
-      </button>
+        {isDropdownOpen && (
+          <Menu>
+            <button onClick={handleLogout}>Logout</button>
+          </Menu>
+        )}
+      </div>
     </Container>
   )
 }

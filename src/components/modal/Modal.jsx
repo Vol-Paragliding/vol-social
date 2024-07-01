@@ -20,6 +20,7 @@ const Container = styled.div`
     background-color: black;
     border-radius: 20px;
     overflow: auto;
+    height: 700px;
 
     .close-btn {
       margin-top: 5px;

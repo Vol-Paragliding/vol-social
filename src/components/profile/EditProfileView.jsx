@@ -91,7 +91,7 @@ const ProfileImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f3f3f3;
+  background-color: #444;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
@@ -100,7 +100,8 @@ const ProfileImageContainer = styled.div`
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   }
 
-  img {
+  img,
+  svg {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -242,10 +243,12 @@ export const EditProfileView = ({ onSave }) => {
     }
   }
 
-
   return (
     <ProfileContainer>
-      <form style={{ width: '100%' }} onSubmit={(e) => e.preventDefault()}>
+      <form
+        style={{ width: '100%' }}
+        onSubmit={(e) => e.preventDefault()}
+      >
         <ModalHeader>
           <ProfileHeader>Edit profile</ProfileHeader>
         </ModalHeader>
