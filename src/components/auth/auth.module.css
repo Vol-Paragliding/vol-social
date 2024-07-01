@@ -76,6 +76,8 @@
 }
 
 .createLoginButton {
+  display: flex;
+  justify-content: center;
   color: white;
   background-color: #007bff;
   padding: 1rem 2rem;
@@ -84,13 +86,14 @@
   border: none;
   cursor: pointer;
   width: 100%;
-  transition: background-color 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform, box-shadow;
 }
 
-/* .createLoginButton:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-} */
+.createLoginButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
 
 .firstCreateLoginButton {
   background-color: #4a5055;

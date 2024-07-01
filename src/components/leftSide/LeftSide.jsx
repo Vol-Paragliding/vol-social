@@ -240,14 +240,13 @@ export default function LeftSide({ onClickPost }) {
       id: 'profile',
       label: 'Profile',
       Icon: User,
-      link: `/profile/${userData.id}`,
+      link: `/${userData.id}`,
     },
   ]
 
   return (
     <Container>
       <Link to="/" className="header">
-        {/* <Twitter color="white" size={25} /> */}
         <img className={'logo'} src={appIcon} alt="Vol Company logo" />
       </Link>
       <div className="buttons">
@@ -255,7 +254,7 @@ export default function LeftSide({ onClickPost }) {
           const isActiveLink =
             location.pathname === `/${m.id}` ||
             (m.id === 'profile' &&
-              location.pathname === `/profile/${userData.id}`)
+              location.pathname === `/${userData.id}`)
 
           return (
             <Link

@@ -35,7 +35,7 @@ export default function CreatePostDialog({ onClickOutside }) {
           shouldFocus={true}
           minHeight={240}
           className="post-form"
-          placeholder="What's happening"
+          placeholder="Share a flight"
         />
       </Modal>
     </Container>

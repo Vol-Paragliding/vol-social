@@ -56,6 +56,10 @@ export async function signup({ username, password }) {
   if (!response.ok) {
     if (data.message && data.message.code === 'SQLITE_CONSTRAINT') {
       throw new Error('Username already exists. Please choose a different one.')
+    } else if (response.status === 409) {
+      throw new Error(
+        'User with given ID already exists. Please choose a different one.'
+      )
     } else {
       throw new Error(data.message || 'Failed to sign up')
     }

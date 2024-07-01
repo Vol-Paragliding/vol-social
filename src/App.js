@@ -7,6 +7,8 @@ import {
 import { StreamApp } from 'react-activity-feed'
 
 import { useAuth } from './contexts/auth/useAuth'
+import { ChatProvider } from './contexts/chat/ChatContext'
+import { FeedProvider } from './contexts/feed/FeedContext'
 import StartView from './components/auth/StartView'
 import HomeContent from './components/homeContent/HomeContent'
 import Layout from './components/layout/Layout'
@@ -43,69 +45,73 @@ export default function App() {
       appId={APP_ID}
       apiKey={API_KEY}
     >
-      <Router>
-        <ScrollToTop />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              !authState.isAuthenticated ? (
-                <StartView />
-              ) : (
-                <Navigate to="/home" replace />
-              )
-            }
-          />
-          <Route
-            path="/home"
-            element={
-              authState.isAuthenticated ? (
-                <Layout>
-                  <HomeContent />
-                </Layout>
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-          <Route
-            path="/profile/:userId"
-            element={
-              authState.isAuthenticated ? (
-                <Layout>
-                  <ProfileContent />
-                </Layout>
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-          <Route
-            path="/thread/:userId/status/:id"
-            element={
-              authState.isAuthenticated ? (
-                <Layout>
-                  <ThreadContent />
-                </Layout>
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-          <Route
-            path="/notifications"
-            element={
-              authState.isAuthenticated ? (
-                <Layout>
-                  <NotificationContent />
-                </Layout>
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-        </Routes>
-      </Router>
+      <ChatProvider>
+        <FeedProvider>
+          <Router>
+            <ScrollToTop />
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  !authState.isAuthenticated ? (
+                    <StartView />
+                  ) : (
+                    <Navigate to="/home" replace />
+                  )
+                }
+              />
+              <Route
+                path="/home"
+                element={
+                  authState.isAuthenticated ? (
+                    <Layout>
+                      <HomeContent />
+                    </Layout>
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
+              />
+              <Route
+                path="/:userId"
+                element={
+                  authState.isAuthenticated ? (
+                    <Layout>
+                      <ProfileContent />
+                    </Layout>
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
+              />
+              <Route
+                path="/thread/:userId/status/:id"
+                element={
+                  authState.isAuthenticated ? (
+                    <Layout>
+                      <ThreadContent />
+                    </Layout>
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
+              />
+              <Route
+                path="/notifications"
+                element={
+                  authState.isAuthenticated ? (
+                    <Layout>
+                      <NotificationContent />
+                    </Layout>
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
+              />
+            </Routes>
+          </Router>
+        </FeedProvider>
+      </ChatProvider>
     </StreamApp>
   )
 }

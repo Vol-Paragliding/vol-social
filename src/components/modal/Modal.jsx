@@ -17,13 +17,12 @@ const Container = styled.div`
   .modal {
     z-index: 2;
     position: relative;
-
     background-color: black;
     border-radius: 20px;
+    overflow: auto;
 
     .close-btn {
-      position: relative;
-      left: -10px;
+      margin-top: 5px;
     }
   }
 `

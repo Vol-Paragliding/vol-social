@@ -16,7 +16,7 @@ export default function CreatePostTop() {
 
   return (
     <Container>
-      <PostForm placeholder="What's happening?" onSubmit={onSubmit} />
+      <PostForm placeholder="Share a flight" onSubmit={onSubmit} />
     </Container>
   )
 }

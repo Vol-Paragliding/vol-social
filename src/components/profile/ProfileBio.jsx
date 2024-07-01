@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { format } from 'date-fns'
 import { useStreamContext } from 'react-activity-feed'
@@ -10,6 +10,8 @@ import { formatStringWithLink } from '../../utils/string'
 import { ProfileContext } from './ProfileContent'
 import UserImage from './UserImage'
 import FollowBtn from '../follow/FollowBtn'
+import { EditProfileView } from './EditProfileView'
+import Modal from '../modal/Modal'
 
 const Container = styled.div`
   padding: 20px;
@@ -114,6 +116,23 @@ const Container = styled.div`
   }
 `
 
+const ActionButton = styled.button`
+  border: 1px solid #666;
+  border-radius: 30px;
+  height: 34px;
+  color: white;
+  font-size: 14px;
+  padding: 0 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: #333;
+  }
+`
+
 const actions = [
   {
     Icon: More,
@@ -127,13 +146,22 @@ const actions = [
 
 export default function ProfileBio() {
   const { client } = useStreamContext()
-  const { user } = useContext(ProfileContext)
+  const { user, setUser } = useContext(ProfileContext)
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
 
   const joinedDate = format(new Date(user.created_at), 'MMMM RRRR')
-
   const bio = formatStringWithLink(user.data.bio || '')
 
   const isLoggedInUserProfile = user.id === client.userId
+
+  const handleEditProfile = () => {
+    setIsEditProfileOpen(true)
+  }
+
+  const handleProfileUpdate = (updatedUser) => {
+    setUser(updatedUser)
+    setIsEditProfileOpen(false)
+  }
 
   return (
     <Container>
@@ -141,7 +169,7 @@ export default function ProfileBio() {
         <div className="image">
           <UserImage src={user.data?.image} alt={user.data.name} />
         </div>
-        {!isLoggedInUserProfile && (
+        {!isLoggedInUserProfile ? (
           <div className="actions">
             {actions.map((action) => (
               <button className="action-btn" key={action.id}>
@@ -149,6 +177,12 @@ export default function ProfileBio() {
               </button>
             ))}
             <FollowBtn userId={user.id} />
+          </div>
+        ) : (
+          <div className="actions">
+            <ActionButton onClick={handleEditProfile}>
+              Edit Profile
+            </ActionButton>
           </div>
         )}
       </div>
@@ -172,6 +206,11 @@ export default function ProfileBio() {
           Not followed by anyone you are following
         </div>
       </div>
+      {isEditProfileOpen && (
+        <Modal onClickOutside={() => setIsEditProfileOpen(false)}>
+          <EditProfileView onSave={handleProfileUpdate} />
+        </Modal>
+      )}
     </Container>
   )
 }

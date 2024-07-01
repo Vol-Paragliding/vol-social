@@ -1,13 +1,14 @@
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useStreamContext } from 'react-activity-feed'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import FollowBtn from '../follow/FollowBtn'
-import More from '../Icons/More'
 import Search from '../Icons/Search'
-import users from '../../users'
+import LoadingIndicator from '../loading/LoadingIndicator'
+import UserImage from '../profile/UserImage'
+import { useChat } from '../../contexts/chat/useChat'
 
 const Container = styled.div`
   padding: 0 15px 15px;
@@ -47,28 +48,32 @@ const Container = styled.div`
         color: white;
 
         &:focus {
-          outline: none;
-          border: 1px solid var(--theme-color);
+          outline: 2px solid var(--theme-color);
           background-color: black;
         }
       }
 
-      .submit-btn {
+      .delete-btn {
         &.hide {
           display: none;
         }
 
         position: absolute;
         right: 15px;
-        top: 0;
-        bottom: 0;
-        margin: auto 0;
+        top: 50%;
+        transform: translateY(-50%);
         background-color: var(--theme-color);
         color: black;
         border-radius: 50%;
         height: 25px;
         width: 25px;
         font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        line-height: 1;
+        padding: 0;
       }
     }
   }
@@ -82,62 +87,6 @@ const Container = styled.div`
     h2 {
       font-size: 20px;
       color: white;
-    }
-  }
-
-  .trends {
-    margin-top: 10px;
-    &-list {
-      margin-top: 30px;
-    }
-
-    .trend {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 30px;
-
-      &__details {
-        &__category {
-          font-size: 13px;
-          display: flex;
-          color: #aaa;
-
-          &--label {
-            margin-left: 20px;
-            position: relative;
-
-            &::after {
-              content: '';
-              width: 2px;
-              height: 2px;
-              background-color: #aaa;
-              border-radius: 50%;
-              left: -10px;
-              top: 0;
-              bottom: 0;
-              margin: auto 0;
-              position: absolute;
-            }
-          }
-        }
-
-        &__title {
-          font-weight: bold;
-          color: white;
-          font-size: 16px;
-          margin: 2px 0;
-          display: block;
-        }
-
-        &__tweets-count {
-          color: #aaa;
-          font-size: 12px;
-        }
-      }
-
-      .more-btn {
-        opacity: 0.5;
-      }
     }
   }
 
@@ -186,47 +135,91 @@ const Container = styled.div`
     .show-more-text {
       font-size: 14px;
       color: var(--theme-color);
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 `
 
-const trends = [
-  {
-    title: 'iPhone 12',
-    tweetsCount: '11.6k',
-    category: 'Technology',
-  },
-  {
-    title: 'LinkedIn',
-    tweetsCount: '51.1K',
-    category: 'Business & finance',
-  },
-  {
-    title: 'John Cena',
-    tweetsCount: '1,200',
-    category: 'Sports',
-  },
-  {
-    title: '#Microsoft',
-    tweetsCount: '3,022',
-    category: 'Business & finance',
-  },
-  {
-    title: '#DataSciencve',
-    tweetsCount: '18.6k',
-    category: 'Technology',
-  },
-]
-
 export default function RightSide() {
   const [searchText, setSearchText] = useState('')
-
+  const [debouncedTerm, setDebouncedTerm] = useState('')
+  const [users, setUsers] = useState([])
+  const [offset, setOffset] = useState(0)
+  const [renderLoadMore, setRenderLoadMore] = useState(true)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const { client } = useStreamContext()
+  const { chatClient } = useChat()
 
-  const whoToFollow = users.filter((u) => {
-    // filter out currently logged in user
-    return u.id !== client.userId
-  })
+  const USERS_PER_PAGE = 10
+
+  const queryUsers = useCallback(
+    async (filter, sort, options) => {
+      if (!chatClient) return null
+
+      try {
+        return await chatClient.queryUsers(filter, sort, options)
+      } catch (error) {
+        console.error('Error fetching users:', error)
+        setError('Error fetching users')
+        return null
+      }
+    },
+    [chatClient]
+  )
+
+  const fetchUsers = useCallback(
+    async (newOffset = 0) => {
+      if (!chatClient || !chatClient.userID) {
+        return
+      }
+
+      const filter = debouncedTerm
+        ? { username: { $autocomplete: debouncedTerm } }
+        : { id: { $ne: chatClient.userID } }
+      const sort = { last_active: -1 }
+      const options = { limit: USERS_PER_PAGE, offset: newOffset }
+
+      const response = await queryUsers(filter, sort, options)
+
+      if (response) {
+        setUsers((prevUsers) =>
+          newOffset === 0 ? response.users : [...prevUsers, ...response.users]
+        )
+        setOffset(newOffset + USERS_PER_PAGE)
+        setRenderLoadMore(response.users.length === USERS_PER_PAGE)
+      }
+      setLoading(false)
+    },
+    [debouncedTerm, queryUsers, chatClient]
+  )
+
+  useEffect(() => {
+    fetchUsers(0)
+  }, [fetchUsers])
+
+  useEffect(() => {
+    const timerID = setTimeout(() => {
+      setDebouncedTerm(searchText)
+      if (searchText === '') {
+        setOffset(0)
+        setRenderLoadMore(true)
+      }
+    }, 500)
+
+    return () => {
+      clearTimeout(timerID)
+    }
+  }, [searchText])
+
+  const handleShowMore = () => {
+    fetchUsers(offset)
+  }
+
+  const whoToFollow = users.filter((u) => u.id !== client.userID)
 
   return (
     <Container>
@@ -238,10 +231,10 @@ export default function RightSide() {
           <input
             onChange={(e) => setSearchText(e.target.value)}
             value={searchText}
-            placeholder="Search Streamer"
+            placeholder="Search for pilots"
           />
           <button
-            className={classNames(!Boolean(searchText) && 'hide', 'submit-btn')}
+            className={classNames(!Boolean(searchText) && 'hide', 'delete-btn')}
             type="button"
             onClick={() => setSearchText('')}
           >
@@ -250,55 +243,37 @@ export default function RightSide() {
         </form>
       </div>
 
-      <div className="trends">
-        <h2>Trends for you</h2>
-        <div className="trends-list">
-          {trends.map((trend, i) => {
-            return (
-              <div className="trend" key={trend.title + '-' + i}>
-                <div className="trend__details">
-                  <div className="trend__details__category">
-                    {trend.category}
-                    <span className="trend__details__category--label">
-                      Trending
-                    </span>
-                  </div>
-                  <span className="trend__details__title">{trend.title}</span>
-                  <span className="trend__details__tweets-count">
-                    {trend.tweetsCount} Tweets
-                  </span>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <div className="follows">
+          <h2>Who to follow</h2>
+          <div className="follows-list">
+            {whoToFollow.map((user) => {
+              return (
+                <div className="user" key={user.id}>
+                  <Link to={`/${user.id}`} className="user__details">
+                    <div className="user__img">
+                      <UserImage src={user.image} alt={user.name} />
+                    </div>
+                    <div className="user__info">
+                      <span className="user__name">{user.name}</span>
+                      <span className="user__id">@{user.id}</span>
+                    </div>
+                  </Link>
+                  <FollowBtn userId={user.id} />
                 </div>
-                <button className="more-btn">
-                  <More color="white" />
-                </button>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
+          {renderLoadMore && (
+            <button className="show-more-text" onClick={handleShowMore}>
+              Show more
+            </button>
+          )}
         </div>
-      </div>
-
-      <div className="follows">
-        <h2>Who to follow</h2>
-        <div className="follows-list">
-          {whoToFollow.map((user) => {
-            return (
-              <div className="user" key={user.id}>
-                <Link to={`/${user.id}`} className="user__details">
-                  <div className="user__img">
-                    <img src={user.image} alt="" />
-                  </div>
-                  <div className="user__info">
-                    <span className="user__name">{user.name}</span>
-                    <span className="user__id">@{user.id}</span>
-                  </div>
-                </Link>
-                <FollowBtn userId={user.id} />
-              </div>
-            )
-          })}
-        </div>
-        <span className="show-more-text">Show more</span>
-      </div>
+      )}
+      {error && <div className="error">{error}</div>}
     </Container>
   )
 }

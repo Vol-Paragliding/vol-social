@@ -36,9 +36,9 @@ export default function ProfileContent() {
   }, [userId])
 
   if (!client || !user) return <LoadingIndicator />
-
+console.log('user', user)
   return (
-    <ProfileContext.Provider value={{ user }}>
+    <ProfileContext.Provider value={{ user, setUser }}>
       <Container>
         <ProfileHeader />
         <main>

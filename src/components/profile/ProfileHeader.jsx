@@ -57,12 +57,11 @@ export default function ProfileHeader() {
 
     async function getActivitiesCount() {
       const activities = await feed.get()
-
       setActivitiesCount(activities.results.length)
     }
 
     getActivitiesCount()
-  }, [])
+  }, [client, user.id])
 
   const navigateBack = () => {
     navigate(-1)
@@ -80,7 +79,11 @@ export default function ProfileHeader() {
         </div>
       </div>
       <div className="cover">
-        <img src="https://picsum.photos/500/300" />
+        {user.data.coverPhoto ? (
+          <img src={user.data.coverPhoto} alt="Cover" />
+        ) : (
+          <div style={{ backgroundColor: '#555', height: '200px' }} />
+        )}
       </div>
     </Header>
   )

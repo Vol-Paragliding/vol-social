@@ -26,14 +26,14 @@ const StartView = () => {
               Explore the paragliding world
             </h1>
             <div className={styles.authFormHeader}>
-              <h2>join or sign back in</h2>
+              <h2>Share adventures</h2>
             </div>
             <div className={styles.startActionContainer}>
               <button
                 className={`${styles.createLoginButton} ${styles.firstCreateLoginButton}`}
                 onClick={handleSignUpPress}
               >
-                Create Account
+                Join
               </button>
               <div className={styles.orSeparator}>or</div>
               <button
