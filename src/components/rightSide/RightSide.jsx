@@ -100,6 +100,7 @@ const Container = styled.div`
       margin-bottom: 30px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
 
       &__details {
         display: flex;
@@ -161,7 +162,8 @@ export default function RightSide() {
       if (!chatClient) return null
 
       try {
-        return await chatClient.queryUsers(filter, sort, options)
+        const response = await chatClient.queryUsers(filter, sort, options)
+        return response
       } catch (error) {
         console.error('Error fetching users:', error)
         setError('Error fetching users')
@@ -178,21 +180,32 @@ export default function RightSide() {
       }
 
       const filter = debouncedTerm
-        ? { username: { $autocomplete: debouncedTerm } }
+        ? {
+            $or: [
+              { name: { $autocomplete: debouncedTerm } },
+              { id: { $autocomplete: debouncedTerm } },
+            ],
+          }
         : { id: { $ne: chatClient.userID } }
       const sort = { last_active: -1 }
       const options = { limit: USERS_PER_PAGE, offset: newOffset }
 
-      const response = await queryUsers(filter, sort, options)
+      setLoading(true)
+      try {
+        const response = await queryUsers(filter, sort, options)
+        setLoading(false)
 
-      if (response) {
-        setUsers((prevUsers) =>
-          newOffset === 0 ? response.users : [...prevUsers, ...response.users]
-        )
-        setOffset(newOffset + USERS_PER_PAGE)
-        setRenderLoadMore(response.users.length === USERS_PER_PAGE)
+        if (response) {
+          setUsers((prevUsers) =>
+            newOffset === 0 ? response.users : [...prevUsers, ...response.users]
+          )
+          setOffset(newOffset + USERS_PER_PAGE)
+          setRenderLoadMore(response.users.length === USERS_PER_PAGE)
+        }
+      } catch (error) {
+        console.error('Error fetching users:', error)
+        setLoading(false)
       }
-      setLoading(false)
     },
     [debouncedTerm, queryUsers, chatClient]
   )
@@ -219,7 +232,7 @@ export default function RightSide() {
     fetchUsers(offset)
   }
 
-  const whoToFollow = users.filter((u) => u.id !== client.userID)
+  const whoToFollow = users.filter((u) => u.id !== client.userId)
 
   return (
     <Container>
@@ -247,24 +260,28 @@ export default function RightSide() {
         <LoadingIndicator />
       ) : (
         <div className="follows">
-          <h2>Who to follow</h2>
+          <h2>Pilots</h2>
           <div className="follows-list">
-            {whoToFollow.map((user) => {
-              return (
-                <div className="user" key={user.id}>
-                  <Link to={`/${user.id}`} className="user__details">
-                    <div className="user__img">
-                      <UserImage src={user.image} alt={user.name} />
-                    </div>
-                    <div className="user__info">
-                      <span className="user__name">{user.name}</span>
-                      <span className="user__id">@{user.id}</span>
-                    </div>
-                  </Link>
-                  <FollowBtn userId={user.id} />
-                </div>
-              )
-            })}
+            {whoToFollow.length ? (
+              whoToFollow.map((user) => {
+                return (
+                  <div className="user" key={user.id}>
+                    <Link to={`/${user.id}`} className="user__details">
+                      <div className="user__img">
+                        <UserImage src={user.image} alt={user.name} />
+                      </div>
+                      <div className="user__info">
+                        <span className="user__name">{user.name}</span>
+                        <span className="user__id">@{user.id}</span>
+                      </div>
+                    </Link>
+                    <FollowBtn userId={user.id} />
+                  </div>
+                )
+              })
+            ) : (
+              <div>No pilots found</div>
+            )}
           </div>
           {renderLoadMore && (
             <button className="show-more-text" onClick={handleShowMore}>

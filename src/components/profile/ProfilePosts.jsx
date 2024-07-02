@@ -1,11 +1,10 @@
 import { useContext } from 'react'
-import { FlatFeed } from 'react-activity-feed'
+import { FlatFeed, useStreamContext } from 'react-activity-feed'
 
 import PostBlock from '../post/PostBlock'
-import { ProfileContext } from './ProfileContent'
 
 export default function MyPosts() {
-  const { user } = useContext(ProfileContext)
+  const { user } = useStreamContext()
 
   return (
     <div>

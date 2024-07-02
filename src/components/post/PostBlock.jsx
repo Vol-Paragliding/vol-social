@@ -22,6 +22,10 @@ const Block = styled.div`
   border-bottom: 1px solid #333;
   padding: 15px;
 
+  &:hover {
+    background-color: rgb(17, 17, 17);
+  }
+
   .user-image {
     width: 40px;
     height: 40px;
@@ -61,7 +65,7 @@ const Block = styled.div`
 
     &__actions {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       margin-top: 5px;
 
       button {
@@ -110,7 +114,7 @@ export default function PostBlock({ activity }) {
   if (activity.verb === 'signup') {
     return null
   }
-  console.log('activity', activity)
+
   const actor = activity.actor
 
   let hasLikedPost = false
@@ -131,19 +135,6 @@ export default function PostBlock({ activity }) {
 
   const actions = [
     {
-      id: 'comment',
-      Icon: Comment,
-      alt: 'Comment',
-      value: activity?.reaction_counts?.comment || 0,
-      onClick: () => setCommentDialogOpened(true),
-    },
-    {
-      id: 'repost',
-      Icon: Repost,
-      alt: 'Repost',
-      value: 0,
-    },
-    {
       id: 'heart',
       Icon: Heart,
       alt: 'Heart',
@@ -151,9 +142,11 @@ export default function PostBlock({ activity }) {
       onClick: onToggleLike,
     },
     {
-      id: 'upload',
-      Icon: Upload,
-      alt: 'Upload',
+      id: 'comment',
+      Icon: Comment,
+      alt: 'Comment',
+      value: activity?.reaction_counts?.comment || 0,
+      onClick: () => setCommentDialogOpened(true),
     },
   ]
 

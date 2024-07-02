@@ -1,13 +1,15 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { format } from 'date-fns'
 import { useStreamContext } from 'react-activity-feed'
+import { useParams } from 'react-router-dom'
 
+import { useFeed } from '../../contexts/feed/useFeed'
+import LoadingIndicator from '../loading/LoadingIndicator'
 import More from '../Icons/More'
 import Mail from '../Icons/Mail'
 import Calendar from '../Icons/Calendar'
 import { formatStringWithLink } from '../../utils/string'
-import { ProfileContext } from './ProfileContent'
 import UserImage from './UserImage'
 import FollowBtn from '../follow/FollowBtn'
 import { EditProfileView } from './EditProfileView'
@@ -145,21 +147,35 @@ const actions = [
 ]
 
 export default function ProfileBio() {
-  const { client } = useStreamContext()
-  const { user, setUser } = useContext(ProfileContext)
+  const { client, user } = useStreamContext()
+  const { feedUser, setFeedUser } = useFeed()
+  const [fullUser, setFullUser] = useState({})
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
+  const { userId } = useParams()
 
-  const joinedDate = format(new Date(user.created_at), 'MMMM RRRR')
-  const bio = formatStringWithLink(user.data.bio || '')
+  useEffect(() => {
+    const getUser = async () => {
+      const user = await client.user(userId).get({ with_follow_counts: true })
 
-  const isLoggedInUserProfile = user.id === client.userId
+      setFullUser(user.full)
+    }
+
+    getUser()
+  }, [userId])
+
+  if (!feedUser?.data || !fullUser) return <LoadingIndicator />
+
+  const joinedDate = format(new Date(user.full.created_at), 'MMMM RRRR')
+  const bio = formatStringWithLink(feedUser.data.bio || '')
+
+  const isLoggedInUserProfile = feedUser.data.id === client.userId
 
   const handleEditProfile = () => {
     setIsEditProfileOpen(true)
   }
 
   const handleProfileUpdate = (updatedUser) => {
-    setUser(updatedUser)
+    setFeedUser(updatedUser)
     setIsEditProfileOpen(false)
   }
 
@@ -167,7 +183,7 @@ export default function ProfileBio() {
     <Container>
       <div className="top">
         <div className="image">
-          <UserImage src={user.data?.image} alt={user.data.name} />
+          <UserImage src={feedUser.data?.image} alt={feedUser.data.name} />
         </div>
         {!isLoggedInUserProfile ? (
           <div className="actions">
@@ -176,7 +192,7 @@ export default function ProfileBio() {
                 <action.Icon color="white" size={21} />
               </button>
             ))}
-            <FollowBtn userId={user.id} />
+            <FollowBtn userId={feedUser.data.id} />
           </div>
         ) : (
           <div className="actions">
@@ -187,8 +203,8 @@ export default function ProfileBio() {
         )}
       </div>
       <div className="details">
-        <span className="user__name">{user.data.name}</span>
-        <span className="user__id">@{user.id}</span>
+        <span className="user__name">{feedUser.data.name}</span>
+        <span className="user__id">@{feedUser.data.id}</span>
         <span className="user__bio" dangerouslySetInnerHTML={{ __html: bio }} />
         <div className="user__joined">
           <Calendar color="#777" size={20} />
@@ -196,10 +212,10 @@ export default function ProfileBio() {
         </div>
         <div className="user__follows">
           <span className="user__follows__following">
-            <b>{user.following_count || 0}</b> Following
+            <b>{fullUser.following_count || 0}</b> Following
           </span>
           <span className="user__follows__followers">
-            <b>{user.followers_count || 0}</b> Followers
+            <b>{fullUser.followers_count || 0}</b> Followers
           </span>
         </div>
         <div className="user__followed-by">

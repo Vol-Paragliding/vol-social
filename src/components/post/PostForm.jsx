@@ -3,14 +3,15 @@ import { useEffect, useRef, useState } from 'react'
 import { useStreamContext } from 'react-activity-feed'
 import styled from 'styled-components'
 
-import UserImage from '../profile/UserImage'
+import { useFeed } from '../../contexts/feed/useFeed'
 import Calendar from '../Icons/Calendar'
 import Emoji from '../Icons/Emoji'
 import Gif from '../Icons/Gif'
 import Image from '../Icons/Image'
-import Location from '../Icons/Location'
-import Poll from '../Icons/Poll'
+// import Location from '../Icons/Location'
+// import Poll from '../Icons/Poll'
 import ProgressRing from '../Icons/ProgressRing'
+import UserImage from '../profile/UserImage'
 
 const Container = styled.div`
   width: 100%;
@@ -149,26 +150,21 @@ const actions = [
     Icon: Gif,
     alt: 'GIF',
   },
-  {
-    id: 'poll',
-    Icon: Poll,
-    alt: 'Poll',
-  },
+  // {
+  //   id: 'poll',
+  //   Icon: Poll,
+  //   alt: 'Poll',
+  // },
   {
     id: 'emoji',
     Icon: Emoji,
     alt: 'Emoji',
   },
-  {
-    id: 'schedule',
-    Icon: Calendar,
-    alt: 'Schedule',
-  },
-  {
-    id: 'location',
-    Icon: Location,
-    alt: 'Location',
-  },
+  // {
+  //   id: 'location',
+  //   Icon: Location,
+  //   alt: 'Location',
+  // },
 ]
 
 export default function PostForm({
@@ -183,7 +179,7 @@ export default function PostForm({
 }) {
   const inputRef = useRef(null)
 
-  const { client } = useStreamContext()
+  const { feedUser } = useFeed()
 
   const [expanded, setExpanded] = useState(!collapsedOnMount)
   const [text, setText] = useState('')
@@ -191,8 +187,6 @@ export default function PostForm({
   useEffect(() => {
     if (shouldFocus && inputRef.current) inputRef.current.focus()
   }, [])
-
-  const user = client.currentUser.data
 
   const MAX_CHARS = 280
 
@@ -236,7 +230,7 @@ export default function PostForm({
         onSubmit={submit}
       >
         <div className="user">
-          <UserImage src={user?.image} alt={user.name} />
+          <UserImage src={feedUser?.data?.image} alt={feedUser?.data.name} />
         </div>
         <div className="input-section">
           <textarea

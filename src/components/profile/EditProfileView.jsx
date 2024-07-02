@@ -1,11 +1,12 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+// import { useStreamContext } from 'react-activity-feed'
 
-import UserImage from '../profile/UserImage'
 import { useAuth } from '../../contexts/auth/useAuth'
 import { useFeed } from '../../contexts/feed/useFeed'
 import { useChat } from '../../contexts/chat/useChat'
 import { updateUser, uploadImage } from '../../services/FeedService'
+import { ProfileImageUpload } from './ProfileImageUpload'
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -83,62 +84,6 @@ const ActionButton = styled.button`
   justify-content: center;
 `
 
-const ProfileImageContainer = styled.div`
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #444;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
-
-  &:hover {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  img,
-  svg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`
-
-const CoverImageContainer = styled.div`
-  width: 100%;
-  height: 150px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f3f3f3;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
-
-  &:hover {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`
-
-const FileInput = styled.input`
-  opacity: 0;
-  width: 0;
-  height: 0;
-  position: absolute;
-  z-index: -1;
-`
-
 const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -147,13 +92,17 @@ const ModalHeader = styled.div`
 
 export const EditProfileView = ({ onSave }) => {
   const { authState } = useAuth()
-  const { feedUser, setFeedUser, setViewMode } = useFeed()
+  const { feedUser } = useFeed()
   const { chatClient } = useChat()
+  // const { client } = useStreamContext()
 
-  const [userData, setUserData] = useState({
+  const [profileData, setProfileData] = useState({
+    id: feedUser?.data?.userId || authState.authUser?.userId || '',
     name: feedUser?.data?.name || '',
     bio: feedUser?.data?.bio || '',
     location: feedUser?.data?.location || '',
+    image: feedUser?.data?.image || '',
+    coverPhoto: feedUser?.data?.coverPhoto || '',
   })
   const [selectedFile, setSelectedFile] = useState(null)
   const [imageSrc, setImageSrc] = useState(feedUser?.data?.image)
@@ -162,27 +111,18 @@ export const EditProfileView = ({ onSave }) => {
     feedUser?.data?.coverPhoto || null
   )
 
-  const fileInputRef = useRef(null)
-  const coverInputRef = useRef(null)
-
   const handleInputChange = (event, field) => {
-    setUserData({ ...userData, [field]: event.target.value })
+    setProfileData({ ...profileData, [field]: event.target.value })
   }
 
-  const handleImageContainerClick = () => fileInputRef.current?.click()
-  const handleCoverContainerClick = () => coverInputRef.current?.click()
+  const handleImageChange = (file) => {
+    setSelectedFile(file)
+    setImageSrc(URL.createObjectURL(file))
+  }
 
-  const handleFileChange = (event, isCover = false) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      if (isCover) {
-        setCoverFile(file)
-        setCoverImageSrc(URL.createObjectURL(file))
-      } else {
-        setSelectedFile(file)
-        setImageSrc(URL.createObjectURL(file))
-      }
-    }
+  const handleCoverImageChange = (file) => {
+    setCoverFile(file)
+    setCoverImageSrc(URL.createObjectURL(file))
   }
 
   const handleUpload = async (file) => {
@@ -203,7 +143,7 @@ export const EditProfileView = ({ onSave }) => {
   }
 
   const handleSubmit = async () => {
-    if (!userData) {
+    if (!profileData) {
       console.error('No user data to submit.')
       return
     }
@@ -214,9 +154,9 @@ export const EditProfileView = ({ onSave }) => {
         : imageSrc
       const coverUrl = coverFile ? await handleUpload(coverFile) : coverImageSrc
       const updatedUserData = {
-        ...userData,
-        image: imageUrl?.toString() ?? userData.image,
-        coverPhoto: coverUrl?.toString() ?? userData.coverPhoto,
+        ...profileData,
+        image: imageUrl?.toString() ?? profileData.image,
+        coverPhoto: coverUrl?.toString() ?? profileData.coverPhoto,
       }
 
       const updatedUser = await updateUser(
@@ -236,7 +176,7 @@ export const EditProfileView = ({ onSave }) => {
         console.error('Chat client is not initialized or userId is undefined.')
       }
 
-      setFeedUser(updatedUser)
+      // await client.user(userId).update(updatedUserData)
       onSave(updatedUser)
     } catch (error) {
       console.error('Error updating user: ', error)
@@ -245,42 +185,22 @@ export const EditProfileView = ({ onSave }) => {
 
   return (
     <ProfileContainer>
-      <form
-        style={{ width: '100%' }}
-        onSubmit={(e) => e.preventDefault()}
-      >
+      <form style={{ width: '100%' }} onSubmit={(e) => e.preventDefault()}>
         <ModalHeader>
           <ProfileHeader>Edit profile</ProfileHeader>
         </ModalHeader>
-
-        <CoverImageContainer onClick={handleCoverContainerClick}>
-          <FileInput
-            type="file"
-            onChange={(e) => handleFileChange(e, true)}
-            accept="image/*"
-            ref={coverInputRef}
-          />
-          {coverImageSrc ? (
-            <img src={coverImageSrc} alt="Cover" />
-          ) : (
-            <p style={{ color: 'black' }}>Update cover image</p>
-          )}
-        </CoverImageContainer>
-        <ProfileImageContainer onClick={handleImageContainerClick}>
-          <FileInput
-            type="file"
-            onChange={handleFileChange}
-            accept="image/*"
-            ref={fileInputRef}
-          />
-          <UserImage src={imageSrc} alt={feedUser?.data?.name} />
-        </ProfileImageContainer>
-        <FormField>
+        <ProfileImageUpload
+          imageSrc={imageSrc}
+          coverImageSrc={coverImageSrc}
+          onImageChange={handleImageChange}
+          onCoverImageChange={handleCoverImageChange}
+        />
+        <FormField style={{ marginTop: '80px' }}>
           <FormLabel htmlFor="name">Name</FormLabel>
           <FormInput
             id="name"
             name="name"
-            value={userData.name}
+            value={profileData.name}
             onChange={(e) => handleInputChange(e, 'name')}
             placeholder="Name"
           />
@@ -289,7 +209,7 @@ export const EditProfileView = ({ onSave }) => {
           <FormInput
             id="location"
             name="location"
-            value={userData.location}
+            value={profileData.location}
             onChange={(e) => handleInputChange(e, 'location')}
             placeholder="Location"
           />
@@ -298,7 +218,7 @@ export const EditProfileView = ({ onSave }) => {
           <TextArea
             id="bio"
             name="bio"
-            value={userData.bio}
+            value={profileData.bio}
             onChange={(e) => handleInputChange(e, 'bio')}
             placeholder="Bio"
           />

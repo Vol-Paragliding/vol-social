@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useAuth } from '../../contexts/auth/useAuth'
+import { useFeed } from '../../contexts/feed/useFeed'
 import { logout } from '../../contexts/auth/AuthSlice'
 import LoadingIndicator from '../loading/LoadingIndicator'
 import UserImage from '../profile/UserImage'
@@ -129,6 +130,7 @@ const Container = styled.div`
     justify-content: space-between;
     border-radius: 30px;
     position: relative;
+    cursor: pointer;
 
     &:hover {
       background-color: #333;
@@ -137,6 +139,7 @@ const Container = styled.div`
     .details {
       display: flex;
       align-items: center;
+
       &__img {
         margin-right: 10px;
         width: 40px;
@@ -147,6 +150,7 @@ const Container = styled.div`
         img {
           width: 100%;
           height: 100%;
+          object-fit: cover;
         }
       }
 
@@ -183,6 +187,7 @@ const Menu = styled.div`
   padding: 10px;
   z-index: 2;
   box-shadow: 0 0 10px rgba(0, 0, 0, 1.5);
+  cursor: pointer;
 
   &:hover {
     background: #333;
@@ -204,6 +209,7 @@ const Menu = styled.div`
 export default function LeftSide({ onClickPost }) {
   const location = useLocation()
   const { client, userData } = useStreamContext()
+  const { feedUser } = useFeed()
   const { dispatch } = useAuth()
   const [newNotifications, setNewNotifications] = useState(0)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -284,7 +290,7 @@ export default function LeftSide({ onClickPost }) {
 
   return (
     <Container>
-      <Link to="/" className="header">
+      <Link to="/home" className="header">
         <img className={'logo'} src={appIcon} alt="Vol Company logo" />
       </Link>
       <div className="buttons">
@@ -331,10 +337,10 @@ export default function LeftSide({ onClickPost }) {
       >
         <div className="details">
           <div className="details__img">
-            <UserImage src={userData?.image} alt={userData.name} />
+            <UserImage src={feedUser?.data?.image} alt={feedUser?.data?.name} />
           </div>
           <div className="details__text">
-            <span className="details__text__name">{userData.name}</span>
+            <span className="details__text__name">{feedUser?.data.name}</span>
             <span className="details__text__id">@{userData.id}</span>
           </div>
         </div>

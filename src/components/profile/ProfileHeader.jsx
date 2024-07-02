@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useStreamContext } from 'react-activity-feed'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { ProfileContext } from './ProfileContent'
+import { useFeed } from '../../contexts/feed/useFeed'
 import ArrowLeft from '../Icons/ArrowLeft'
 
 const Header = styled.header`
@@ -47,21 +47,22 @@ const Header = styled.header`
 
 export default function ProfileHeader() {
   const navigate = useNavigate()
-  const { user } = useContext(ProfileContext)
   const { client } = useStreamContext()
+  const { feedUser } = useFeed()
 
   const [activitiesCount, setActivitiesCount] = useState(0)
 
   useEffect(() => {
-    const feed = client.feed('user', user.id)
+    if (!client || !feedUser) return
+    const feed = client.feed('user', feedUser.id)
 
     async function getActivitiesCount() {
       const activities = await feed.get()
-      setActivitiesCount(activities.results.length)
+      setActivitiesCount(activities.results.length-1)
     }
 
     getActivitiesCount()
-  }, [client, user.id])
+  }, [client, feedUser?.id])
 
   const navigateBack = () => {
     navigate(-1)
@@ -74,13 +75,15 @@ export default function ProfileHeader() {
           <ArrowLeft size={20} color="white" />
         </button>
         <div className="info">
-          <h1>{user.data.name}</h1>
-          <span className="info__posts-count">{activitiesCount} Posts</span>
+          <h1>{feedUser?.data.name}</h1>
+          <span className="info__posts-count">
+            {activitiesCount} Post{activitiesCount > 1 && 's'}
+          </span>
         </div>
       </div>
       <div className="cover">
-        {user.data.coverPhoto ? (
-          <img src={user.data.coverPhoto} alt="Cover" />
+        {feedUser?.data?.coverPhoto ? (
+          <img src={feedUser.data.coverPhoto} alt="Cover" />
         ) : (
           <div style={{ backgroundColor: '#555', height: '200px' }} />
         )}

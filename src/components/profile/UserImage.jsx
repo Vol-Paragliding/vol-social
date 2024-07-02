@@ -17,7 +17,11 @@ const PlaceholderSVG = () => (
 )
 
 const UserImage = ({ src, alt }) => {
-  return src ? <img src={src} alt={alt} /> : <PlaceholderSVG />
+  return src ? (
+    <img style={{ objectFit: 'cover' }} src={src} alt={alt} />
+  ) : (
+    <PlaceholderSVG />
+  )
 }
 
 export default UserImage
