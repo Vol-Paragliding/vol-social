@@ -42,7 +42,7 @@ const LogInView = ({ onClose }) => {
         &times;
       </button>
       <img className={styles.logo} src={appIcon} alt="Paragliding logo" />
-      <h1 className={styles.authFormTitle}>Log in</h1>
+      <h1 className={styles.authFormTitle}>Log in to Vol</h1>
       <div className={styles.credentialsForm}>
         <form onSubmit={handleLogin}>
           {error && <div className={styles.signupError}>{error}</div>}
@@ -73,7 +73,7 @@ const LogInView = ({ onClose }) => {
             />
           </div>
           <button type="submit" className={styles.createLoginButton}>
-            Log In
+            Sign In
           </button>
         </form>
       </div>

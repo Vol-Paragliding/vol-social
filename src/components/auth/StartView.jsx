@@ -33,14 +33,14 @@ const StartView = () => {
                 className={`${styles.createLoginButton} ${styles.firstCreateLoginButton}`}
                 onClick={handleSignUpPress}
               >
-                Join
+                Create account
               </button>
-              <div className={styles.orSeparator}>or</div>
+              <div className={styles.orSeparator}>Already have an account?</div>
               <button
                 className={styles.createLoginButton}
                 onClick={handleLoginPress}
               >
-                Log In
+                Sign In
               </button>
             </div>
           </div>
