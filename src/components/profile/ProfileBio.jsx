@@ -149,8 +149,8 @@ const actions = [
 export default function ProfileBio() {
   const { client, user } = useStreamContext()
   const { feedUser, setFeedUser } = useFeed()
-  const [fullUser, setFullUser] = useState({})
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
+  const [fullUser, setFullUser] = useState({})
   const { userId } = useParams()
 
   useEffect(() => {
@@ -161,14 +161,14 @@ export default function ProfileBio() {
     }
 
     getUser()
-  }, [userId])
+  }, [userId, feedUser?.data])
 
   if (!feedUser?.data || !fullUser) return <LoadingIndicator />
 
   const joinedDate = format(new Date(user.full.created_at), 'MMMM RRRR')
-  const bio = formatStringWithLink(feedUser.data.bio || '')
+  const bio = formatStringWithLink(fullUser.data.bio || '')
 
-  const isLoggedInUserProfile = feedUser.data.id === client.userId
+  const isLoggedInUserProfile = fullUser.data.id === client.userId
 
   const handleEditProfile = () => {
     setIsEditProfileOpen(true)
@@ -183,7 +183,7 @@ export default function ProfileBio() {
     <Container>
       <div className="top">
         <div className="image">
-          <UserImage src={feedUser.data?.image} alt={feedUser.data.name} />
+          <UserImage src={fullUser.data?.image} alt={fullUser.data.name} />
         </div>
         {!isLoggedInUserProfile ? (
           <div className="actions">
@@ -192,7 +192,7 @@ export default function ProfileBio() {
                 <action.Icon color="white" size={21} />
               </button>
             ))}
-            <FollowBtn userId={feedUser.data.id} />
+            <FollowBtn userId={fullUser.data.id} />
           </div>
         ) : (
           <div className="actions">
@@ -203,8 +203,8 @@ export default function ProfileBio() {
         )}
       </div>
       <div className="details">
-        <span className="user__name">{feedUser.data.name}</span>
-        <span className="user__id">@{feedUser.data.id}</span>
+        <span className="user__name">{fullUser.data.name}</span>
+        <span className="user__id">@{fullUser.data.id}</span>
         <span className="user__bio" dangerouslySetInnerHTML={{ __html: bio }} />
         <div className="user__joined">
           <Calendar color="#777" size={20} />

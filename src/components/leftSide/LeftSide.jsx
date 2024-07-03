@@ -349,7 +349,7 @@ export default function LeftSide({ onClickPost }) {
         </div>
         {isDropdownOpen && (
           <Menu>
-            <button onClick={handleLogout}>Logout</button>
+            <button onClick={handleLogout}>Logout @{feedUser.id}</button>
           </Menu>
         )}
       </div>
