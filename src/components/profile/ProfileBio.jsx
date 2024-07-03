@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { format } from 'date-fns'
 import { useStreamContext } from 'react-activity-feed'
@@ -31,9 +31,9 @@ const Container = styled.div`
       overflow: hidden;
       border: 4px solid black;
       background-color: #444;
-      display: flex; /* Center the placeholder */
-      align-items: center; /* Center the placeholder */
-      justify-content: center; /* Center the placeholder */
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       img,
       svg {
@@ -147,27 +147,29 @@ const actions = [
 ]
 
 export default function ProfileBio() {
-  const { client, user } = useStreamContext()
+  const { client } = useStreamContext()
   const { feedUser, setFeedUser } = useFeed()
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
-  const [fullUser, setFullUser] = useState({})
+  const [fullUser, setFullUser] = useState(null)
   const { userId } = useParams()
 
   useEffect(() => {
     const getUser = async () => {
-      const user = await client.user(userId).get({ with_follow_counts: true })
-
-      setFullUser(user.full)
+      try {
+        const user = await client.user(userId).get({ with_follow_counts: true })
+        setFullUser(user.full)
+      } catch (error) {
+        console.error('Error fetching user data:', error)
+      }
     }
 
     getUser()
-  }, [userId, feedUser?.data])
+  }, [userId, client])
 
   if (!feedUser?.data || !fullUser) return <LoadingIndicator />
 
-  const joinedDate = format(new Date(user.full.created_at), 'MMMM RRRR')
+  const joinedDate = format(new Date(fullUser.created_at), 'MMMM RRRR')
   const bio = formatStringWithLink(fullUser.data.bio || '')
-
   const isLoggedInUserProfile = fullUser.data.id === client.userId
 
   const handleEditProfile = () => {
@@ -185,22 +187,20 @@ export default function ProfileBio() {
         <div className="image">
           <UserImage src={fullUser.data?.image} alt={fullUser.data.name} />
         </div>
-        {!isLoggedInUserProfile ? (
-          <div className="actions">
-            {actions.map((action) => (
+        <div className="actions">
+          {!isLoggedInUserProfile ? (
+            actions.map((action) => (
               <button className="action-btn" key={action.id}>
                 <action.Icon color="white" size={21} />
               </button>
-            ))}
-            <FollowBtn userId={fullUser.data.id} />
-          </div>
-        ) : (
-          <div className="actions">
+            ))
+          ) : (
             <ActionButton onClick={handleEditProfile}>
               Edit Profile
             </ActionButton>
-          </div>
-        )}
+          )}
+          {!isLoggedInUserProfile && <FollowBtn userId={fullUser.data.id} />}
+        </div>
       </div>
       <div className="details">
         <span className="user__name">{fullUser.data.name}</span>

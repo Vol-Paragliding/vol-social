@@ -14,7 +14,7 @@ import HomeContent from './components/homeContent/HomeContent'
 import Layout from './components/layout/Layout'
 import NotificationContent from './components/notifications/NotificationContent'
 import ProfileContent from './components/profile/ProfileContent'
-import ThreadContent from './components/thread/ThreadContent'
+import Thread from './components/thread/Thread'
 import ScrollToTop from './components/ScrollToTop'
 
 const APP_ID = process.env.REACT_APP_STREAM_APP_ID
@@ -85,11 +85,11 @@ export default function App() {
                 }
               />
               <Route
-                path="/thread/:userId/status/:id"
+                path="/:userId/status/:id"
                 element={
                   authState.isAuthenticated ? (
                     <Layout>
-                      <ThreadContent />
+                      <Thread />
                     </Layout>
                   ) : (
                     <Navigate to="/" replace />

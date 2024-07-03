@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useFeed } from '../../contexts/feed/useFeed'
+import LoadingIndicator from '../loading/LoadingIndicator'
 import ArrowLeft from '../Icons/ArrowLeft'
 
 const Header = styled.header`
@@ -39,6 +40,7 @@ const Header = styled.header`
 
     img {
       width: 100%;
+      height: 100%;
       object-fit: cover;
       object-position: center;
     }
@@ -50,34 +52,43 @@ export default function ProfileHeader() {
   const { client } = useStreamContext()
   const { feedUser } = useFeed()
   const [activitiesCount, setActivitiesCount] = useState(0)
-  const [fullUser, setFullUser] = useState({})
+  const [fullUser, setFullUser] = useState(null)
   const { userId } = useParams()
 
   useEffect(() => {
     const getUser = async () => {
-      const user = await client.user(userId).get({ with_follow_counts: true })
-
-      setFullUser(user.full)
+      try {
+        const user = await client.user(userId).get({ with_follow_counts: true })
+        setFullUser(user.full)
+      } catch (error) {
+        console.error('Error fetching user data:', error)
+      }
     }
 
     getUser()
-  }, [userId, feedUser?.data])
+  }, [client, userId, feedUser?.data])
 
   useEffect(() => {
     if (!client || !fullUser) return
-    const feed = client.feed('user', fullUser.id)
 
-    async function getActivitiesCount() {
-      const activities = await feed.get()
-      setActivitiesCount(activities.results.length-1)
+    const fetchActivitiesCount = async () => {
+      try {
+        const feed = client.feed('user', fullUser.id)
+        const activities = await feed.get()
+        setActivitiesCount(activities.results.length - 1)
+      } catch (error) {
+        console.error('Error fetching activities count:', error)
+      }
     }
 
-    getActivitiesCount()
-  }, [client, fullUser?.id])
+    fetchActivitiesCount()
+  }, [client, fullUser])
 
   const navigateBack = () => {
     navigate(-1)
   }
+
+  if (!fullUser) return <LoadingIndicator />
 
   return (
     <Header>
@@ -88,7 +99,7 @@ export default function ProfileHeader() {
         <div className="info">
           <h1>{fullUser?.data.name}</h1>
           <span className="info__posts-count">
-            {activitiesCount} Post{activitiesCount > 1 && 's'}
+            {activitiesCount} Post{activitiesCount > 1 ? 's' : ''}
           </span>
         </div>
       </div>

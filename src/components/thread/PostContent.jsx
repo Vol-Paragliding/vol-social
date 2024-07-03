@@ -121,8 +121,7 @@ const Container = styled.div`
     }
 
     &__reactors {
-      justify-content: space-between;
-      padding: 0 50px;
+      justify-content: flex-start;
     }
   }
 
@@ -164,17 +163,15 @@ export default function PostContent({ activity }) {
 
   const reactors = [
     {
-      id: 'comment',
-      Icon: Comment,
-      onClick: () => setCommentDialogOpened(true),
-    },
-    { id: 'repost', Icon: Repost },
-    {
       id: 'heart',
       Icon: Heart,
       onClick: onToggleLike,
     },
-    { id: 'upload', Icon: Upload },
+    {
+      id: 'comment',
+      Icon: Comment,
+      onClick: () => setCommentDialogOpened(true),
+    },
   ]
 
   const onPostComment = async (text) => {
@@ -218,11 +215,6 @@ export default function PostContent({ activity }) {
           <div className="post__time">
             <span className="post__time--time">{time}</span>
             <span className="post__time--date">{date}</span>
-          </div>
-
-          <div className="post__analytics">
-            <BarChart color="#888" />
-            <span className="post__analytics__text">View Post Analytics</span>
           </div>
 
           <div className="post__reactions">
