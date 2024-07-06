@@ -57,33 +57,42 @@ const Block = styled.div`
 
 export default function FollowNotification({ followActivities }) {
   const firstActivity = followActivities[0]
+  const otherCount = followActivities.length - 1
+
+  const getOtherFollowersText = (count) => {
+    if (count > 0) {
+      return (
+        <span>
+          and {count} other{count > 1 ? 's' : ' pilot'}
+        </span>
+      )
+    }
+    return null
+  }
 
   return (
     <Block>
       <User color="#1c9bef" size={25} />
       <div className="right">
         <div className="actors__images">
-          {followActivities.map((follow) => {
-            return (
-              <Link
-                to={`/${follow.actor.id}`}
-                className="actors__images__image"
-                key={follow.id}
-              >
-                <UserImage src={follow.actor.data.image} alt={follow.actor.data.name} />
-              </Link>
-            )
-          })}
+          {followActivities.map((follow) => (
+            <Link
+              to={`/${follow.actor.id}`}
+              className="actors__images__image"
+              key={follow.id}
+            >
+              <UserImage
+                src={follow.actor.data.image}
+                alt={follow.actor.data.name}
+              />
+            </Link>
+          ))}
         </div>
         <p className="actors__text">
           <Link className="actors__name" to={`/${firstActivity.actor.id}`}>
             {firstActivity.actor.data.name}
           </Link>{' '}
-          <span>
-            {followActivities.length > 1 &&
-              `and ${followActivities.length - 1} others`}{' '}
-            followed you
-          </span>
+          {getOtherFollowersText(otherCount)} followed you
         </p>
       </div>
     </Block>

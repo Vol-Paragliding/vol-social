@@ -1,14 +1,17 @@
-import { useContext } from 'react'
-import { FlatFeed, useStreamContext } from 'react-activity-feed'
+import { FlatFeed } from 'react-activity-feed'
 
+import { useParamUser } from '../../contexts/paramUser/useParamUser'
+import LoadingIndicator from '../loading/LoadingIndicator'
 import PostBlock from '../post/PostBlock'
 
 export default function MyPosts() {
-  const { user } = useStreamContext()
+  const { paramUser } = useParamUser()
+
+  if (!paramUser) return <LoadingIndicator />
 
   return (
     <div>
-      <FlatFeed Activity={PostBlock} userId={user.id} feedGroup="user" notify />
+      <FlatFeed Activity={PostBlock} userId={paramUser.id} feedGroup="user" notify />
     </div>
   )
 }

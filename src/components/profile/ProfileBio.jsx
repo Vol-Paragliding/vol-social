@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { format } from 'date-fns'
 import { useStreamContext } from 'react-activity-feed'
-import { useParams } from 'react-router-dom'
 
 import { useFeed } from '../../contexts/feed/useFeed'
-import LoadingIndicator from '../loading/LoadingIndicator'
+import { useParamUser } from '../../contexts/paramUser/useParamUser'
+import { formatStringWithLink } from '../../utils/string'
 import More from '../Icons/More'
 import Mail from '../Icons/Mail'
 import Calendar from '../Icons/Calendar'
-import { formatStringWithLink } from '../../utils/string'
-import UserImage from './UserImage'
+import LoadingIndicator from '../loading/LoadingIndicator'
 import FollowBtn from '../follow/FollowBtn'
-import { EditProfileView } from './EditProfileView'
 import Modal from '../modal/Modal'
+import { EditProfileView } from './EditProfileView'
+import UserImage from './UserImage'
 
 const Container = styled.div`
   padding: 20px;
@@ -150,33 +150,20 @@ export default function ProfileBio() {
   const { client } = useStreamContext()
   const { feedUser, setFeedUser } = useFeed()
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
-  const [fullUser, setFullUser] = useState(null)
-  const { userId } = useParams()
+  const { paramUser, updateParamUser } = useParamUser()
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const user = await client.user(userId).get({ with_follow_counts: true })
-        setFullUser(user.full)
-      } catch (error) {
-        console.error('Error fetching user data:', error)
-      }
-    }
+  if (!feedUser?.data || !paramUser) return <LoadingIndicator />
 
-    getUser()
-  }, [userId, client])
-
-  if (!feedUser?.data || !fullUser) return <LoadingIndicator />
-
-  const joinedDate = format(new Date(fullUser.created_at), 'MMMM RRRR')
-  const bio = formatStringWithLink(fullUser.data.bio || '')
-  const isLoggedInUserProfile = fullUser.data.id === client.userId
+  const joinedDate = format(new Date(paramUser.created_at), 'MMMM RRRR')
+  const bio = formatStringWithLink(paramUser.data.bio || '')
+  const isLoggedInUserProfile = paramUser.data.id === client.userId
 
   const handleEditProfile = () => {
     setIsEditProfileOpen(true)
   }
 
   const handleProfileUpdate = (updatedUser) => {
+    updateParamUser(updatedUser)
     setFeedUser(updatedUser)
     setIsEditProfileOpen(false)
   }
@@ -185,7 +172,7 @@ export default function ProfileBio() {
     <Container>
       <div className="top">
         <div className="image">
-          <UserImage src={fullUser.data?.image} alt={fullUser.data.name} />
+          <UserImage src={paramUser.data?.image} alt={paramUser.data.name} />
         </div>
         <div className="actions">
           {!isLoggedInUserProfile ? (
@@ -199,12 +186,12 @@ export default function ProfileBio() {
               Edit Profile
             </ActionButton>
           )}
-          {!isLoggedInUserProfile && <FollowBtn userId={fullUser.data.id} />}
+          {!isLoggedInUserProfile && <FollowBtn userId={paramUser.data.id} />}
         </div>
       </div>
       <div className="details">
-        <span className="user__name">{fullUser.data.name}</span>
-        <span className="user__id">@{fullUser.data.id}</span>
+        <span className="user__name">{paramUser.data.name}</span>
+        <span className="user__id">@{paramUser.data.id}</span>
         <span className="user__bio" dangerouslySetInnerHTML={{ __html: bio }} />
         <div className="user__joined">
           <Calendar color="#777" size={20} />
@@ -212,10 +199,10 @@ export default function ProfileBio() {
         </div>
         <div className="user__follows">
           <span className="user__follows__following">
-            <b>{fullUser.following_count || 0}</b> Following
+            <b>{paramUser.following_count || 0}</b> Following
           </span>
           <span className="user__follows__followers">
-            <b>{fullUser.followers_count || 0}</b> Followers
+            <b>{paramUser.followers_count || 0}</b> Followers
           </span>
         </div>
         <div className="user__followed-by">

@@ -4,6 +4,7 @@ import { useStreamContext } from 'react-activity-feed'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
+import appIcon from '../../assets/appIcon.png'
 import { useAuth } from '../../contexts/auth/useAuth'
 import { useFeed } from '../../contexts/feed/useFeed'
 import { logout } from '../../contexts/auth/AuthSlice'
@@ -16,7 +17,6 @@ import Mail from '../Icons/Mail'
 import User from '../Icons/User'
 import More from '../Icons/More'
 import Search from '../Icons/Search'
-import appIcon from '../../assets/appIcon.png'
 
 const Container = styled.div`
   display: flex;
@@ -59,7 +59,6 @@ const Container = styled.div`
         .notifications-count {
           position: absolute;
           font-size: 11px;
-          /* min-width: 14px; */
           background-color: var(--theme-color);
           top: -5px;
           padding: 1px 5px;
@@ -68,6 +67,7 @@ const Container = styled.div`
           right: 0;
           margin: 0 auto;
           width: max-content;
+          color: black;
         }
       }
 

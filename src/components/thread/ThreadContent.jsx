@@ -26,7 +26,7 @@ export default function ThreadContent() {
 
       setActivity(targetActivity)
     }
-  }, [feed.refreshing])
+  }, [feed.feedManager, feed.hasDoneRequest, feed.refreshing, id])
 
   if (!client || !activity) return <LoadingIndicator />
 

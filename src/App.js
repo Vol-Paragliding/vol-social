@@ -9,6 +9,7 @@ import { StreamApp } from 'react-activity-feed'
 import { useAuth } from './contexts/auth/useAuth'
 import { ChatProvider } from './contexts/chat/ChatContext'
 import { FeedProvider } from './contexts/feed/FeedContext'
+import { ParamUserProvider } from './contexts/paramUser/ParamUserContext'
 import StartView from './components/auth/StartView'
 import HomeContent from './components/homeContent/HomeContent'
 import Layout from './components/layout/Layout'
@@ -77,7 +78,9 @@ export default function App() {
                 element={
                   authState.isAuthenticated ? (
                     <Layout>
-                      <ProfileContent />
+                      <ParamUserProvider>
+                        <ProfileContent />
+                      </ParamUserProvider>
                     </Layout>
                   ) : (
                     <Navigate to="/" replace />

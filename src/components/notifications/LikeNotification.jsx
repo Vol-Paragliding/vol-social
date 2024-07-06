@@ -65,7 +65,6 @@ const Block = styled.button`
 export default function LikeNotification({ likedActivities }) {
   const likedGroup = {}
   const navigate = useNavigate()
-
   const { user } = useStreamContext()
 
   likedActivities.forEach((act) => {
@@ -74,13 +73,19 @@ export default function LikeNotification({ likedActivities }) {
     } else likedGroup[act.object.id] = [act]
   })
 
+  const getOtherLikesText = (count) => {
+    if (count > 0) {
+      return `and ${count} other${count > 1 ? 's' : ' person'}`
+    }
+    return ''
+  }
+
   return (
     <>
       {Object.keys(likedGroup).map((groupKey) => {
         const activities = likedGroup[groupKey]
-
+        const otherCount = activities.length - 1
         const lastActivity = activities[0]
-
         const postLink = `/${user.id}/status/${lastActivity.object.id}`
 
         return (
@@ -112,11 +117,7 @@ export default function LikeNotification({ likedActivities }) {
                 >
                   {lastActivity.actor.data.name}
                 </Link>{' '}
-                <span to={postLink}>
-                  {activities.length > 1 &&
-                    `and ${activities.length - 1} others`}{' '}
-                  liked your Post
-                </span>
+                <span>{getOtherLikesText(otherCount)} liked your post</span>
               </span>
 
               <p className="post-text">{lastActivity.object.data.text}</p>
