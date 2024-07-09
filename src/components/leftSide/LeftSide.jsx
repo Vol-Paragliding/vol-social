@@ -237,9 +237,9 @@ export default function LeftSide({ onClickPost }) {
     init()
 
     return () => notifFeed?.unsubscribe()
-  }, [userData, location.pathname])
+  }, [userData, location.pathname, client])
 
-  if (!userData)
+  if (!userData || !feedUser)
     return (
       <Container>
         <LoadingIndicator />
@@ -337,10 +337,14 @@ export default function LeftSide({ onClickPost }) {
       >
         <div className="details">
           <div className="details__img">
-            <UserImage src={feedUser?.data?.image} alt={feedUser?.data?.name} />
+            <UserImage
+              src={feedUser.data?.image}
+              alt={feedUser.data?.name}
+              userId={feedUser.id}
+            />
           </div>
           <div className="details__text">
-            <span className="details__text__name">{feedUser?.data.name}</span>
+            <span className="details__text__name">{feedUser.data.name}</span>
             <span className="details__text__id">@{userData.id}</span>
           </div>
         </div>

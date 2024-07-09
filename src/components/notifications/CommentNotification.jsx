@@ -67,7 +67,11 @@ export default function CommentNotification({ commentActivities }) {
         return (
           <Block key={cAct.id} onClick={() => navigate(postLink)}>
             <Link to={`/${actor.id}`} className="user__image">
-              <UserImage src={actor.data?.image} alt={actor.data.name} />
+              <UserImage
+                src={actor.data?.image}
+                alt={actor.data.name}
+                userId={actor.id}
+              />
             </Link>
             <div className="user__details">
               <PostActorName

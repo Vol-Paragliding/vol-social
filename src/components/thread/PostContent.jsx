@@ -189,7 +189,11 @@ export default function PostContent({ activity }) {
       <Container>
         <Link to={`/${postActor.id}`} className="user">
           <div className="user__image">
-            <UserImage src={postActor?.image} alt={postActor.name} />
+            <UserImage
+              src={postActor?.image}
+              alt={postActor.name}
+              userId={postActor.id}
+            />
           </div>
           <div className="user__name">
             <span className="user__name--name">{postActor.name}</span>

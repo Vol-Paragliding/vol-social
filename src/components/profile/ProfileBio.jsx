@@ -172,7 +172,11 @@ export default function ProfileBio() {
     <Container>
       <div className="top">
         <div className="image">
-          <UserImage src={paramUser.data?.image} alt={paramUser.data.name} />
+          <UserImage
+            src={paramUser.data?.image}
+            alt={paramUser.data.name}
+            userId={paramUser.id}
+          />
         </div>
         <div className="actions">
           {!isLoggedInUserProfile ? (

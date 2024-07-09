@@ -1,15 +1,12 @@
 import classNames from 'classnames'
 import { useEffect, useRef, useState } from 'react'
-import { useStreamContext } from 'react-activity-feed'
 import styled from 'styled-components'
 
 import { useFeed } from '../../contexts/feed/useFeed'
-import Calendar from '../Icons/Calendar'
 import Emoji from '../Icons/Emoji'
 import Gif from '../Icons/Gif'
 import Image from '../Icons/Image'
 // import Location from '../Icons/Location'
-// import Poll from '../Icons/Poll'
 import ProgressRing from '../Icons/ProgressRing'
 import UserImage from '../profile/UserImage'
 
@@ -199,7 +196,7 @@ export default function PostForm({
     if (exceededMax)
       return alert('Post cannot exceed ' + MAX_CHARS + ' characters')
 
-    await onSubmit(text)
+    await onSubmit(text.trim())
 
     setText('')
   }
@@ -230,7 +227,11 @@ export default function PostForm({
         onSubmit={submit}
       >
         <div className="user">
-          <UserImage src={feedUser?.data?.image} alt={feedUser?.data.name} />
+          <UserImage
+            src={feedUser?.data?.image}
+            alt={feedUser?.data.name}
+            userId={feedUser.id}
+          />
         </div>
         <div className="input-section">
           <textarea

@@ -1,7 +1,10 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const PlaceholderSVG = () => (
+const PlaceholderSVG = ({ onClick }) => (
   <svg
+    onClick={onClick}
+    style={{ cursor: 'pointer' }}
     xmlns="http://www.w3.org/2000/svg"
     fill="white"
     height="40"
@@ -16,11 +19,25 @@ const PlaceholderSVG = () => (
   </svg>
 )
 
-const UserImage = ({ src, alt }) => {
+const UserImage = ({ src, alt, userId }) => {
+  const navigate = useNavigate()
+
+  const handleClick = (e) => {
+    if (userId) {
+      e.stopPropagation()
+      navigate(`/${userId}`)
+    }
+  }
+
   return src ? (
-    <img style={{ objectFit: 'cover' }} src={src} alt={alt} />
+    <img
+      style={{ objectFit: 'cover', cursor: 'pointer' }}
+      src={src}
+      alt={alt}
+      onClick={handleClick}
+    />
   ) : (
-    <PlaceholderSVG />
+    <PlaceholderSVG onClick={handleClick} />
   )
 }
 

@@ -268,7 +268,11 @@ export default function RightSide() {
                   <div className="user" key={user.id}>
                     <Link to={`/${user.id}`} className="user__details">
                       <div className="user__img">
-                        <UserImage src={user.image} alt={user.name} />
+                        <UserImage
+                          src={user.image}
+                          alt={user.name}
+                          userId={user.id}
+                        />
                       </div>
                       <div className="user__info">
                         <span className="user__name">{user.name}</span>

@@ -13,11 +13,11 @@ const FEED_ENRICH_OPTIONS = {
 export default function Thread() {
   const { user } = useStreamContext()
 
-  const { user_id } = useParams()
+  const { userId } = useParams()
 
   return (
     <Feed
-      feedGroup={user.id === user_id ? 'user' : 'timeline'}
+      feedGroup={user.id === userId ? 'user' : 'timeline'}
       options={FEED_ENRICH_OPTIONS}
     >
       <ThreadContent />

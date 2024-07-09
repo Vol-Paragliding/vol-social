@@ -97,15 +97,16 @@ export default function LikeNotification({ likedActivities }) {
             <Heart color="var(--theme-color)" size={25} fill={true} />
             <div className="right">
               <div className="liked-actors__images">
-                {activities.map((act) => (
+                {activities.map((activity) => (
                   <Link
-                    to={`/${act.actor.id}`}
-                    key={act.id}
+                    to={`/${activity.actor.id}`}
+                    key={activity.id}
                     className="liked-actors__images__image"
                   >
                     <UserImage
-                      src={act.actor.data?.image}
-                      alt={act.actor.data.name}
+                      src={activity.actor.data?.image}
+                      alt={activity.actor.data.name}
+                      userId={activity.actor.id}
                     />
                   </Link>
                 ))}

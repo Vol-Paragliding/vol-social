@@ -1,20 +1,38 @@
+// import { Activity } from 'react-activity-feed'
+// import { useNavigate } from 'react-router-dom'
+
+// export default function PostBlock({ activity }) {
+//   const navigate = useNavigate()
+
+//   const onClickUser = (user) => {
+//     navigate(`/${user.id}`)
+//   }
+//   console.log('activity!!!', activity)
+//   return (
+//     <Activity
+//       activity={activity}
+//       onClickUser={onClickUser}
+//       className="custom-activity"
+//     />
+//   )
+// }
+
 import classNames from 'classnames'
 import { useState } from 'react'
 import { useStreamContext } from 'react-activity-feed'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import useComment from '../../hooks/useComment'
-import useLike from '../../hooks/useLike'
-import { generatePostLink } from '../../utils/links'
 import { formatStringWithLink } from '../../utils/string'
+import CommentDialog from './CommentDialog'
 import Comment from '../Icons/Comment'
 import Heart from '../Icons/Heart'
 import More from '../Icons/More'
-import UserImage from '../profile/UserImage'
-import CommentDialog from './CommentDialog'
-import { Gallery } from './Gallery'
 import PostActorName from './PostActorName'
+import { generatePostLink } from '../../utils/links'
+import useComment from '../../hooks/useComment'
+import useLike from '../../hooks/useLike'
+import UserImage from '../profile/UserImage'
 
 const Block = styled.div`
   display: flex;
@@ -41,7 +59,6 @@ const Block = styled.div`
   }
 
   .post {
-    cursor: pointer;
     flex: 1;
     .link {
       display: block;
@@ -84,9 +101,16 @@ const Block = styled.div`
     }
 
     &__image {
-      margin-top: 10px;
+      margin-top: 20px;
+      border-radius: 20px;
+      border: 1px solid #333;
       overflow: hidden;
-      width: calc(100% + 30px);
+      width: calc(100% + 20px);
+
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
   }
 
@@ -104,10 +128,10 @@ export default function PostBlock({ activity }) {
 
   const { createComment } = useComment()
   const { toggleLike } = useLike()
-
   if (activity.verb === 'signup') {
     return null
   }
+  console.log('activity', activity)
 
   const actor = activity.actor
 
@@ -115,6 +139,7 @@ export default function PostBlock({ activity }) {
 
   const post = activity.object.data
 
+  // check if current logged in user has liked post
   if (activity?.own_reactions?.like) {
     const myReaction = activity.own_reactions.like.find(
       (l) => l.user.id === user.id
@@ -149,8 +174,6 @@ export default function PostBlock({ activity }) {
     await createComment(text, activity)
   }
 
-  const images = activity.attachments?.images || []
-
   return (
     <>
       <Block>
@@ -161,28 +184,25 @@ export default function PostBlock({ activity }) {
             userId={actor.id}
           />
         </div>
-        <div className="post" onClick={() => navigate(postLink)} role="button">
-          <PostActorName
-            name={actor.data.name}
-            id={actor.id}
-            time={activity.time}
-          />
-          <div className="post__details">
-            <p
-              className="post__text"
-              dangerouslySetInnerHTML={{
-                __html: formatStringWithLink(
-                  post?.text || '',
-                  'post__text--link'
-                ).replace(/\n/g, '<br/>'),
-              }}
+        <div className="post">
+          <button onClick={() => navigate(postLink)} className="link">
+            <PostActorName
+              name={actor.data.name}
+              id={actor.id}
+              time={activity.time}
             />
-            {images.length > 0 && (
-              <div className="post__image" onClick={(e) => e.stopPropagation()}>
-                <Gallery images={images} />
-              </div>
-            )}
-          </div>
+            <div className="post__details">
+              <p
+                className="post__text"
+                dangerouslySetInnerHTML={{
+                  __html: formatStringWithLink(
+                    post?.text || '',
+                    'post__text--link'
+                  ).replace(/\n/g, '<br/>'),
+                }}
+              />
+            </div>
+          </button>
 
           <div className="post__actions">
             {actions.map((action) => {

@@ -11,7 +11,12 @@ export default function MyPosts() {
 
   return (
     <div>
-      <FlatFeed Activity={PostBlock} userId={paramUser.id} feedGroup="user" notify />
+      <FlatFeed
+        Activity={PostBlock}
+        userId={paramUser.id}
+        feedGroup="user"
+        notify
+      />
     </div>
   )
 }

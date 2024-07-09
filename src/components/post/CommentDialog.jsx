@@ -132,6 +132,7 @@ export default function CommentDialog({
               <UserImage
                 src={postActor.data?.image}
                 alt={postActor.data.name}
+                userId={postActor.id}
               />
             </div>
             <div className="details">

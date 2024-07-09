@@ -107,7 +107,7 @@ export const ProfileImageUpload = ({
           accept="image/*"
           ref={fileInputRef}
         />
-        <UserImage src={imageSrc} alt="Profile" />
+        <UserImage src={imageSrc} alt="Profile image" userId={null} />
       </ProfileImageContainer>
     </>
   )
