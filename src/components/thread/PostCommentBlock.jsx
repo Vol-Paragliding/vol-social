@@ -4,6 +4,7 @@ import { formatStringWithLink } from '../../utils/string'
 import PostActorName from '../post/PostActorName'
 import UserImage from '../profile/UserImage'
 import More from '../Icons/More'
+import { Gallery } from '../post/Gallery'
 
 const Block = styled.div`
   display: flex;
@@ -46,15 +47,30 @@ const Block = styled.div`
   }
 
   .more {
-    width: 30px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
     display: flex;
     opacity: 0.6;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    margin-top: -14px;
+
+    &:hover {
+      background-color: rgb(51, 51, 51);
+    }
+  }
+
+  .comment-post__image {
+    margin-top: 10px;
+    overflow: hidden;
   }
 `
 
 export default function PostCommentBlock({ comment }) {
   const { user, data: postComment } = comment
+
+  const images = comment.attachments?.images || []
 
   return (
     <Block to="/">
@@ -82,6 +98,11 @@ export default function PostCommentBlock({ comment }) {
                 ).replace(/\n/g, '<br/>'),
               }}
             />
+            {images.length > 0 && (
+              <div className="comment-post__image">
+                <Gallery images={images} />
+              </div>
+            )}
           </div>
         </div>
       </div>

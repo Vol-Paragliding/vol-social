@@ -14,6 +14,7 @@ import Comment from '../Icons/Comment'
 import Heart from '../Icons/Heart'
 import More from '../Icons/More'
 import PostCommentBlock from './PostCommentBlock'
+import { Gallery } from '../post/Gallery'
 
 const Container = styled.div`
   padding: 10px 15px;
@@ -48,6 +49,16 @@ const Container = styled.div`
 
     &__option {
       margin-left: auto;
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        background-color: #333;
+      }
     }
   }
 
@@ -62,6 +73,7 @@ const Container = styled.div`
     &__text {
       color: white;
       font-size: 20px;
+      margin-bottom: 10px;
     }
 
     &__time,
@@ -177,6 +189,8 @@ export default function PostContent({ activity }) {
     feed.refresh()
   }
 
+  const images = activity.attachments?.images || []
+
   return (
     <>
       {commentDialogOpened && (
@@ -187,7 +201,7 @@ export default function PostContent({ activity }) {
         />
       )}
       <Container>
-        <Link to={`/${postActor.id}`} className="user">
+        <Link className="user">
           <div className="user__image">
             <UserImage
               src={postActor?.image}
@@ -213,6 +227,11 @@ export default function PostContent({ activity }) {
               ).replace(/\n/g, '<br/>'),
             }}
           />
+          {images.length > 0 && (
+            <div className="post__image">
+              <Gallery images={images} />
+            </div>
+          )}
           <div className="post__time">
             <span className="post__time--time">{time}</span>
             <span className="post__time--date">{date}</span>

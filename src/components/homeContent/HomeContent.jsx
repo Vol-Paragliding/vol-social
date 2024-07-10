@@ -5,7 +5,6 @@ import CreatePostTop from './CreatePostTop'
 import MainHeader from '../header/MainHeader'
 import Timeline from './Timeline'
 import LoadingIndicator from '../loading/LoadingIndicator'
-import { FeedProvider } from '../../contexts/feed/FeedContext'
 
 const Container = styled.div`
   .header {
@@ -48,8 +47,6 @@ const HomeContent = () => {
     <Container>
       <div className="header">
         <MainHeader />
-        <FeedProvider>
-        </FeedProvider>
       </div>
       <Feed feedGroup="user">
         <div className="create-post-top">

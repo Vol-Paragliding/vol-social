@@ -20,6 +20,7 @@ const Block = styled.div`
   display: flex;
   border-bottom: 1px solid #333;
   padding: 15px;
+  cursor: pointer;
 
   &:hover {
     background-color: rgb(17, 17, 17);
@@ -94,6 +95,14 @@ const Block = styled.div`
     width: 40px;
     height: 40px;
     display: flex;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    margin-top: -14px;
+
+    &:hover {
+      background-color: rgb(51, 51, 51);
+    }
   }
 `
 
@@ -153,15 +162,15 @@ export default function PostBlock({ activity }) {
 
   return (
     <>
-      <Block>
-        <div className="user-image">
+      <Block onClick={() => navigate(postLink)} role="button">
+        <div className="user-image" onClick={(e) => e.stopPropagation()}>
           <UserImage
             src={actor.data?.image}
             alt={actor.data.name}
             userId={actor.id}
           />
         </div>
-        <div className="post" onClick={() => navigate(postLink)} role="button">
+        <div className="post">
           <PostActorName
             name={actor.data.name}
             id={actor.id}
@@ -216,7 +225,13 @@ export default function PostBlock({ activity }) {
             })}
           </div>
         </div>
-        <button className="more">
+        <button
+          className="more"
+          onClick={(e) => {
+            e.stopPropagation()
+            console.log('More button clicked')
+          }}
+        >
           <More color="#777" size={20} />
         </button>
       </Block>

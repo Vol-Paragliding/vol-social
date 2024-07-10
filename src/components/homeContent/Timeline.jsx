@@ -1,6 +1,6 @@
 import { FlatFeed, useStreamContext } from 'react-activity-feed'
 
-import PostBlock from '../post/PostBlock-old'
+import PostBlock from '../post/PostBlock'
 
 export default function Timeline() {
   const { user } = useStreamContext()

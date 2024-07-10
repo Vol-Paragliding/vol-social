@@ -15,7 +15,7 @@ export const Gallery = ({ images = [], className }) => {
   return (
     <div
       className={classNames('raf-gallery', className)}
-      style={{ border: 'none' }}
+      style={{ border: 'none', cursor: 'pointer' }}
     >
       {images.slice(0, 5).map((image, i) => (
         <div
