@@ -3,7 +3,6 @@ import { StatusUpdateForm } from 'react-activity-feed'
 import 'react-activity-feed/dist/index.css'
 
 import usePost from '../../hooks/usePost'
-// import PostForm from '../post/PostForm'
 
 const Container = styled.div`
   // padding: 15px;
@@ -16,13 +15,8 @@ export default function CreatePostTop() {
     console.log('Post submitted successfully', activity)
   }
 
-  // const onSubmit = async (text) => {
-  //   createPost(text)
-  // }
-
   return (
     <Container>
-      {/* <PostForm placeholder="Share a flight" onSubmit={onSubmit} /> */}
       <StatusUpdateForm
         feedGroup="user"
         activityVerb="post"

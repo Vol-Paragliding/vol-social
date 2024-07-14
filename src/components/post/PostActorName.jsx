@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 const TextBlock = styled(Link)`
   display: flex;
+  // flex-direction: column;
 
   &:hover .user--name {
     text-decoration: underline;
@@ -36,9 +37,27 @@ const TextBlock = styled(Link)`
       margin: auto 0;
     }
   }
+
+  .site {
+    margin-left: 15px;
+    color: #777;
+    position: relative;
+
+    &::before {
+      content: '';
+      width: 2px;
+      height: 2px;
+      background-color: #777;
+      position: absolute;
+      left: -8px;
+      top: 0;
+      bottom: 0;
+      margin: auto 0;
+    }
+  }
 `
 
-export default function PostActorName({ time, name, id }) {
+export default function PostActorName({ time, name, id, site }) {
   const timeDiff = Date.now() - new Date(time).getTime()
 
   // convert ms to hours
@@ -59,6 +78,7 @@ export default function PostActorName({ time, name, id }) {
       <span className="user--name">{name}</span>
       <span className="user--id">@{id}</span>
       <span className="post-date">{timeText}</span>
+      {site && <span className="site">{site}</span>}
     </TextBlock>
   )
 }

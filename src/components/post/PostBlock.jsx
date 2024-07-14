@@ -15,6 +15,7 @@ import UserImage from '../profile/UserImage'
 import CommentDialog from './CommentDialog'
 import { Gallery } from './Gallery'
 import PostActorName from './PostActorName'
+import LeafletMap from './LeafletMap'
 
 const Block = styled.div`
   display: flex;
@@ -56,6 +57,7 @@ const Block = styled.div`
       font-size: 15px;
       line-height: 20px;
       margin-top: 3px;
+      margin-bottom: 10px;
       width: 100%;
 
       &--link {
@@ -85,9 +87,13 @@ const Block = styled.div`
     }
 
     &__image {
-      margin-top: 10px;
       overflow: hidden;
       width: calc(100% + 30px);
+    }
+
+    &__igc {
+      width: calc(100% + 30px);
+      border-right: 1px solid black;
     }
   }
 
@@ -110,6 +116,7 @@ export default function PostBlock({ activity }) {
   const { user } = useStreamContext()
   const navigate = useNavigate()
   const [commentDialogOpened, setCommentDialogOpened] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
 
   const { createComment } = useComment()
   const { toggleLike } = useLike()
@@ -119,7 +126,6 @@ export default function PostBlock({ activity }) {
   }
 
   const actor = activity.actor
-
   let hasLikedPost = false
 
   const post = activity.object.data
@@ -159,10 +165,32 @@ export default function PostBlock({ activity }) {
   }
 
   const images = activity.attachments?.images || []
+  const igc = activity.attachments?.igc || null
+  const wholeSite = igc && igc[0]?.data?.site
+  const site = wholeSite ? wholeSite.split('-')[0] : null
+
+  const handleMouseDown = (e) => {
+    setIsDragging(false)
+  }
+
+  const handleMouseMove = (e) => {
+    setIsDragging(true)
+  }
+
+  const handleMouseUp = (e) => {
+    if (!isDragging) {
+      navigate(postLink)
+    }
+  }
 
   return (
     <>
-      <Block onClick={() => navigate(postLink)} role="button">
+      <Block
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        role="button"
+      >
         <div className="user-image" onClick={(e) => e.stopPropagation()}>
           <UserImage
             src={actor.data?.image}
@@ -175,6 +203,7 @@ export default function PostBlock({ activity }) {
             name={actor.data.name}
             id={actor.id}
             time={activity.time}
+            site={site}
           />
           <div className="post__details">
             <p
@@ -186,6 +215,12 @@ export default function PostBlock({ activity }) {
                 ).replace(/\n/g, '<br/>'),
               }}
             />
+            {igc && (
+              console.log('igc', igc),
+              <div className="post__igc" onClick={(e) => e.stopPropagation()}>
+                <LeafletMap igc={igc[0]} />
+              </div>
+            )}
             {images.length > 0 && (
               <div className="post__image" onClick={(e) => e.stopPropagation()}>
                 <Gallery images={images} />

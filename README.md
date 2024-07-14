@@ -6,8 +6,8 @@
 
 In the project directory, you can run:
 
-### `npm start`
+### `yarn start`
 
-### `npm test`
+### `yarn test`
 
-### `npm run build`
+### `yarn run build`
