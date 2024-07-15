@@ -1,30 +1,75 @@
+import { createElement } from 'react'
+
+const MAX_LINK_LENGTH = 150
+
 export function formatStringWithLink(text, linkClass, noLink = false) {
-  // regex to match links, hashtags and mentions
-  const regex = /((https?:\/\/\S*)|(#\S*))|(@\S*)/gi
+  const regex = /((https?:\/\/\S*)|(#\S*)|(@\S*))/gi
+  const parts = []
+  let lastIndex = 0
 
-  const modifiedText = text.replace(regex, (match) => {
+  let match
+  while ((match = regex.exec(text)) !== null) {
+    const { index } = match
+
+    if (index > lastIndex) {
+      const plainText = text.substring(lastIndex, index)
+      const plainTextParts = plainText.split('\n')
+      plainTextParts.forEach(((lastIndex) => {
+        return (part, idx) => {
+          if (idx > 0) {
+            parts.push(createElement('br', { key: `br-${lastIndex}-${idx}` }))
+          }
+          parts.push(part)
+        }
+      })(lastIndex))
+    }
+
     let url, label
-
-    if (match.startsWith('#')) {
+    if (match[0].startsWith('#')) {
       // it is a hashtag
-      url = match
-      label = match
-    } else if (match.startsWith('@')) {
+      url = match[0]
+      label = match[0]
+    } else if (match[0].startsWith('@')) {
       // it is a mention
-      url = `/${match.replace('@', '')}`
-      label = match
+      url = `/${match[0].replace('@', '')}`
+      label = match[0]
     } else {
       // it is a link
-      url = match
+      url = match[0]
       label = url.replace('https://', '')
+
+      if (label.length > MAX_LINK_LENGTH) {
+        label = `${label.slice(0, MAX_LINK_LENGTH)}...`
+      }
     }
 
     const tag = noLink ? 'span' : 'a'
 
-    return `<${tag} class="${
-      noLink ? '' : linkClass
-    }" href="${url}">${label}</${tag}>`
-  })
+    parts.push(
+      createElement(
+        tag,
+        {
+          className: noLink ? '' : linkClass,
+          href: !noLink ? url : undefined,
+          key: index,
+        },
+        label
+      )
+    )
 
-  return modifiedText
+    lastIndex = index + match[0].length
+  }
+
+  if (lastIndex < text.length) {
+    const remainingText = text.substring(lastIndex)
+    const remainingTextParts = remainingText.split('\n')
+    remainingTextParts.forEach((part, idx) => {
+      if (idx > 0) {
+        parts.push(createElement('br', { key: `br-${lastIndex}-${idx}` }))
+      }
+      parts.push(part)
+    })
+  }
+
+  return parts
 }

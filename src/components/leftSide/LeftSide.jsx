@@ -142,7 +142,8 @@ const Container = styled.div`
 
       &__img {
         margin-right: 10px;
-        width: 40px;
+        min-width: 40px;
+        max-width: 40px;
         border-radius: 50%;
         height: 40px;
         overflow: hidden;

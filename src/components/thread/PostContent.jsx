@@ -24,7 +24,8 @@ const Container = styled.div`
     text-decoration: none;
 
     &__image {
-      width: 40px;
+      min-width: 40px;
+      max-width: 40px;
       height: 40px;
       border-radius: 50%;
       overflow: hidden;
@@ -74,10 +75,15 @@ const Container = styled.div`
       color: white;
       font-size: 20px;
       margin-bottom: 10px;
+      word-break: break-word;
+
+      &--link {
+        color: var(--theme-color);
+        text-decoration: none;
+      }
     }
 
     &__time,
-    &__analytics,
     &__reactions,
     &__reactors {
       height: 50px;
@@ -105,12 +111,6 @@ const Container = styled.div`
           left: -7px;
           margin: auto 0;
         }
-      }
-    }
-
-    &__analytics {
-      &__text {
-        margin-left: 7px;
       }
     }
 
@@ -218,15 +218,9 @@ export default function PostContent({ activity }) {
           </div>
         </Link>
         <div className="post">
-          <p
-            className="post__text"
-            dangerouslySetInnerHTML={{
-              __html: formatStringWithLink(
-                post.text,
-                'post__text--link'
-              ).replace(/\n/g, '<br/>'),
-            }}
-          />
+          <p className="post__text">
+            {formatStringWithLink( post.text, 'post__text--link' )}
+          </p>
           {images.length > 0 && (
             <div className="post__image">
               <Gallery images={images} />

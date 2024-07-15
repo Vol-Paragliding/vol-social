@@ -11,6 +11,8 @@ import { formatStringWithLink } from '../../utils/string'
 import Comment from '../Icons/Comment'
 import Heart from '../Icons/Heart'
 import More from '../Icons/More'
+import Expand from '../Icons/Expand'
+import Collapse from '../Icons/Collapse'
 import UserImage from '../profile/UserImage'
 import CommentDialog from './CommentDialog'
 import { Gallery } from './Gallery'
@@ -28,7 +30,8 @@ const Block = styled.div`
   }
 
   .user-image {
-    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
@@ -59,6 +62,8 @@ const Block = styled.div`
       margin-top: 3px;
       margin-bottom: 10px;
       width: 100%;
+      word-break: break-word;
+      position: relative;
 
       &--link {
         color: var(--theme-color);
@@ -93,16 +98,12 @@ const Block = styled.div`
 
     &__igc {
       width: calc(100% + 30px);
-      // border-right: 1px solid black;
-      // margin-right: 1px;
     }
   }
 
   .expand-text {
     color: var(--theme-color);
     cursor: pointer;
-    margin-top: 5px;
-    margin-bottom: 5px;
     font-size: 18px;
     font-weight: bold;
     border-radius: 50%;
@@ -111,6 +112,9 @@ const Block = styled.div`
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    position: absolute;
+    right: -30px;
+    bottom: 0;
 
     &:hover {
       background-color: #333;
@@ -222,16 +226,17 @@ export default function PostBlock({ activity }) {
       'post__image',
     ]
 
-    while (target) {
-      if (
-        target.classList &&
-        nonNavigableClasses.some((className) =>
-          target.classList.contains(className)
-        )
-      ) {
+    const hasNonNavigableClass = (element) =>
+      nonNavigableClasses.some((className) =>
+        element.classList.contains(className)
+      )
+
+    let currentElement = target
+    while (currentElement) {
+      if (currentElement.classList && hasNonNavigableClass(currentElement)) {
         return true
       }
-      target = target.parentElement
+      currentElement = currentElement.parentElement
     }
     return false
   }
@@ -247,33 +252,23 @@ export default function PostBlock({ activity }) {
     if (text.length > 350) {
       return (
         <>
-          <p
-            className="post__text"
-            dangerouslySetInnerHTML={{
-              __html: formatStringWithLink(
-                isExpanded ? text : text.slice(0, 350),
-                'post__text--link'
-              ).replace(/\n/g, '<br/>'),
-            }}
-          />
-          {!isExpanded && (
-            <button onClick={toggleTextExpansion} className="expand-text">
-              ...
-            </button>
-          )}
+          <p className="post__text">
+            {formatStringWithLink(
+              isExpanded ? text : text.slice(0, 350),
+              'post__text--link'
+            )}{' '}
+            {!isExpanded && '...'}
+            <span onClick={toggleTextExpansion} className="expand-text">
+              {!isExpanded ? <Expand /> : <Collapse />}
+            </span>
+          </p>
         </>
       )
     } else {
       return (
-        <p
-          className="post__text"
-          dangerouslySetInnerHTML={{
-            __html: formatStringWithLink(text, 'post__text--link').replace(
-              /\n/g,
-              '<br/>'
-            ),
-          }}
-        />
+        <p className="post__text">
+          {formatStringWithLink(text, 'post__text--link')}
+        </p>
       )
     }
   }
@@ -302,14 +297,11 @@ export default function PostBlock({ activity }) {
           />
           <div className="post__details">
             {renderText()}
-            {igc &&
-              igc.length > 0 &&
-              (console.log('igc', igc),
-              (
-                <div className="post__igc" onClick={(e) => e.stopPropagation()}>
-                  <LeafletMap igc={igc[0]} />
-                </div>
-              ))}
+            {igc && igc.length > 0 && (
+              <div className="post__igc" onClick={(e) => e.stopPropagation()}>
+                <LeafletMap igc={igc[0]} />
+              </div>
+            )}
             {images.length > 0 && (
               <div className="post__image" onClick={(e) => e.stopPropagation()}>
                 <Gallery images={images} />

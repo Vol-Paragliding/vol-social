@@ -108,7 +108,8 @@ const Container = styled.div`
       }
 
       &__img {
-        width: 40px;
+        min-width: 40px;
+        max-width: 40px;
         height: 40px;
         overflow: hidden;
         border-radius: 50%;

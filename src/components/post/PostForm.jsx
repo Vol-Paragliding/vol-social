@@ -1,4 +1,4 @@
-import classNames from 'classnames'
+// import classNames from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -7,7 +7,7 @@ import { useFeed } from '../../contexts/feed/useFeed'
 // import Gif from '../Icons/Gif'
 // import Image from '../Icons/Image'
 // import Location from '../Icons/Location'
-import ProgressRing from '../Icons/ProgressRing'
+// import ProgressRing from '../Icons/ProgressRing'
 import UserImage from '../profile/UserImage'
 
 const Container = styled.div`
@@ -33,7 +33,8 @@ const Form = styled.form`
   align-items: ${({ inline }) => (inline ? 'center' : 'initial')};
 
   .user {
-    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
@@ -255,7 +256,7 @@ export default function PostForm({
                 )
               })}
             <div className="right">
-              {!isInputEmpty && (
+              {/* {!isInputEmpty && (
                 <div className="post-length">
                   <ProgressRing
                     stroke={2.2}
@@ -280,7 +281,7 @@ export default function PostForm({
                     </span>
                   )}
                 </div>
-              )}
+              )} */}
               {!isInputEmpty && <hr className="divider" />}
               <button
                 type="submit"

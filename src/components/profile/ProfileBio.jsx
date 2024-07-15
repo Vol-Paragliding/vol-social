@@ -6,8 +6,6 @@ import { useStreamContext } from 'react-activity-feed'
 import { useFeed } from '../../contexts/feed/useFeed'
 import { useParamUser } from '../../contexts/paramUser/useParamUser'
 import { formatStringWithLink } from '../../utils/string'
-// import More from '../Icons/More'
-// import Mail from '../Icons/Mail'
 import Calendar from '../Icons/Calendar'
 import LoadingIndicator from '../loading/LoadingIndicator'
 import FollowBtn from '../follow/FollowBtn'
@@ -80,6 +78,8 @@ const Container = styled.div`
       &__bio {
         color: white;
         margin-top: 10px;
+        word-break: break-word;
+
         a {
           color: var(--theme-color);
           text-decoration: none;
@@ -156,7 +156,6 @@ export default function ProfileBio() {
   if (!feedUser?.data || !paramUser) return <LoadingIndicator />
 
   const joinedDate = format(new Date(paramUser.created_at), 'MMMM RRRR')
-  const bio = formatStringWithLink(paramUser.data.bio || '')
   const isLoggedInUserProfile = paramUser.data.id === client.userId
 
   const handleEditProfile = () => {
@@ -197,7 +196,9 @@ export default function ProfileBio() {
       <div className="details">
         <span className="user__name">{paramUser.data.name}</span>
         <span className="user__id">@{paramUser.data.id}</span>
-        <span className="user__bio" dangerouslySetInnerHTML={{ __html: bio }} />
+        <span className="user__bio">
+          {formatStringWithLink(paramUser.data.bio || '')}
+        </span>
         <div className="user__joined">
           <Calendar color="#777" size={20} />
           <span className="user__joined--text">Joined {joinedDate}</span>

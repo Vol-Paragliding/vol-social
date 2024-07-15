@@ -12,7 +12,8 @@ const Block = styled.div`
   padding: 15px 0;
 
   .user-image {
-    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
@@ -38,6 +39,7 @@ const Block = styled.div`
       font-size: 15px;
       line-height: 20px;
       margin-top: 3px;
+      word-break: break-word;
 
       &--link {
         color: var(--theme-color);
@@ -89,15 +91,9 @@ export default function PostCommentBlock({ comment }) {
             time={comment.created_at}
           />
           <div className="post__details">
-            <p
-              className="comment-post__text"
-              dangerouslySetInnerHTML={{
-                __html: formatStringWithLink(
-                  postComment.text,
-                  'post__text--link'
-                ).replace(/\n/g, '<br/>'),
-              }}
-            />
+            <p className="comment-post__text">
+              {formatStringWithLink( postComment.text, 'post__text--link' )}
+            </p>
             {images.length > 0 && (
               <div className="comment-post__image">
                 <Gallery images={images} />

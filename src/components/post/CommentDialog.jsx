@@ -32,11 +32,11 @@ const BlockContent = styled.div`
     }
 
     .img {
-      width: 40px;
+      min-width: 40px;
+      max-width: 40px;
       height: 40px;
       border-radius: 50%;
       margin-right: 15px;
-      border-radius: 50%;
       overflow: hidden;
 
       img {
@@ -63,6 +63,7 @@ const BlockContent = styled.div`
         color: white;
         margin-top: 3px;
         font-size: 14px;
+        word-break: break-word;
       }
 
       .replying-info {
@@ -89,7 +90,6 @@ const BlockContent = styled.div`
       margin-left: 3px;
       border-radius: 50%;
       margin-right: 15px;
-      border-radius: 50%;
       overflow: hidden;
 
       img {
@@ -119,7 +119,6 @@ export default function CommentDialog({
 
   const onSubmit = async (text) => {
     await onPostComment(text)
-
     onClickOutside()
   }
 
@@ -141,16 +140,9 @@ export default function CommentDialog({
                 name={postActor.data.name}
                 id={postActor.data.id}
               />
-              <p
-                className="post-text"
-                dangerouslySetInnerHTML={{
-                  __html: formatStringWithLink(
-                    post.text,
-                    'post__text--link',
-                    true
-                  ).replace(/\n/g, '<br/>'),
-                }}
-              />
+              <p className="post-text">
+                {formatStringWithLink(post.text, 'post__text--link', true)}
+              </p>
               <div className="replying-info">
                 Replying to{' '}
                 <span className="replying-info--actor">@{postActor.id}</span>
