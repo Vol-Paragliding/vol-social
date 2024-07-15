@@ -93,7 +93,27 @@ const Block = styled.div`
 
     &__igc {
       width: calc(100% + 30px);
-      border-right: 1px solid black;
+      // border-right: 1px solid black;
+      // margin-right: 1px;
+    }
+  }
+
+  .expand-text {
+    color: var(--theme-color);
+    cursor: pointer;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    &:hover {
+      background-color: #333;
     }
   }
 
@@ -117,6 +137,7 @@ export default function PostBlock({ activity }) {
   const navigate = useNavigate()
   const [commentDialogOpened, setCommentDialogOpened] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const { createComment } = useComment()
   const { toggleLike } = useLike()
@@ -154,7 +175,13 @@ export default function PostBlock({ activity }) {
       Icon: Comment,
       alt: 'Comment',
       value: activity?.reaction_counts?.comment || 0,
-      onClick: () => setCommentDialogOpened(true),
+      onClick: () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        })
+        setCommentDialogOpened(true)
+      },
     },
   ]
 
@@ -178,8 +205,76 @@ export default function PostBlock({ activity }) {
   }
 
   const handleMouseUp = (e) => {
-    if (!isDragging) {
+    if (!isDragging && !e.defaultPrevented && !isNonNavigableClick(e.target)) {
       navigate(postLink)
+    }
+  }
+
+  const isNonNavigableClick = (target) => {
+    const nonNavigableClasses = [
+      'expand-stats',
+      'expand-text',
+      'comment-icon',
+      'heart-icon',
+      'more-icon',
+      'user-image',
+      'post__igc',
+      'post__image',
+    ]
+
+    while (target) {
+      if (
+        target.classList &&
+        nonNavigableClasses.some((className) =>
+          target.classList.contains(className)
+        )
+      ) {
+        return true
+      }
+      target = target.parentElement
+    }
+    return false
+  }
+
+  const toggleTextExpansion = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsExpanded(!isExpanded)
+  }
+
+  const renderText = () => {
+    const text = post?.text || ''
+    if (text.length > 350) {
+      return (
+        <>
+          <p
+            className="post__text"
+            dangerouslySetInnerHTML={{
+              __html: formatStringWithLink(
+                isExpanded ? text : text.slice(0, 350),
+                'post__text--link'
+              ).replace(/\n/g, '<br/>'),
+            }}
+          />
+          {!isExpanded && (
+            <button onClick={toggleTextExpansion} className="expand-text">
+              ...
+            </button>
+          )}
+        </>
+      )
+    } else {
+      return (
+        <p
+          className="post__text"
+          dangerouslySetInnerHTML={{
+            __html: formatStringWithLink(text, 'post__text--link').replace(
+              /\n/g,
+              '<br/>'
+            ),
+          }}
+        />
+      )
     }
   }
 
@@ -206,21 +301,15 @@ export default function PostBlock({ activity }) {
             site={site}
           />
           <div className="post__details">
-            <p
-              className="post__text"
-              dangerouslySetInnerHTML={{
-                __html: formatStringWithLink(
-                  post?.text || '',
-                  'post__text--link'
-                ).replace(/\n/g, '<br/>'),
-              }}
-            />
-            {igc && (
-              console.log('igc', igc),
-              <div className="post__igc" onClick={(e) => e.stopPropagation()}>
-                <LeafletMap igc={igc[0]} />
-              </div>
-            )}
+            {renderText()}
+            {igc &&
+              igc.length > 0 &&
+              (console.log('igc', igc),
+              (
+                <div className="post__igc" onClick={(e) => e.stopPropagation()}>
+                  <LeafletMap igc={igc[0]} />
+                </div>
+              ))}
             {images.length > 0 && (
               <div className="post__image" onClick={(e) => e.stopPropagation()}>
                 <Gallery images={images} />
@@ -233,11 +322,13 @@ export default function PostBlock({ activity }) {
               return (
                 <button
                   onClick={(e) => {
+                    e.preventDefault()
                     e.stopPropagation()
                     action.onClick?.()
                   }}
                   key={action.id}
                   type="button"
+                  className={`${action.id}-icon`}
                 >
                   <action.Icon
                     color={
@@ -261,8 +352,9 @@ export default function PostBlock({ activity }) {
           </div>
         </div>
         <button
-          className="more"
+          className="more more-icon"
           onClick={(e) => {
+            e.preventDefault()
             e.stopPropagation()
             console.log('More button clicked')
           }}

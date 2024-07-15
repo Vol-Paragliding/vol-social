@@ -1,6 +1,6 @@
+import { StatusUpdateForm } from 'react-activity-feed'
 import styled from 'styled-components'
 
-import PostForm from './PostForm'
 import Modal from '../modal/Modal'
 import usePost from '../../hooks/usePost'
 
@@ -21,21 +21,19 @@ const Container = styled.div`
 export default function CreatePostDialog({ onClickOutside }) {
   const { createPost } = usePost()
 
-  const onSubmit = async (text) => {
-    createPost(text)
-
+  const onSuccess = async (activity) => {
+    console.log('Post submitted successfully', activity)
     onClickOutside()
   }
 
   return (
     <Container>
       <Modal onClickOutside={onClickOutside} className="modal-block">
-        <PostForm
-          onSubmit={onSubmit}
-          shouldFocus={true}
-          minHeight={240}
-          className="post-form"
-          placeholder="Share a flight"
+        <StatusUpdateForm
+          feedGroup="user"
+          activityVerb="post"
+          onSuccess={onSuccess}
+          doRequest={createPost}
         />
       </Modal>
     </Container>

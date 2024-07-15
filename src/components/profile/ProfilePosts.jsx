@@ -1,4 +1,4 @@
-import { FlatFeed } from 'react-activity-feed'
+import { FlatFeed, NewActivitiesNotification } from 'react-activity-feed'
 
 import { useParamUser } from '../../contexts/paramUser/useParamUser'
 import LoadingIndicator from '../loading/LoadingIndicator'
@@ -16,6 +16,11 @@ export default function MyPosts() {
         userId={paramUser.id}
         feedGroup="user"
         notify
+        // Notification={
+        //   <NewActivitiesNotification
+        //     style={{ background: 'black', color: 'white' }}
+        //   />
+        // }
       />
     </div>
   )

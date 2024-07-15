@@ -6,8 +6,8 @@ import { useStreamContext } from 'react-activity-feed'
 import { useFeed } from '../../contexts/feed/useFeed'
 import { useParamUser } from '../../contexts/paramUser/useParamUser'
 import { formatStringWithLink } from '../../utils/string'
-import More from '../Icons/More'
-import Mail from '../Icons/Mail'
+// import More from '../Icons/More'
+// import Mail from '../Icons/Mail'
 import Calendar from '../Icons/Calendar'
 import LoadingIndicator from '../loading/LoadingIndicator'
 import FollowBtn from '../follow/FollowBtn'
@@ -18,6 +18,7 @@ import UserImage from './UserImage'
 const Container = styled.div`
   padding: 20px;
   position: relative;
+  border-bottom: 1px solid #555;
 
   .top {
     display: flex;
@@ -136,14 +137,14 @@ const ActionButton = styled.button`
 `
 
 const actions = [
-  {
-    Icon: More,
-    id: 'more',
-  },
-  {
-    Icon: Mail,
-    id: 'message',
-  },
+  // {
+  //   Icon: More,
+  //   id: 'more',
+  // },
+  // {
+  //   Icon: Mail,
+  //   id: 'message',
+  // },
 ]
 
 export default function ProfileBio() {
@@ -208,9 +209,6 @@ export default function ProfileBio() {
           <span className="user__follows__followers">
             <b>{paramUser.followers_count || 0}</b> Followers
           </span>
-        </div>
-        <div className="user__followed-by">
-          Not followed by anyone you are following
         </div>
       </div>
       {isEditProfileOpen && (

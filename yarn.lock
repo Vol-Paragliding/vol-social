@@ -8676,7 +8676,7 @@ rbush@^3.0.1:
 
 "react-activity-feed@https://github.com/zacheryconverse/react-activity-feed.git#main":
   version "1.4.3"
-  resolved "https://github.com/zacheryconverse/react-activity-feed.git#6808e6cc5ed431b41d03c4caa8696f0643534a87"
+  resolved "https://github.com/zacheryconverse/react-activity-feed.git#dfa186158bd55f3454e635b05be87e2bfdebe81a"
   dependencies:
     "@babel/runtime" "^7.14.0"
     "@emotion/react" "^11.4.0"

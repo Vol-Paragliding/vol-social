@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { useFeed } from '../../contexts/feed/useFeed'
-import Emoji from '../Icons/Emoji'
-import Gif from '../Icons/Gif'
-import Image from '../Icons/Image'
+// import Emoji from '../Icons/Emoji'
+// import Gif from '../Icons/Gif'
+// import Image from '../Icons/Image'
 // import Location from '../Icons/Location'
 import ProgressRing from '../Icons/ProgressRing'
 import UserImage from '../profile/UserImage'
@@ -137,26 +137,26 @@ const Form = styled.form`
 `
 
 const actions = [
-  {
-    id: 'image',
-    Icon: Image,
-    alt: 'Image',
-  },
-  {
-    id: 'gif',
-    Icon: Gif,
-    alt: 'GIF',
-  },
+  // {
+  //   id: 'image',
+  //   Icon: Image,
+  //   alt: 'Image',
+  // },
+  // {
+  //   id: 'gif',
+  //   Icon: Gif,
+  //   alt: 'GIF',
+  // },
   // {
   //   id: 'poll',
   //   Icon: Poll,
   //   alt: 'Poll',
   // },
-  {
-    id: 'emoji',
-    Icon: Emoji,
-    alt: 'Emoji',
-  },
+  // {
+  //   id: 'emoji',
+  //   Icon: Emoji,
+  //   alt: 'Emoji',
+  // },
   // {
   //   id: 'location',
   //   Icon: Location,

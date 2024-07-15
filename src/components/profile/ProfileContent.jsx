@@ -5,7 +5,7 @@ import LoadingIndicator from '../loading/LoadingIndicator'
 import ProfileBio from './ProfileBio'
 import ProfileHeader from './ProfileHeader'
 import ProfilePosts from './ProfilePosts'
-import TabList from './TabList'
+// import TabList from './TabList'
 
 const Container = styled.div`
   --profile-image-size: 120px;
@@ -25,9 +25,9 @@ export default function ProfileContent() {
         <ProfileHeader />
         <main>
           <ProfileBio />
-          <div className="tab-list">
+          {/* <div className="tab-list">
             <TabList />
-          </div>
+          </div> */}
           <ProfilePosts />
         </main>
       </Container>
