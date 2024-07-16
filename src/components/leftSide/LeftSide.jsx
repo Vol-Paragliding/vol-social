@@ -112,12 +112,12 @@ const Container = styled.div`
 
   .post-btn {
     background-color: var(--theme-color);
-    margin-bottom: 10px;
+    margin-bottom: 11px;
     border-radius: 30px;
     color: black;
     font-weight: bold;
     text-align: center;
-    padding: 10px 0;
+    padding: 18px 0;
     font-size: 16px;
     transition: background-color 0.2s;
     width: 100%;
