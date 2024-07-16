@@ -11,12 +11,13 @@ import { logout } from '../../contexts/auth/AuthSlice'
 import LoadingIndicator from '../loading/LoadingIndicator'
 import UserImage from '../profile/UserImage'
 import Bell from '../Icons/Bell'
-import Group from '../Icons/Group'
+// import Group from '../Icons/Group'
 import Home from '../Icons/Home'
-import Mail from '../Icons/Mail'
+// import Mail from '../Icons/Mail'
 import User from '../Icons/User'
 import More from '../Icons/More'
-import Search from '../Icons/Search'
+import Plus from '../Icons/Plus'
+// import Search from '../Icons/Search'
 
 const Container = styled.div`
   display: flex;
@@ -85,16 +86,16 @@ const Container = styled.div`
 
       &.btn--home {
         position: relative;
-        &.new-posts::after {
-          content: '';
-          position: absolute;
-          width: 5px;
-          height: 5px;
-          left: 35px;
-          top: 7px;
-          border-radius: 50%;
-          background-color: var(--theme-color);
-        }
+        // &.new-posts::after {
+        //   content: '';
+        //   position: absolute;
+        //   width: 5px;
+        //   height: 5px;
+        //   left: 35px;
+        //   top: 7px;
+        //   border-radius: 50%;
+        //   background-color: var(--theme-color);
+        // }
       }
 
       &.btn--more {
@@ -111,13 +112,19 @@ const Container = styled.div`
 
   .post-btn {
     background-color: var(--theme-color);
-    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 30px;
     color: black;
     font-weight: bold;
     text-align: center;
-    padding: 15px 0;
+    padding: 10px 0;
     font-size: 16px;
+    transition: background-color 0.2s;
+    width: 100%;
+
+    &:hover {
+      background-color: var(--faded-theme-color);
+    }
   }
 
   .profile-section {
@@ -254,16 +261,16 @@ export default function LeftSide({ onClickPost }) {
       Icon: Home,
       link: '/home',
     },
-    {
-      id: 'explore',
-      label: 'Explore',
-      Icon: Search,
-    },
-    {
-      id: 'communities',
-      label: 'Communities',
-      Icon: Group,
-    },
+    // {
+    //   id: 'explore',
+    //   label: 'Explore',
+    //   Icon: Search,
+    // },
+    // {
+    //   id: 'communities',
+    //   label: 'Communities',
+    //   Icon: Group,
+    // },
     {
       id: 'notifications',
       label: 'Notifications',
@@ -272,11 +279,11 @@ export default function LeftSide({ onClickPost }) {
       value: newNotifications,
       onClick: () => setNewNotifications(0),
     },
-    {
-      id: 'messages',
-      label: 'Messages',
-      Icon: Mail,
-    },
+    // {
+    //   id: 'messages',
+    //   label: 'Messages',
+    //   Icon: Mail,
+    // },
     {
       id: 'profile',
       label: 'Profile',
@@ -322,41 +329,44 @@ export default function LeftSide({ onClickPost }) {
             </Link>
           )
         })}
-        <button className="btn--more">
+        {/* <button className="btn--more">
           <div className="btn--icon">
             <More color="white" size={20} />
           </div>
           <span>More</span>
-        </button>
+        </button> */}
       </div>
-      <button onClick={onClickPost} className="post-btn">
-        Post
-      </button>
-      <div
-        className="profile-section"
-        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-      >
-        <div className="details">
-          <div className="details__img">
-            <UserImage
-              src={feedUser.data?.image}
-              alt={feedUser.data?.name}
-              userId={feedUser.id}
-            />
+      <div style={{ marginTop: 'auto' }}>
+        <button onClick={onClickPost} className="post-btn">
+          <Plus />
+        </button>
+        <div
+          className="profile-section"
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          <div className="details">
+            <div className="details__img">
+              <UserImage
+                src={feedUser.data?.image}
+                alt={feedUser.data?.name}
+                userId={feedUser.id}
+              />
+            </div>
+            <div className="details__text">
+              <span className="details__text__name">{feedUser.data.name}</span>
+              <span className="details__text__id">@{userData.id}</span>
+            </div>
           </div>
-          <div className="details__text">
-            <span className="details__text__name">{feedUser.data.name}</span>
-            <span className="details__text__id">@{userData.id}</span>
+          <div>
+            <More color="white" />
           </div>
+
+          {isDropdownOpen && (
+            <Menu>
+              <button onClick={handleLogout}>Logout @{feedUser.id}</button>
+            </Menu>
+          )}
         </div>
-        <div>
-          <More color="white" />
-        </div>
-        {isDropdownOpen && (
-          <Menu>
-            <button onClick={handleLogout}>Logout @{feedUser.id}</button>
-          </Menu>
-        )}
       </div>
     </Container>
   )

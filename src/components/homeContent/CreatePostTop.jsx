@@ -1,12 +1,5 @@
-import styled from 'styled-components'
-import { StatusUpdateForm } from 'react-activity-feed'
-import 'react-activity-feed/dist/index.css'
-
+import CreatePostForm from '../post/CreatePostForm'
 import usePost from '../../hooks/usePost'
-
-const Container = styled.div`
-  // padding: 15px;
-`
 
 export default function CreatePostTop() {
   const { createPost } = usePost()
@@ -16,13 +9,12 @@ export default function CreatePostTop() {
   }
 
   return (
-    <Container>
-      <StatusUpdateForm
-        feedGroup="user"
-        activityVerb="post"
-        onSuccess={onSuccess}
-        doRequest={createPost}
-      />
-    </Container>
+    <CreatePostForm
+      feedGroup="user"
+      activityVerb="post"
+      onSuccess={onSuccess}
+      doRequest={createPost}
+      Header={false}
+    />
   )
 }

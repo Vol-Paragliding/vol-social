@@ -1,8 +1,8 @@
-import { StatusUpdateForm } from 'react-activity-feed'
 import styled from 'styled-components'
 
 import Modal from '../modal/Modal'
 import usePost from '../../hooks/usePost'
+import CreatePostForm from './CreatePostForm'
 
 const Container = styled.div`
   .modal-block {
@@ -29,11 +29,13 @@ export default function CreatePostDialog({ onClickOutside }) {
   return (
     <Container>
       <Modal onClickOutside={onClickOutside} className="modal-block">
-        <StatusUpdateForm
+        <CreatePostForm
           feedGroup="user"
           activityVerb="post"
           onSuccess={onSuccess}
           doRequest={createPost}
+          Header={false}
+          autoFocus
         />
       </Modal>
     </Container>

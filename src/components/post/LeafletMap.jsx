@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 import { parseIgcFile } from '../../utils/igcParser'
 import FlightStats from './FlightStats'
@@ -13,6 +13,7 @@ const Container = styled.div`
 
 const LeafletMap = ({ igc }) => {
   const [flightPath, setFlightPath] = useState([])
+  const attributionRef = useRef(null)
 
   useEffect(() => {
     const fetchAndDisplayFlightPath = async () => {
@@ -31,25 +32,28 @@ const LeafletMap = ({ igc }) => {
           fix.longitude,
         ])
         setFlightPath(path)
-        const attributionControl = document.querySelector(
-          '.leaflet-control-attribution'
-        )
-        if (attributionControl) {
-          attributionControl.style.opacity = '0.5'
-          attributionControl.style.fontSize = '10px'
-          attributionControl.querySelectorAll('a').forEach((a) => {
-            a.style.color = 'rgba(0, 0, 0, 0.5)'
-            a.style.textDecoration = 'none'
-          })
-          const leafletLink = attributionControl.querySelector(
-            'a[href="https://leafletjs.com"]'
+
+        if (attributionRef.current) {
+          const attributionControl = attributionRef.current.querySelector(
+            '.leaflet-control-attribution'
           )
-          const spanSeparator = attributionControl.querySelector(
-            'span[aria-hidden="true"]'
-          )
-          if (leafletLink && spanSeparator) {
-            leafletLink.style.display = 'none'
-            spanSeparator.style.display = 'none'
+          if (attributionControl) {
+            attributionControl.style.opacity = '0.5'
+            attributionControl.style.fontSize = '10px'
+            attributionControl.querySelectorAll('a').forEach((a) => {
+              a.style.color = 'rgba(0, 0, 0, 0.5)'
+              a.style.textDecoration = 'none'
+            })
+            const leafletLink = attributionControl.querySelector(
+              'a[href="https://leafletjs.com"]'
+            )
+            const spanSeparator = attributionControl.querySelector(
+              'span[aria-hidden="true"]'
+            )
+            if (leafletLink && spanSeparator) {
+              leafletLink.style.display = 'none'
+              spanSeparator.style.display = 'none'
+            }
           }
         }
       } catch (error) {
@@ -61,7 +65,7 @@ const LeafletMap = ({ igc }) => {
   }, [igc?.url])
 
   return (
-    <Container>
+    <Container ref={attributionRef}>
       <FlightStats igc={igc} />
       <FlightMap flightPath={flightPath} />
     </Container>
