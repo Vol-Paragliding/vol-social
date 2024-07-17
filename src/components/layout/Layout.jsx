@@ -25,7 +25,6 @@ const Container = styled.div`
   .main-content {
     width: 100%;
     min-height: 100vh;
-    padding: 1rem;
     border-left: none;
     border-right: none;
   }

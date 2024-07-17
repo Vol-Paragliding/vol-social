@@ -7,7 +7,7 @@ const StatsContainer = styled.div`
     justify-content: space-between;
     align-content: space-around;
     flex-wrap: wrap;
-    height: ${(props) => (props.expanded ? '140px' : '40px')};
+    min-height: ${(props) => (props.expanded ? '140px' : '40px')};
     color: #fff;
     margin-bottom: 10px;
     transition: height 0.5s ease;

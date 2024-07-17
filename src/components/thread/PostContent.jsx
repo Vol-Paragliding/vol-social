@@ -13,8 +13,9 @@ import PostForm from '../post/PostForm'
 import Comment from '../Icons/Comment'
 import Heart from '../Icons/Heart'
 import More from '../Icons/More'
-import PostCommentBlock from './PostCommentBlock'
 import { Gallery } from '../post/Gallery'
+import LeafletMap from '../post/LeafletMap'
+import PostCommentBlock from './PostCommentBlock'
 
 const Container = styled.div`
   padding: 10px 15px;
@@ -190,6 +191,7 @@ export default function PostContent({ activity }) {
   }
 
   const images = activity.attachments?.images || []
+  const igc = activity.attachments?.igc || null
 
   return (
     <>
@@ -219,8 +221,13 @@ export default function PostContent({ activity }) {
         </Link>
         <div className="post">
           <p className="post__text">
-            {formatStringWithLink( post.text, 'post__text--link' )}
+            {formatStringWithLink(post.text, 'post__text--link')}
           </p>
+          {igc && igc.length > 0 && (
+            <div className="post__igc" onClick={(e) => e.stopPropagation()}>
+              <LeafletMap igc={igc[0]} />
+            </div>
+          )}
           {images.length > 0 && (
             <div className="post__image">
               <Gallery images={images} />
