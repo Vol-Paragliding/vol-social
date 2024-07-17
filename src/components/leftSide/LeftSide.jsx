@@ -15,6 +15,7 @@ import Home from '../Icons/Home'
 import User from '../Icons/User'
 import More from '../Icons/More'
 import Plus from '../Icons/Plus'
+import Search from '../Icons/Search'
 
 const Container = styled.div`
   display: flex;
@@ -109,6 +110,14 @@ const Container = styled.div`
         }
       }
     }
+
+    .btn--users {
+      display: none;
+
+      @media (max-width: 868px) {
+        display: flex;
+      }
+    }
   }
 
   .menu-label {
@@ -136,6 +145,9 @@ const Container = styled.div`
     color: black;
     font-weight: bold;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 18px 0;
     font-size: 16px;
     transition: background-color 0.2s;
@@ -231,8 +243,8 @@ const Container = styled.div`
     }
 
     .post-btn {
-      padding: 9px;
       width: 40px;
+      height: 40px;
     }
   }
 
@@ -360,6 +372,13 @@ export default function LeftSide({ onClickPost }) {
       Icon: User,
       link: `/${userData.id}`,
     },
+    {
+      id: 'users',
+      label: 'Users',
+      Icon: Search,
+      link: `/users`,
+      className: 'btn--users',
+    },
   ]
 
   const handleLogout = () => {
@@ -382,6 +401,7 @@ export default function LeftSide({ onClickPost }) {
               to={m.link ?? '#'}
               className={classNames(
                 `btn--${m.id} new-posts`,
+                m.className,
                 isActiveLink && 'active'
               )}
               key={m.id}

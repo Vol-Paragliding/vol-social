@@ -7,6 +7,7 @@ import HomeContent from '../components/homeContent/HomeContent'
 import Layout from '../components/layout/Layout'
 import NotificationContent from '../components/notifications/NotificationContent'
 import ProfileContent from '../components/profile/ProfileContent'
+import RightSide from '../components/rightSide/RightSide'
 import Thread from '../components/thread/Thread'
 
 export default function AppRoutes() {
@@ -34,6 +35,18 @@ export default function AppRoutes() {
           authState.isAuthenticated ? (
             <Layout>
               <HomeContent />
+            </Layout>
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          authState.isAuthenticated ? (
+            <Layout>
+              <RightSide />
             </Layout>
           ) : (
             <Navigate to="/" replace />
