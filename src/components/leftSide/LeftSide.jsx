@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useStreamContext } from 'react-activity-feed'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
@@ -11,18 +11,15 @@ import { logout } from '../../contexts/auth/AuthSlice'
 import LoadingIndicator from '../loading/LoadingIndicator'
 import UserImage from '../profile/UserImage'
 import Bell from '../Icons/Bell'
-// import Group from '../Icons/Group'
 import Home from '../Icons/Home'
-// import Mail from '../Icons/Mail'
 import User from '../Icons/User'
 import More from '../Icons/More'
 import Plus from '../Icons/Plus'
-// import Search from '../Icons/Search'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 30px;
+  padding: 0 10px;
   height: 100%;
 
   .header {
@@ -35,16 +32,14 @@ const Container = styled.div`
 
   .buttons {
     margin-top: 5px;
-    max-width: 200px;
 
     a,
     button {
-      display: block;
+      display: flex;
+      align-items: center;
       margin-bottom: 12px;
       color: white;
       padding: 10px 15px;
-      display: flex;
-      align-items: center;
       border-radius: 30px;
       font-size: 18px;
       padding-right: 25px;
@@ -52,11 +47,10 @@ const Container = styled.div`
       --icon-size: 25px;
 
       .btn--icon {
-        margin-right: 15px;
         height: var(--icon-size);
         width: var(--icon-size);
-
         position: relative;
+
         .notifications-count {
           position: absolute;
           font-size: 11px;
@@ -84,20 +78,6 @@ const Container = styled.div`
         background-color: #333;
       }
 
-      &.btn--home {
-        position: relative;
-        // &.new-posts::after {
-        //   content: '';
-        //   position: absolute;
-        //   width: 5px;
-        //   height: 5px;
-        //   left: 35px;
-        //   top: 7px;
-        //   border-radius: 50%;
-        //   background-color: var(--theme-color);
-        // }
-      }
-
       &.btn--more {
         svg {
           border: 1px solid #fff;
@@ -108,6 +88,17 @@ const Container = styled.div`
         }
       }
     }
+  }
+
+  .menu-label {
+    margin-left: 10px;
+  }
+
+  .menu-bottom {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .post-btn {
@@ -138,6 +129,7 @@ const Container = styled.div`
     border-radius: 30px;
     position: relative;
     cursor: pointer;
+    width: 100%;
 
     &:hover {
       background-color: #333;
@@ -148,7 +140,6 @@ const Container = styled.div`
       align-items: center;
 
       &__img {
-        margin-right: 10px;
         min-width: 40px;
         max-width: 40px;
         border-radius: 50%;
@@ -165,6 +156,7 @@ const Container = styled.div`
       &__text {
         span {
           display: block;
+          margin-left: 10px;
         }
 
         &__name {
@@ -181,18 +173,60 @@ const Container = styled.div`
       }
     }
   }
+
+  @media (max-width: 1274px) {
+    .buttons a span {
+      display: none;
+    }
+
+    .profile-section {
+      justify-content: center;
+    }
+
+    .profile-section .details__text {
+      display: none;
+    }
+
+    .profile-more {
+      display: none;
+    }
+
+    .buttons a {
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .post-btn {
+      padding: 9px;
+      width: 40px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .buttons a {
+      padding: 10px;
+      justify-content: center;
+    }
+
+    .profile-section {
+      justify-content: center;
+    }
+
+    .profile-section .details__img {
+      margin-right: 0;
+    }
+  }
 `
 
 const Menu = styled.div`
   position: absolute;
   bottom: calc(100% + 10px);
-  right: 0;
+  right: -40px;
   background: black;
   border: 1px solid #555;
   border-radius: 30px;
   overflow: hidden;
-  width: 240px;
-  padding: 10px;
+  padding: 20px;
   z-index: 2;
   box-shadow: 0 0 10px rgba(0, 0, 0, 1.5);
   cursor: pointer;
@@ -207,7 +241,7 @@ const Menu = styled.div`
     color: white;
     background: none;
     border: none;
-    text-align: left;
+    text-align: center;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
@@ -221,6 +255,7 @@ export default function LeftSide({ onClickPost }) {
   const { dispatch } = useAuth()
   const [newNotifications, setNewNotifications] = useState(0)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const profileSectionRef = useRef()
 
   useEffect(() => {
     if (!userData || location.pathname === `/notifications`) return
@@ -247,6 +282,22 @@ export default function LeftSide({ onClickPost }) {
     return () => notifFeed?.unsubscribe()
   }, [userData, location.pathname, client])
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileSectionRef.current &&
+        !profileSectionRef.current.contains(event.target)
+      ) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [profileSectionRef])
+
   if (!userData || !feedUser)
     return (
       <Container>
@@ -261,16 +312,6 @@ export default function LeftSide({ onClickPost }) {
       Icon: Home,
       link: '/home',
     },
-    // {
-    //   id: 'explore',
-    //   label: 'Explore',
-    //   Icon: Search,
-    // },
-    // {
-    //   id: 'communities',
-    //   label: 'Communities',
-    //   Icon: Group,
-    // },
     {
       id: 'notifications',
       label: 'Notifications',
@@ -279,11 +320,6 @@ export default function LeftSide({ onClickPost }) {
       value: newNotifications,
       onClick: () => setNewNotifications(0),
     },
-    // {
-    //   id: 'messages',
-    //   label: 'Messages',
-    //   Icon: Mail,
-    // },
     {
       id: 'profile',
       label: 'Profile',
@@ -325,18 +361,12 @@ export default function LeftSide({ onClickPost }) {
                 ) : null}
                 <m.Icon fill={isActiveLink} color="white" size={25} />
               </div>
-              <span>{m.label}</span>
+              <span className="menu-label">{m.label}</span>
             </Link>
           )
         })}
-        {/* <button className="btn--more">
-          <div className="btn--icon">
-            <More color="white" size={20} />
-          </div>
-          <span>More</span>
-        </button> */}
       </div>
-      <div style={{ marginTop: 'auto' }}>
+      <div className="menu-bottom">
         <button onClick={onClickPost} className="post-btn">
           <Plus />
         </button>
@@ -349,7 +379,7 @@ export default function LeftSide({ onClickPost }) {
               <UserImage
                 src={feedUser.data?.image}
                 alt={feedUser.data?.name}
-                userId={feedUser.id}
+                clickable={false}
               />
             </div>
             <div className="details__text">
@@ -357,12 +387,12 @@ export default function LeftSide({ onClickPost }) {
               <span className="details__text__id">@{userData.id}</span>
             </div>
           </div>
-          <div>
+          <div className="profile-more">
             <More color="white" />
           </div>
 
           {isDropdownOpen && (
-            <Menu>
+            <Menu ref={profileSectionRef}>
               <button onClick={handleLogout}>Logout @{feedUser.id}</button>
             </Menu>
           )}

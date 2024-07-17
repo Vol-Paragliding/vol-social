@@ -10,40 +10,64 @@ import LoadingIndicator from '../loading/LoadingIndicator'
 const Container = styled.div`
   min-height: 100vh;
   background: black;
-  --left: 300px;
-  --right: 400px;
-  --middle: calc(100% - var(--left) - var(--right));
 
   .content {
-    max-width: 1300px;
-    margin: 0 auto;
     width: 100%;
     display: flex;
+    flex-direction: column;
   }
 
-  .left-side-bar {
-    height: 100vh;
-    width: var(--left);
-    position: sticky;
-    top: 0;
+  .left-side-bar,
+  .right-side-bar {
+    display: none;
   }
 
   .main-content {
-    position: relative;
-    width: var(--middle);
-    border-left: 1px solid #333;
-    border-right: 1px solid #333;
+    width: 100%;
     min-height: 100vh;
+    padding: 1rem;
+    border-left: none;
+    border-right: none;
   }
 
-  .right-side-bar {
-    width: var(--right);
+  @media (min-width: 768px) {
+    .content {
+      max-width: 1300px;
+      margin: 0 auto;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    .left-side-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      transition: width 0.3s;
+
+      &:hover {
+        // width: 300px;
+      }
+    }
+
+    .main-content {
+      flex: 1 1 600px;
+      max-width: 600px;
+      border-left: 1px solid #333;
+      border-right: 1px solid #333;
+    }
+
+    .right-side-bar {
+      display: block;
+      flex: 0 0 400px;
+    }
   }
 `
 
 export default function Layout({ children }) {
   const { user } = useStreamContext()
-
   const [createDialogOpened, setCreateDialogOpened] = useState(false)
 
   if (!user) return <LoadingIndicator />
@@ -56,18 +80,22 @@ export default function Layout({ children }) {
       <Container>
         <div className="content">
           <div className="left-side-bar">
-            <LeftSide onClickPost={() => {
-              window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-              })
-              setCreateDialogOpened(true)
-            }} />
+            <LeftSide
+              onClickPost={() => {
+                window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth',
+                })
+                setCreateDialogOpened(true)
+              }}
+            />
           </div>
           <main className="main-content">
             {!user ? <LoadingIndicator /> : children}
           </main>
-          <div className="right-side-bar"><RightSide /></div>
+          <div className="right-side-bar">
+            <RightSide />
+          </div>
           <div />
         </div>
       </Container>

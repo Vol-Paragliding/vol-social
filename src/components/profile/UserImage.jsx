@@ -17,11 +17,11 @@ const PlaceholderSVG = ({ onClick }) => (
   </svg>
 )
 
-const UserImage = ({ src, alt, userId }) => {
+const UserImage = ({ src, alt, userId, clickable = true }) => {
   const navigate = useNavigate()
 
   const handleClick = (e) => {
-    if (userId) {
+    if (clickable && userId) {
       e.stopPropagation()
       navigate(`/${userId}`)
     }
