@@ -10,6 +10,7 @@ import LoadingIndicator from '../loading/LoadingIndicator'
 const Container = styled.div`
   min-height: 100vh;
   background: black;
+  position: relative;
 
   .content {
     width: 100%;
@@ -17,7 +18,6 @@ const Container = styled.div`
     flex-direction: column;
   }
 
-  .left-side-bar,
   .right-side-bar {
     display: none;
   }
@@ -30,7 +30,25 @@ const Container = styled.div`
     border-right: none;
   }
 
-  @media (min-width: 768px) {
+  @media (max-width: 868px) {
+    .left-side-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      backdrop-filter: blur(2px);
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 10;
+    }
+
+    .main-content {
+      margin-top: 60px;
+    }
+  }
+
+  @media (min-width: 868px) {
     .content {
       max-width: 1300px;
       margin: 0 auto;
@@ -46,10 +64,6 @@ const Container = styled.div`
       position: sticky;
       top: 0;
       transition: width 0.3s;
-
-      &:hover {
-        // width: 300px;
-      }
     }
 
     .main-content {
@@ -57,11 +71,14 @@ const Container = styled.div`
       max-width: 600px;
       border-left: 1px solid #333;
       border-right: 1px solid #333;
+      order: 1;
     }
 
     .right-side-bar {
       display: block;
-      flex: 0 0 400px;
+      max-width: 400px;
+      flex: 1 0 200px;
+      order: 2;
     }
   }
 `
@@ -96,7 +113,6 @@ export default function Layout({ children }) {
           <div className="right-side-bar">
             <RightSide />
           </div>
-          <div />
         </div>
       </Container>
     </>

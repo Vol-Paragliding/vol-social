@@ -19,8 +19,14 @@ import Plus from '../Icons/Plus'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 10px;
   height: 100%;
+
+  @media (max-width: 868px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
 
   .header {
     padding: 15px;
@@ -32,6 +38,16 @@ const Container = styled.div`
 
   .buttons {
     margin-top: 5px;
+
+    @media (max-width: 868px) {
+      flex-direction: row;
+      margin-top: 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+      width: 100%;
+    }
 
     a,
     button {
@@ -45,6 +61,11 @@ const Container = styled.div`
       padding-right: 25px;
       text-decoration: none;
       --icon-size: 25px;
+
+      @media (max-width: 868px) {
+        margin-bottom: 0;
+        padding: 10px;
+      }
 
       .btn--icon {
         height: var(--icon-size);
@@ -99,11 +120,18 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0 10px;
+
+    @media (max-width: 868px) {
+      flex-direction: row;
+      justify-content: center;
+      margin-top: 0;
+      padding: 0;
+    }
   }
 
   .post-btn {
     background-color: var(--theme-color);
-    margin-bottom: 11px;
     border-radius: 30px;
     color: black;
     font-weight: bold;
@@ -130,6 +158,12 @@ const Container = styled.div`
     position: relative;
     cursor: pointer;
     width: 100%;
+
+    @media (max-width: 868px) {
+      margin-top: 0;
+      margin-bottom: 0;
+      width: unset;
+    }
 
     &:hover {
       background-color: #333;
