@@ -1,15 +1,11 @@
-import classNames from 'classnames'
 import { useState } from 'react'
 import { useStreamContext } from 'react-activity-feed'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import useComment from '../../hooks/useComment'
-import useLike from '../../hooks/useLike'
 import { generatePostLink } from '../../utils/links'
 import { formatStringWithLink } from '../../utils/string'
-import Comment from '../Icons/Comment'
-import Heart from '../Icons/Heart'
 import More from '../Icons/More'
 import Expand from '../Icons/Expand'
 import Collapse from '../Icons/Collapse'
@@ -18,12 +14,15 @@ import CommentDialog from './CommentDialog'
 import { Gallery } from './Gallery'
 import PostActorName from './PostActorName'
 import LeafletMap from './LeafletMap'
+import MoreMenu from './MoreMenu'
+import PostActions from './PostActions'
 
 const Block = styled.div`
   display: flex;
   border-bottom: 1px solid #333;
   padding: 15px;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     background-color: rgb(17, 17, 17);
@@ -68,26 +67,6 @@ const Block = styled.div`
       &--link {
         color: var(--theme-color);
         text-decoration: none;
-      }
-    }
-
-    &__actions {
-      display: flex;
-      justify-content: flex-start;
-      margin-top: 5px;
-
-      button {
-        display: flex;
-        align-items: center;
-      }
-
-      &__value {
-        margin-left: 10px;
-        color: #666;
-
-        &.colored {
-          color: var(--theme-color);
-        }
       }
     }
 
@@ -142,9 +121,8 @@ export default function PostBlock({ activity }) {
   const [commentDialogOpened, setCommentDialogOpened] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-
+  const [menuOpened, setMenuOpened] = useState(false)
   const { createComment } = useComment()
-  const { toggleLike } = useLike()
 
   if (activity.verb === 'signup') {
     return null
@@ -161,33 +139,6 @@ export default function PostBlock({ activity }) {
     )
     hasLikedPost = Boolean(myReaction)
   }
-
-  const onToggleLike = async () => {
-    await toggleLike(activity, hasLikedPost)
-  }
-
-  const actions = [
-    {
-      id: 'heart',
-      Icon: Heart,
-      alt: 'Heart',
-      value: activity?.reaction_counts?.like || 0,
-      onClick: onToggleLike,
-    },
-    {
-      id: 'comment',
-      Icon: Comment,
-      alt: 'Comment',
-      value: activity?.reaction_counts?.comment || 0,
-      onClick: () => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        })
-        setCommentDialogOpened(true)
-      },
-    },
-  ]
 
   const postLink = activity.id ? generatePostLink(actor.id, activity.id) : '#'
 
@@ -221,6 +172,7 @@ export default function PostBlock({ activity }) {
       'comment-icon',
       'heart-icon',
       'more-icon',
+      'menu-item',
       'user-image',
       'post__igc',
       'post__image',
@@ -309,50 +261,25 @@ export default function PostBlock({ activity }) {
             )}
           </div>
 
-          <div className="post__actions">
-            {actions.map((action) => {
-              return (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    action.onClick?.()
-                  }}
-                  key={action.id}
-                  type="button"
-                  className={`${action.id}-icon`}
-                >
-                  <action.Icon
-                    color={
-                      action.id === 'heart' && hasLikedPost
-                        ? 'var(--theme-color)'
-                        : '#777'
-                    }
-                    size={17}
-                    fill={action.id === 'heart' && hasLikedPost && true}
-                  />
-                  <span
-                    className={classNames('post__actions__value', {
-                      colored: action.id === 'heart' && hasLikedPost,
-                    })}
-                  >
-                    {action.value}
-                  </span>
-                </button>
-              )
-            })}
-          </div>
+          <PostActions
+            activity={activity}
+            hasLikedPost={hasLikedPost}
+            setCommentDialogOpened={setCommentDialogOpened}
+          />
         </div>
         <button
           className="more more-icon"
           onClick={(e) => {
             e.preventDefault()
             e.stopPropagation()
-            console.log('More button clicked')
+            setMenuOpened(!menuOpened)
           }}
         >
           <More color="#777" size={20} />
         </button>
+        {menuOpened && (
+          <MoreMenu activity={activity} onClose={() => setMenuOpened(false)} />
+        )}
       </Block>
       {activity.id && commentDialogOpened && (
         <CommentDialog

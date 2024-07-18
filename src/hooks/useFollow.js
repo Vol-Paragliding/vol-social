@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useStreamContext } from 'react-activity-feed'
-
 import useNotification from './useNotification'
 
 export default function useFollow({ userId }) {
   const { client } = useStreamContext()
   const { createNotification } = useNotification()
   const [isFollowing, setIsFollowing] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function init() {
@@ -15,12 +15,16 @@ export default function useFollow({ userId }) {
         .following({ filter: [`user:${userId}`] })
 
       setIsFollowing(!!response.results.length)
+      setLoading(false)
     }
 
-    init()
-  }, [])
+    if (userId) {
+      init()
+    }
+  }, [client, userId])
 
   const toggleFollow = async () => {
+    setLoading(true)
     const action = isFollowing ? 'unfollow' : 'follow'
 
     if (action === 'follow') {
@@ -31,7 +35,8 @@ export default function useFollow({ userId }) {
     await timelineFeed[action]('user', userId)
 
     setIsFollowing((isFollowing) => !isFollowing)
+    setLoading(false)
   }
 
-  return { isFollowing, toggleFollow }
+  return { isFollowing, toggleFollow, loading }
 }

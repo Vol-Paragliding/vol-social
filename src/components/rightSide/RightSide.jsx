@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useStreamContext } from 'react-activity-feed'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -149,12 +149,14 @@ export default function RightSide() {
   const [searchText, setSearchText] = useState('')
   const [debouncedTerm, setDebouncedTerm] = useState('')
   const [users, setUsers] = useState([])
-  const [offset, setOffset] = useState(0)
+  const [,setOffset] = useState(0)
   const [renderLoadMore, setRenderLoadMore] = useState(true)
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState(null)
   const { client } = useStreamContext()
   const { chatClient } = useChat()
+  const timerIDRef = useRef(null)
 
   const USERS_PER_PAGE = 10
 
@@ -175,7 +177,7 @@ export default function RightSide() {
   )
 
   const fetchUsers = useCallback(
-    async (newOffset = 0) => {
+    async (newOffset = 0, isLoadingMore = false) => {
       if (!chatClient || !chatClient.userID) {
         return
       }
@@ -191,21 +193,29 @@ export default function RightSide() {
       const sort = { last_active: -1 }
       const options = { limit: USERS_PER_PAGE, offset: newOffset }
 
-      setLoading(true)
+      if (!isLoadingMore) {
+        setLoading(true)
+      } else {
+        setLoadingMore(true)
+      }
       try {
         const response = await queryUsers(filter, sort, options)
-        setLoading(false)
+        if (!isLoadingMore) {
+          setLoading(false)
+        } else {
+          setLoadingMore(false)
+        }
 
         if (response) {
           setUsers((prevUsers) =>
             newOffset === 0 ? response.users : [...prevUsers, ...response.users]
           )
-          setOffset(newOffset + USERS_PER_PAGE)
           setRenderLoadMore(response.users.length === USERS_PER_PAGE)
         }
       } catch (error) {
         console.error('Error fetching users:', error)
         setLoading(false)
+        setLoadingMore(false)
       }
     },
     [debouncedTerm, queryUsers, chatClient]
@@ -216,7 +226,11 @@ export default function RightSide() {
   }, [fetchUsers])
 
   useEffect(() => {
-    const timerID = setTimeout(() => {
+    if (timerIDRef.current) {
+      clearTimeout(timerIDRef.current)
+    }
+
+    timerIDRef.current = setTimeout(() => {
       setDebouncedTerm(searchText)
       if (searchText === '') {
         setOffset(0)
@@ -225,12 +239,17 @@ export default function RightSide() {
     }, 500)
 
     return () => {
-      clearTimeout(timerID)
+      clearTimeout(timerIDRef.current)
     }
   }, [searchText])
 
   const handleShowMore = () => {
-    fetchUsers(offset)
+    // Update the offset state before fetching more users
+    setOffset((prevOffset) => {
+      const newOffset = prevOffset + USERS_PER_PAGE
+      fetchUsers(newOffset, true)
+      return newOffset
+    })
   }
 
   const whoToFollow = users.filter((u) => u.id !== client.userId)
@@ -290,7 +309,7 @@ export default function RightSide() {
           </div>
           {renderLoadMore && (
             <button className="show-more-text" onClick={handleShowMore}>
-              Show more
+              {loadingMore ? 'Loading...' : 'Show more'}
             </button>
           )}
         </div>

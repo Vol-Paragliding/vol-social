@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import styled from 'styled-components'
-
+import { memo } from 'react'
 import useFollow from '../../hooks/useFollow'
 
 const Container = styled.div`
@@ -51,26 +51,38 @@ const Container = styled.div`
       }
     }
   }
+
+  .loading {
+    color: #666;
+  }
 `
 
-export default function FollowBtn({ userId }) {
-  const { isFollowing, toggleFollow } = useFollow({ userId })
+const FollowBtn = memo(({ userId }) => {
+  const { isFollowing, toggleFollow, loading } = useFollow({ userId })
+
+  if (!userId) return null
 
   return (
     <Container>
-      <button
-        className={classNames(isFollowing ? 'following' : 'not-following')}
-        onClick={toggleFollow}
-      >
-        {isFollowing ? (
-          <div className="follow-text">
-            <span className="follow-text__following">Following</span>
-            <span className="follow-text__unfollow">Unfollow</span>
-          </div>
-        ) : (
-          'Follow'
-        )}
-      </button>
+      {loading ? (
+        <button className="loading">Loading...</button>
+      ) : (
+        <button
+          className={classNames(isFollowing ? 'following' : 'not-following')}
+          onClick={toggleFollow}
+        >
+          {isFollowing ? (
+            <div className="follow-text">
+              <span className="follow-text__following">Following</span>
+              <span className="follow-text__unfollow">Unfollow</span>
+            </div>
+          ) : (
+            'Follow'
+          )}
+        </button>
+      )}
     </Container>
   )
-}
+})
+
+export default FollowBtn

@@ -10,7 +10,7 @@ const StatsContainer = styled.div`
     min-height: ${(props) => (props.expanded ? '140px' : '40px')};
     color: #fff;
     margin-bottom: 10px;
-    transition: height 0.5s ease;
+    transition: min-height 0.5s ease;
 
     p {
       margin: 0;
@@ -78,7 +78,9 @@ const FlightStats = ({ igc }) => {
         </div>
         <div className="stat">
           <span className="stat-label">Avg. speed</span>
-          <span className="stat-value">{igc.data.avgSpeed} km/h</span>
+          <span className="stat-value">
+            {Math.round(igc.data.avgSpeed)} km/h
+          </span>
         </div>
         {expanded && (
           <>
