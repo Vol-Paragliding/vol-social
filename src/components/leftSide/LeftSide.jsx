@@ -218,6 +218,10 @@ const Container = styled.div`
         }
       }
     }
+
+    .profile-more {
+      margin-left: 10px;
+    }
   }
 
   @media (max-width: 1274px) {

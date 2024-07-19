@@ -233,19 +233,18 @@ export default function RightSide() {
 
     timerIDRef.current = setTimeout(() => {
       setDebouncedTerm(searchText)
+      setOffset(0)
       if (searchText === '') {
-        setOffset(0)
-        setRenderLoadMore(true)
+        setRenderLoadMore(users.length === USERS_PER_PAGE)
       }
     }, 500)
 
     return () => {
       clearTimeout(timerIDRef.current)
     }
-  }, [searchText])
+  }, [searchText, users])
 
   const handleShowMore = () => {
-    // Update the offset state before fetching more users
     setOffset((prevOffset) => {
       const newOffset = prevOffset + USERS_PER_PAGE
       fetchUsers(newOffset, true)
@@ -305,7 +304,7 @@ export default function RightSide() {
                 )
               })
             ) : (
-              <div>No pilots found</div>
+              <div style={{ color: 'white' }}>No pilots found</div>
             )}
           </div>
           {renderLoadMore && (

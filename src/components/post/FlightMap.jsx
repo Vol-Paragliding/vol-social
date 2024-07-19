@@ -8,6 +8,7 @@ const MapWrapper = styled.div`
   .leafletMap {
     height: 300px;
     width: 100%;
+    z-index: 1;
   }
 `
 

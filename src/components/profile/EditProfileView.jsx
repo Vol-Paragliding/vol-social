@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-// import { useStreamContext } from 'react-activity-feed'
-
 import { useAuth } from '../../contexts/auth/useAuth'
 import { useFeed } from '../../contexts/feed/useFeed'
 import { useChat } from '../../contexts/chat/useChat'
@@ -94,7 +92,6 @@ export const EditProfileView = ({ onSave }) => {
   const { authState } = useAuth()
   const { feedUser } = useFeed()
   const { chatClient } = useChat()
-  // const { client } = useStreamContext()
 
   const [profileData, setProfileData] = useState({
     id: feedUser?.data?.userId || authState.authUser?.userId || '',
@@ -110,6 +107,7 @@ export const EditProfileView = ({ onSave }) => {
   const [coverImageSrc, setCoverImageSrc] = useState(
     feedUser?.data?.coverPhoto || null
   )
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleInputChange = (event, field) => {
     setProfileData({ ...profileData, [field]: event.target.value })
@@ -148,6 +146,8 @@ export const EditProfileView = ({ onSave }) => {
       return
     }
 
+    setIsLoading(true)
+
     try {
       const imageUrl = selectedFile
         ? await handleUpload(selectedFile)
@@ -169,17 +169,17 @@ export const EditProfileView = ({ onSave }) => {
       if (chatClient && userId) {
         await chatClient.upsertUser({
           id: userId,
-          name: userId,
           ...updatedUserData,
         })
       } else {
         console.error('Chat client is not initialized or userId is undefined.')
       }
 
-      // await client.user(userId).update(updatedUserData)
       onSave(updatedUser)
     } catch (error) {
       console.error('Error updating user: ', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -203,6 +203,7 @@ export const EditProfileView = ({ onSave }) => {
             value={profileData.name}
             onChange={(e) => handleInputChange(e, 'name')}
             placeholder="Name"
+            maxLength="25"
           />
         </FormField>
         <FormField>
@@ -223,8 +224,8 @@ export const EditProfileView = ({ onSave }) => {
             placeholder="Bio"
           />
         </FormField>
-        <ActionButton save onClick={handleSubmit}>
-          Save
+        <ActionButton save onClick={handleSubmit} disabled={isLoading}>
+          {isLoading ? 'Saving...' : 'Save'}
         </ActionButton>
       </form>
     </ProfileContainer>

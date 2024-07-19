@@ -73,8 +73,8 @@ const SignUpView = ({ onClose }) => {
               placeholder="Username"
               value={username}
               onChange={handleUsernameChange}
-              pattern="^[a-z0-9_.\-]{3,30}$"
-              title="Username must be 3-30 characters and can include lowercase letters, numbers, underscores, hyphens, and periods."
+              pattern="^[a-z0-9_.\-]{3,25}$"
+              title="Username must be 3-25 characters and can include lowercase letters, numbers, underscores, hyphens, and periods."
               required
             />
           </div>

@@ -41,6 +41,10 @@ const StatsContainer = styled.div`
       cursor: pointer;
       margin-top: 10px;
 
+      &.expanded {
+        margin-left: auto;
+      }
+
       &:hover {
         text-decoration: underline;
       }
@@ -110,7 +114,10 @@ const FlightStats = ({ igc }) => {
             </div>
           </>
         )}
-        <button className="expand-stats" onClick={handleToggleExpand}>
+        <button
+          className={`expand-stats ${expanded && 'expanded'}`}
+          onClick={handleToggleExpand}
+        >
           {expanded ? 'Show Less' : 'Show More'}
         </button>
       </div>

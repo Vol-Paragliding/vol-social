@@ -55,10 +55,10 @@ const LogInView = ({ onClose }) => {
               type="text"
               placeholder="Your username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value.toLowerCase())}
               autoComplete="username"
-              pattern="^[a-zA-Z0-9_.\-]{3,30}$"
-              title="Username must be 3-30 characters and can include letters, numbers, underscores, hyphens, and periods."
+              pattern="^[a-zA-Z0-9_.\-]{3,25}$"
+              title="Username must be 3-25 characters and can include letters, numbers, underscores, hyphens, and periods."
               required
             />
           </div>

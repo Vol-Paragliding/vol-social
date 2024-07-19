@@ -3,7 +3,46 @@ import { StatusUpdateForm } from 'react-activity-feed'
 import 'react-activity-feed/dist/index.css'
 import styled from 'styled-components'
 
-const StyledStatusUpdateForm = styled(StatusUpdateForm)`
+const CustomTextarea = forwardRef(({ emojiData, innerRef, ...props }, ref) => {
+  const textareaRef = useRef(null)
+
+  const adjustHeight = () => {
+    const textarea = textareaRef.current
+    if (textarea) {
+      textarea.style.height = 'auto'
+      textarea.style.height = `${textarea.scrollHeight}px`
+    }
+  }
+
+  useEffect(() => {
+    adjustHeight()
+  }, [props.value])
+
+  const handleInput = (event) => {
+    adjustHeight()
+    if (props.onChange) props.onChange(event)
+  }
+
+  return (
+    <textarea
+      {...props}
+      placeholder="Share a flight!"
+      className="rta__textarea"
+      ref={(node) => {
+        textareaRef.current = node
+        if (ref) ref.current = node
+      }}
+      style={{ height: 'auto', flex: 1 }}
+      onInput={handleInput}
+    />
+  )
+})
+
+const ForwardedStatusUpdateForm = forwardRef((props, ref) => (
+  <StatusUpdateForm {...props} innerRef={ref} />
+))
+
+const StyledStatusUpdateForm = styled(ForwardedStatusUpdateForm)`
   .raf-panel-header {
     border-bottom: 1px solid #333;
     padding: 5px;
@@ -38,43 +77,30 @@ const StyledStatusUpdateForm = styled(StatusUpdateForm)`
   }
 `
 
-const CustomTextarea = forwardRef(({ emojiData, innerRef, ...props }, ref) => {
-  const textareaRef = useRef(null)
+const CreatePostForm = (props) => {
+  const formRef = useRef(null)
 
-  const adjustHeight = () => {
-    const textarea = textareaRef.current
-    if (textarea) {
-      textarea.style.height = 'auto'
-      textarea.style.height = `${textarea.scrollHeight}px`
+  const handleSubmit = async (...args) => {
+    if (props.onSubmit) {
+      await props.onSubmit(...args)
+    }
+    // Reset textarea height after submitting
+    if (formRef.current) {
+      const textarea = formRef.current.querySelector('textarea.rta__textarea')
+      if (textarea) {
+        textarea.style.height = 'auto'
+      }
     }
   }
 
-  useEffect(() => {
-    adjustHeight()
-  }, [])
-
-  const handleInput = (event) => {
-    adjustHeight()
-    if (props.onChange) props.onChange(event)
-  }
-
   return (
-    <textarea
+    <StyledStatusUpdateForm
       {...props}
-      placeholder="Share a flight!"
-      className="rta__textarea"
-      ref={(node) => {
-        textareaRef.current = node
-        if (ref) ref.current = node
-      }}
-      style={{ flex: 1 }}
-      onInput={handleInput}
+      Textarea={CustomTextarea}
+      ref={formRef}
+      onSubmit={handleSubmit}
     />
   )
-})
-
-const CreatePostForm = (props) => {
-  return <StyledStatusUpdateForm {...props} Textarea={CustomTextarea} />
 }
 
 export default CreatePostForm
