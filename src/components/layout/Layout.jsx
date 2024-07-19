@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useStreamContext } from 'react-activity-feed'
+import { useStreamContext, Feed } from 'react-activity-feed'
 import styled from 'styled-components'
 
 import LeftSide from '../leftSide/LeftSide'
@@ -89,7 +89,7 @@ export default function Layout({ children }) {
   if (!user) return <LoadingIndicator />
 
   return (
-    <>
+    <Feed feedGroup="user">
       {createDialogOpened && (
         <CreatePostDialog onClickOutside={() => setCreateDialogOpened(false)} />
       )}
@@ -114,6 +114,6 @@ export default function Layout({ children }) {
           </div>
         </div>
       </Container>
-    </>
+    </Feed>
   )
 }

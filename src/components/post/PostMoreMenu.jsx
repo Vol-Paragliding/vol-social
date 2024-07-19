@@ -30,7 +30,7 @@ const MenuContainer = styled.div`
   }
 `
 
-export default function MoreMenu({ activity, onClose }) {
+export default function PostMoreMenu({ activity, onClose }) {
   const { client, user } = useStreamContext()
   const { refresh } = useFeedContext()
 

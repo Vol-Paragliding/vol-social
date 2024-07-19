@@ -149,7 +149,7 @@ export default function RightSide() {
   const [searchText, setSearchText] = useState('')
   const [debouncedTerm, setDebouncedTerm] = useState('')
   const [users, setUsers] = useState([])
-  const [,setOffset] = useState(0)
+  const [, setOffset] = useState(0)
   const [renderLoadMore, setRenderLoadMore] = useState(true)
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
@@ -188,8 +188,9 @@ export default function RightSide() {
               { name: { $autocomplete: debouncedTerm } },
               { id: { $autocomplete: debouncedTerm } },
             ],
+            id: { $ne: 'zacheryconverse' },
           }
-        : { id: { $ne: chatClient.userID } }
+        : { id: { $nin: [chatClient.userID, 'zacheryconverse'] } }
       const sort = { last_active: -1 }
       const options = { limit: USERS_PER_PAGE, offset: newOffset }
 

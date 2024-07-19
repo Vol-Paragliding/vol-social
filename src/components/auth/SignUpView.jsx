@@ -44,8 +44,13 @@ const SignUpView = ({ onClose }) => {
       navigate("/home");
     } catch (error) {
       console.error("Sign Up Error:", error);
-      setError((error).message || "An error occurred during sign up.");
+      setError(error.message || "An error occurred during sign up.");
     }
+  };
+
+  const handleUsernameChange = (e) => {
+    const value = e.target.value.toLowerCase().replace(/[^a-z0-9_.\-]/g, "");
+    setUsername(value);
   };
 
   return (
@@ -67,9 +72,9 @@ const SignUpView = ({ onClose }) => {
               type="text"
               placeholder="Username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              pattern="^[a-zA-Z0-9_.\-]{3,30}$"
-              title="Username must be 3-30 characters and can include letters, numbers, underscores, hyphens, and periods."
+              onChange={handleUsernameChange}
+              pattern="^[a-z0-9_.\-]{3,30}$"
+              title="Username must be 3-30 characters and can include lowercase letters, numbers, underscores, hyphens, and periods."
               required
             />
           </div>

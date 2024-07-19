@@ -1,5 +1,4 @@
-import { FlatFeed, NewActivitiesNotification } from 'react-activity-feed'
-
+import { FlatFeed, InfiniteScrollPaginator } from 'react-activity-feed'
 import { useParamUser } from '../../contexts/paramUser/useParamUser'
 import LoadingIndicator from '../loading/LoadingIndicator'
 import PostBlock from '../post/PostBlock'
@@ -16,11 +15,13 @@ export default function MyPosts() {
         userId={paramUser.id}
         feedGroup="user"
         notify
-        // Notification={
-        //   <NewActivitiesNotification
-        //     style={{ background: 'black', color: 'white' }}
-        //   />
-        // }
+        Paginator={(props) => (
+          <InfiniteScrollPaginator
+            threshold={10}
+            loadingIndicator={<LoadingIndicator />}
+            {...props}
+          />
+        )}
       />
     </div>
   )

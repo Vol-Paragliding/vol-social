@@ -14,7 +14,7 @@ import CommentDialog from './CommentDialog'
 import { Gallery } from './Gallery'
 import PostActorName from './PostActorName'
 import LeafletMap from './LeafletMap'
-import MoreMenu from './MoreMenu'
+import PostMoreMenu from './PostMoreMenu'
 import PostActions from './PostActions'
 
 const Block = styled.div`
@@ -278,7 +278,7 @@ export default function PostBlock({ activity }) {
           <More color="#777" size={20} />
         </button>
         {menuOpened && (
-          <MoreMenu activity={activity} onClose={() => setMenuOpened(false)} />
+          <PostMoreMenu activity={activity} onClose={() => setMenuOpened(false)} />
         )}
       </Block>
       {activity.id && commentDialogOpened && (

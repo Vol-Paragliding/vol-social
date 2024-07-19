@@ -6,11 +6,13 @@ import { useStreamContext } from 'react-activity-feed'
 import { useFeed } from '../../contexts/feed/useFeed'
 import { useParamUser } from '../../contexts/paramUser/useParamUser'
 import { formatStringWithLink } from '../../utils/string'
-import Calendar from '../Icons/Calendar'
-import LoadingIndicator from '../loading/LoadingIndicator'
 import FollowBtn from '../follow/FollowBtn'
+import Calendar from '../Icons/Calendar'
+import More from '../Icons/More'
+import LoadingIndicator from '../loading/LoadingIndicator'
 import Modal from '../modal/Modal'
 import { EditProfileView } from './EditProfileView'
+import ProfileMoreMenu from './ProfileMoreMenu'
 import UserImage from './UserImage'
 
 const Container = styled.div`
@@ -136,21 +138,11 @@ const ActionButton = styled.button`
   }
 `
 
-const actions = [
-  // {
-  //   Icon: More,
-  //   id: 'more',
-  // },
-  // {
-  //   Icon: Mail,
-  //   id: 'message',
-  // },
-]
-
 export default function ProfileBio() {
   const { client } = useStreamContext()
   const { feedUser, setFeedUser } = useFeed()
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false)
   const { paramUser, updateParamUser } = useParamUser()
 
   if (!feedUser?.data || !paramUser) return <LoadingIndicator />
@@ -168,6 +160,10 @@ export default function ProfileBio() {
     setIsEditProfileOpen(false)
   }
 
+  const handleMoreButtonClick = () => {
+    setIsMoreMenuOpen(!isMoreMenuOpen)
+  }
+
   return (
     <Container>
       <div className="top">
@@ -179,18 +175,21 @@ export default function ProfileBio() {
           />
         </div>
         <div className="actions">
-          {!isLoggedInUserProfile ? (
-            actions.map((action) => (
-              <button className="action-btn" key={action.id}>
-                <action.Icon color="white" size={21} />
+          {isLoggedInUserProfile ? (
+            <>
+              <button className="action-btn" onClick={handleMoreButtonClick}>
+                <More color="white" size={21} />
               </button>
-            ))
+              {isMoreMenuOpen && (
+                <ProfileMoreMenu onClose={() => setIsMoreMenuOpen(false)} />
+              )}
+              <ActionButton onClick={handleEditProfile}>
+                Edit Profile
+              </ActionButton>
+            </>
           ) : (
-            <ActionButton onClick={handleEditProfile}>
-              Edit Profile
-            </ActionButton>
+            <FollowBtn userId={paramUser.data.id} />
           )}
-          {!isLoggedInUserProfile && <FollowBtn userId={paramUser.data.id} />}
         </div>
       </div>
       <div className="details">
@@ -205,7 +204,7 @@ export default function ProfileBio() {
         </div>
         <div className="user__follows">
           <span className="user__follows__following">
-            <b>{paramUser.following_count || 0}</b> Following
+            <b>{paramUser.following_count - 1 || 0}</b> Following
           </span>
           <span className="user__follows__followers">
             <b>{paramUser.followers_count || 0}</b> Followers

@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { Feed, useStreamContext } from 'react-activity-feed'
 import CreatePostTop from './CreatePostTop'

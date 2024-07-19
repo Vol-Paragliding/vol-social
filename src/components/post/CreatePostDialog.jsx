@@ -1,3 +1,4 @@
+import { useFeedContext } from 'react-activity-feed'
 import styled from 'styled-components'
 
 import Modal from '../modal/Modal'
@@ -19,10 +20,12 @@ const Container = styled.div`
 `
 
 export default function CreatePostDialog({ onClickOutside }) {
+  const { refresh } = useFeedContext()
   const { createPost } = usePost()
 
   const onSuccess = async (activity) => {
     console.log('Post submitted successfully', activity)
+    refresh()
     onClickOutside()
   }
 
