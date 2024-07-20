@@ -24,16 +24,18 @@ export const FeedProvider = ({ children }) => {
   useEffect(() => {
     if (authState.isAuthenticated && authState.authUser && !feedClient) {
       const client = connect(apiKey, authState.authUser.feedToken, appId)
-      const userFeed = client.feed('user', authState.authUser.userId)
+      const userFeed = client.feed('user', authState.authUser.user.userId)
 
       setFeedClient(userFeed)
 
       const fetchInitialData = async () => {
         try {
           if (!authState.authUser) return
-
+          console.log('authState', authState)
+          console.log('client', client)
+          console.log('userFeed', userFeed)
           const userResponse = await client
-            .user(authState.authUser.userId)
+            .user(authState.authUser.user.userId)
             .get()
           setFeedUser(userResponse)
 

@@ -94,7 +94,7 @@ export const EditProfileView = ({ onSave }) => {
   const { chatClient } = useChat()
 
   const [profileData, setProfileData] = useState({
-    id: feedUser?.data?.userId || authState.authUser?.userId || '',
+    id: feedUser?.data?.userId || authState.authUser?.user.userId || '',
     name: feedUser?.data?.name || '',
     bio: feedUser?.data?.bio || '',
     location: feedUser?.data?.location || '',
@@ -131,7 +131,7 @@ export const EditProfileView = ({ onSave }) => {
         fileName,
         mimeType,
         file,
-        authState.authUser?.userId || '',
+        authState.authUser?.user.userId || '',
         authState.authUser?.feedToken || ''
       )
     } catch (error) {
@@ -161,11 +161,11 @@ export const EditProfileView = ({ onSave }) => {
 
       const updatedUser = await updateUser(
         updatedUserData,
-        authState.authUser?.userId || '',
+        authState.authUser?.user.userId || '',
         authState.authUser?.feedToken || ''
       )
 
-      const userId = authState.authUser?.userId
+      const userId = authState.authUser?.user.userId
       if (chatClient && userId) {
         await chatClient.upsertUser({
           id: userId,

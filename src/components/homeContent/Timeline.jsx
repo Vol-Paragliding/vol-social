@@ -10,7 +10,7 @@ import LoadingIndicator from '../loading/LoadingIndicator'
 export default function Timeline() {
   const { user } = useStreamContext()
 
-  console.log('*********Timeline re-rendered with user*********:', user)
+  // console.log('*********Timeline re-rendered with user*********:', user)
 
   return (
     <div>

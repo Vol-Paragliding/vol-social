@@ -17,8 +17,8 @@ export const ChatProvider = ({ children }) => {
         if (!client.userID) {
           await client.connectUser(
             {
-              id: authState.authUser.userId,
-              name: authState.authUser.username,
+              id: authState.authUser.user.userId,
+              name: authState.authUser.user.username,
             },
             authState.authUser.chatToken
           )
