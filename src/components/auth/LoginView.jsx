@@ -27,7 +27,7 @@ const LogInView = ({ onClose }) => {
 
     try {
       const user = await login({ username, password })
-
+console.log('user:', user)
       dispatch({ type: 'SET_USER', payload: user })
       navigate('/home')
     } catch (error) {

@@ -24,6 +24,25 @@ export const authReducer = (state, action) => {
   }
 }
 
+export async function googleLogin(tokenId) {
+
+  const response = await fetch(`${API_ENDPOINT}/auth/google`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ tokenId }),
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to log in with Google')
+  }
+
+  return data
+}
+
 export async function login({ username, password }) {
   const response = await fetch(`${API_ENDPOINT}/auth/login`, {
     method: 'POST',

@@ -207,7 +207,7 @@ export default function ProfileBio() {
             <b>{paramUser.following_count - 1 || 0}</b> Following
           </span>
           <span className="user__follows__followers">
-            <b>{paramUser.followers_count || 0}</b> Followers
+            <b>{paramUser.followers_count - 1 || 0}</b> Followers
           </span>
         </div>
       </div>
