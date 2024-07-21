@@ -164,6 +164,11 @@ export default function ProfileBio() {
     setIsMoreMenuOpen(!isMoreMenuOpen)
   }
 
+  const followingCount =
+    paramUser.following_count > 1 ? paramUser.following_count - 1 : 0
+  const followersCount =
+    paramUser.followers_count > 1 ? paramUser.followers_count - 1 : 0
+
   return (
     <Container>
       <div className="top">
@@ -204,10 +209,10 @@ export default function ProfileBio() {
         </div>
         <div className="user__follows">
           <span className="user__follows__following">
-            <b>{paramUser.following_count - 1 || 0}</b> Following
+            <b>{followingCount}</b> Following
           </span>
           <span className="user__follows__followers">
-            <b>{paramUser.followers_count - 1 || 0}</b> Followers
+            <b>{followersCount}</b> Followers
           </span>
         </div>
       </div>

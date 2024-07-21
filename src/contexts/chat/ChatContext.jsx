@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import { StreamChat } from 'stream-chat'
 import { useAuth } from '../auth/useAuth'
 
-const apiKey = process.env.REACT_APP_API_KEY;
+const apiKey = process.env.REACT_APP_API_KEY
 
 export const ChatContext = createContext(null)
 
@@ -14,17 +14,21 @@ export const ChatProvider = ({ children }) => {
     const initializeChatClient = async () => {
       if (authState.isAuthenticated && authState.authUser) {
         const client = StreamChat.getInstance(apiKey)
-        if (!client.userID) {
-          await client.connectUser(
-            {
-              id: authState.authUser.user.userId,
-              name: authState.authUser.user.username,
-            },
-            authState.authUser.chatToken
-          )
-          setChatClient(client)
-        } else {
-          setChatClient(client)
+        try {
+          if (!client.userID) {
+            await client.connectUser(
+              {
+                id: authState.authUser.user.id,
+                name: authState.authUser.user.username,
+              },
+              authState.authUser.chatToken
+            )
+            setChatClient(client)
+          } else {
+            setChatClient(client)
+          }
+        } catch (error) {
+          console.error('Error connecting user:', error)
         }
       }
     }

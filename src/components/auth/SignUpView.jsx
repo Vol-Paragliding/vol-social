@@ -1,57 +1,58 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { sanitizeInput } from "../utils";
-import { useAuth } from "../../contexts/auth/useAuth";
-import { signup } from "../../contexts/auth/AuthSlice";
-import appIcon from "../../assets/appIcon.png";
-import styles from "./auth.module.css";
+import { sanitizeInput } from '../utils'
+import { useAuth } from '../../contexts/auth/useAuth'
+import { signup } from '../../contexts/auth/AuthSlice'
+import appIcon from '../../assets/appIcon.png'
+import styles from './auth.module.css'
 
 const SignUpView = ({ onClose }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const { dispatch } = useAuth();
-  const navigate = useNavigate();
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const { dispatch } = useAuth()
+  const navigate = useNavigate()
 
-  const usernameRef = useRef(null);
+  const usernameRef = useRef(null)
 
   useEffect(() => {
     if (usernameRef.current) {
-      usernameRef.current.focus();
+      usernameRef.current.focus()
     }
-  }, []);
+  }, [])
 
   const handleSignUp = async (event) => {
-    event.preventDefault();
-    setError("");
+    event.preventDefault()
+    setError('')
 
     const { sanitized: sanitizedUsername, error: usernameValidationError } =
-      sanitizeInput(username);
+      sanitizeInput(username)
 
     if (usernameValidationError) {
-      setError(usernameValidationError);
-      return;
+      setError(usernameValidationError)
+      return
     }
 
     try {
       const user = await signup({
         username: sanitizedUsername.toLowerCase(),
         password,
-      });
+        email: '',
+      })
 
-      dispatch({ type: "SET_USER", payload: user });
-      navigate("/home");
+      dispatch({ type: 'SET_USER', payload: user })
+      navigate('/home')
     } catch (error) {
-      console.error("Sign Up Error:", error);
-      setError(error.message || "An error occurred during sign up.");
+      console.error('Sign Up Error:', error)
+      setError(error.message || 'An error occurred during sign up.')
     }
-  };
+  }
 
   const handleUsernameChange = (e) => {
-    const value = e.target.value.toLowerCase().replace(/[^a-z0-9_.\-]/g, "");
-    setUsername(value);
-  };
+    const value = e.target.value.toLowerCase().replace(/[^a-z0-9_.\-]/g, '')
+    setUsername(value)
+  }
 
   return (
     <div className={styles.authFormContainer}>
@@ -95,7 +96,7 @@ const SignUpView = ({ onClose }) => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignUpView;
+export default SignUpView

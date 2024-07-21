@@ -306,28 +306,28 @@ export default function LeftSide({ onClickPost }) {
   const [newNotifications, setNewNotifications] = useState(0)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const profileSectionRef = useRef()
-
+// console.log('userData', userData)
   useEffect(() => {
     if (!userData || location.pathname === `/notifications`) return
 
     let notifFeed
 
-    async function init() {
-      notifFeed = client.feed('notification', userData.id)
-      const notifications = await notifFeed.get()
+    // async function init() {
+    //   notifFeed = client.feed('notification', userData.id)
+    //   const notifications = await notifFeed.get()
 
-      const unread = notifications.results.filter(
-        (notification) => !notification.is_seen
-      )
+    //   const unread = notifications.results.filter(
+    //     (notification) => !notification.is_seen
+    //   )
 
-      setNewNotifications(unread.length)
+    //   setNewNotifications(unread.length)
 
-      notifFeed.subscribe((data) => {
-        setNewNotifications((prev) => prev + data.new.length)
-      })
-    }
+    //   notifFeed.subscribe((data) => {
+    //     setNewNotifications((prev) => prev + data.new.length)
+    //   })
+    // }
 
-    init()
+    // init()
 
     return () => notifFeed?.unsubscribe()
   }, [userData, location.pathname, client])
@@ -374,7 +374,7 @@ export default function LeftSide({ onClickPost }) {
       id: 'profile',
       label: 'Profile',
       Icon: User,
-      link: `/${userData.id}`,
+      link: `/${userData.userId}`,
     },
     {
       id: 'users',
@@ -442,7 +442,8 @@ export default function LeftSide({ onClickPost }) {
             </div>
             <div className="details__text">
               <span className="details__text__name">{feedUser.data.name}</span>
-              <span className="details__text__id">@{userData.id}</span>
+              {console.log('userData', userData)}
+              <span className="details__text__id">@{userData.username}</span>
             </div>
           </div>
           <div className="profile-more">
