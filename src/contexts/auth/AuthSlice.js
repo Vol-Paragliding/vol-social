@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 import { API_ENDPOINT } from '../../config'
 
 export const initialState = {
@@ -12,10 +14,25 @@ export const authReducer = (state, action) => {
     case 'SET_LOADING':
       return { ...state, loading: action.payload }
     case 'SET_USER':
+      if (!action.payload) {
+        return {
+          ...state,
+          authUser: null,
+          isAuthenticated: false,
+          feedToken: null,
+          chatToken: null,
+        }
+      }
+      const user = action.payload.user ? action.payload.user : action.payload
       return {
         ...state,
-        authUser: action.payload,
-        isAuthenticated: !!action.payload,
+        authUser: {
+          ...state.authUser,
+          user,
+          feedToken: action.payload.feedToken,
+          chatToken: action.payload.chatToken,
+        },
+        isAuthenticated: !!user,
       }
     case 'SET_ERROR':
       return { ...state, error: action.payload }
@@ -25,7 +42,6 @@ export const authReducer = (state, action) => {
 }
 
 export async function googleLogin(tokenId) {
-
   const response = await fetch(`${API_ENDPOINT}/auth/google`, {
     method: 'POST',
     headers: {
@@ -58,16 +74,23 @@ export async function login({ username, password }) {
     throw new Error(data.message || 'Failed to log in')
   }
 
-  return data
+  return {
+    user: data.user,
+    feedToken: data.feedToken,
+    chatToken: data.chatToken,
+  }
 }
 
-export async function signup({ username, password }) {
+export async function signup({ username, password, email }) {
+  const userId = username.toLowerCase();
+  const id = uuidv4().replace(/-/g, '').slice(0, 21)
+
   const response = await fetch(`${API_ENDPOINT}/auth/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ username, password, email, userId, id }),
   })
 
   const data = await response.json()
@@ -84,7 +107,11 @@ export async function signup({ username, password }) {
     }
   }
 
-  return data
+  return {
+    user: data.user,
+    feedToken: data.feedToken,
+    chatToken: data.chatToken,
+  }
 }
 
 export function logout(dispatch) {

@@ -81,7 +81,7 @@ const StartView = () => {
                   Sign In
                 </button>
                 <div className={styles.orSeparator}>or</div>
-                {error && <div className={styles.errorMessage}>{error}</div>}
+                {error && <div className={styles.signupError}>{error}</div>}
                 <div className={styles.googleLoginButton}>
                   <GoogleLogin
                     onSuccess={handleGoogleLoginSuccess}

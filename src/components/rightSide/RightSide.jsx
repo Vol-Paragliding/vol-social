@@ -175,7 +175,7 @@ export default function RightSide() {
     },
     [chatClient]
   )
-
+console.log('users', users)
   const fetchUsers = useCallback(
     async (newOffset = 0, isLoadingMore = false) => {
       if (!chatClient || !chatClient.userID) {
@@ -285,21 +285,21 @@ export default function RightSide() {
             {whoToFollow.length ? (
               whoToFollow.map((user) => {
                 return (
-                  <div className="user" key={user.id}>
-                    <Link to={`/${user.id}`} className="user__details">
+                  <div className="user" key={user.userId}>
+                    <Link to={`/${user.userId}`} className="user__details">
                       <div className="user__img">
                         <UserImage
                           src={user.image}
                           alt={user.name}
-                          userId={user.id}
+                          userId={user.userId}
                         />
                       </div>
                       <div className="user__info">
                         <span className="user__name">{user.name}</span>
-                        <span className="user__id">@{user.id}</span>
+                        <span className="user__id">@{user.username}</span>
                       </div>
                     </Link>
-                    <FollowBtn userId={user.id} />
+                    <FollowBtn userId={user.userId} />
                   </div>
                 )
               })

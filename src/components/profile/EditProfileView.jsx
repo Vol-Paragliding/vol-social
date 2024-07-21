@@ -92,9 +92,10 @@ export const EditProfileView = ({ onSave }) => {
   const { authState } = useAuth()
   const { feedUser } = useFeed()
   const { chatClient } = useChat()
-
+// console.log('feedUser:', feedUser, 'chatClient:', chatClient, 'authState:', authState)
   const [profileData, setProfileData] = useState({
-    id: feedUser?.data?.userId || authState.authUser?.user.userId || '',
+    id: feedUser?.data?.id || authState.authUser?.user.id || '',
+    userId: feedUser?.data?.userId || authState.authUser?.user.userId || '',
     name: feedUser?.data?.name || '',
     bio: feedUser?.data?.bio || '',
     location: feedUser?.data?.location || '',
@@ -203,6 +204,17 @@ export const EditProfileView = ({ onSave }) => {
             value={profileData.name}
             onChange={(e) => handleInputChange(e, 'name')}
             placeholder="Name"
+            maxLength="25"
+          />
+        </FormField>
+        <FormField>
+          <FormLabel htmlFor="userId">User ID</FormLabel>
+          <FormInput
+            id="userId"
+            name="userId"
+            value={profileData.userId}
+            onChange={(e) => handleInputChange(e, 'userId')}
+            placeholder="User ID"
             maxLength="25"
           />
         </FormField>

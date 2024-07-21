@@ -61,7 +61,8 @@ export default function ProfileHeader() {
       try {
         const feed = client.feed('user', paramUser.id)
         const activities = await feed.get()
-        setActivitiesCount(activities.results.length - 1)
+        const postCount = Math.max(activities.results.length - 1, 0)
+        setActivitiesCount(postCount)
       } catch (error) {
         console.error('Error fetching activities count:', error)
       }
