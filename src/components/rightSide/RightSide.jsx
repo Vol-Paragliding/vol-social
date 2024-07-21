@@ -285,13 +285,13 @@ console.log('users', users)
             {whoToFollow.length ? (
               whoToFollow.map((user) => {
                 return (
-                  <div className="user" key={user.userId}>
-                    <Link to={`/${user.userId}`} className="user__details">
+                  <div className="user" key={user.id}>
+                    <Link to={`/${user.id}`} className="user__details">
                       <div className="user__img">
                         <UserImage
                           src={user.image}
                           alt={user.name}
-                          userId={user.userId}
+                          userId={user.id}
                         />
                       </div>
                       <div className="user__info">
@@ -299,7 +299,7 @@ console.log('users', users)
                         <span className="user__id">@{user.username}</span>
                       </div>
                     </Link>
-                    <FollowBtn userId={user.userId} />
+                    <FollowBtn userId={user.id} />
                   </div>
                 )
               })

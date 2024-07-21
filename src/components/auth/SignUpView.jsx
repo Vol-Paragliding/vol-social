@@ -90,7 +90,10 @@ const SignUpView = ({ onClose }) => {
               required
             />
           </div>
-          <button type="submit" className={styles.createLoginButton}>
+          <button
+            type="submit"
+            className={`${styles.createLoginButton} ${styles.authButtonBottom}`}
+          >
             Sign Up
           </button>
         </form>
