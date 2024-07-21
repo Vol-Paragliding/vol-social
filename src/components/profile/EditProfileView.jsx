@@ -95,7 +95,7 @@ export const EditProfileView = ({ onSave }) => {
 // console.log('feedUser:', feedUser, 'chatClient:', chatClient, 'authState:', authState)
   const [profileData, setProfileData] = useState({
     id: feedUser?.data?.id || authState.authUser?.user.id || '',
-    userId: feedUser?.data?.userId || authState.authUser?.user.userId || '',
+    username: feedUser?.data?.username || authState.authUser?.user.username || '',
     name: feedUser?.data?.name || '',
     bio: feedUser?.data?.bio || '',
     location: feedUser?.data?.location || '',
@@ -132,7 +132,7 @@ export const EditProfileView = ({ onSave }) => {
         fileName,
         mimeType,
         file,
-        authState.authUser?.user.userId || '',
+        authState.authUser?.user.id || '',
         authState.authUser?.feedToken || ''
       )
     } catch (error) {
@@ -162,11 +162,11 @@ export const EditProfileView = ({ onSave }) => {
 
       const updatedUser = await updateUser(
         updatedUserData,
-        authState.authUser?.user.userId || '',
+        authState.authUser?.user.id || '',
         authState.authUser?.feedToken || ''
       )
 
-      const userId = authState.authUser?.user.userId
+      const userId = authState.authUser?.user.id
       if (chatClient && userId) {
         await chatClient.upsertUser({
           id: userId,
@@ -208,12 +208,12 @@ export const EditProfileView = ({ onSave }) => {
           />
         </FormField>
         <FormField>
-          <FormLabel htmlFor="userId">User ID</FormLabel>
+          <FormLabel htmlFor="username">Username</FormLabel>
           <FormInput
-            id="userId"
-            name="userId"
-            value={profileData.userId}
-            onChange={(e) => handleInputChange(e, 'userId')}
+            id="username"
+            name="username"
+            value={profileData.username}
+            onChange={(e) => handleInputChange(e, 'username')}
             placeholder="User ID"
             maxLength="25"
           />

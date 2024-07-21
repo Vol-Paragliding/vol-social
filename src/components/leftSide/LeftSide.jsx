@@ -374,7 +374,7 @@ export default function LeftSide({ onClickPost }) {
       id: 'profile',
       label: 'Profile',
       Icon: User,
-      link: `/${userData.userId}`,
+      link: `/${userData.id}`,
     },
     {
       id: 'users',

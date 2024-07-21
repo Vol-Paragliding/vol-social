@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/auth/useAuth'
 import { login } from '../../contexts/auth/AuthSlice'
 import appIcon from '../../assets/appIcon.png'
 import styles from './auth.module.css'
+import GoogleSignInButton from './GoogleSignInButton'
 
 const LogInView = ({ onClose }) => {
   const [username, setUsername] = useState('')
@@ -27,7 +28,6 @@ const LogInView = ({ onClose }) => {
 
     try {
       const user = await login({ username, password })
-console.log('user:', user)
       dispatch({ type: 'SET_USER', payload: user })
       navigate('/home')
     } catch (error) {
@@ -76,6 +76,8 @@ console.log('user:', user)
             Sign In
           </button>
         </form>
+        <div className={styles.orSeparator}>or</div>
+        <GoogleSignInButton className={styles.googleLoginButton} />
       </div>
     </div>
   )
