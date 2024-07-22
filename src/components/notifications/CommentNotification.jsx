@@ -62,25 +62,26 @@ export default function CommentNotification({ commentActivities }) {
       {commentActivities.map((cAct) => {
         const actor = cAct.actor
 
-        const postLink = generatePostLink(user.id, cAct.object.id)
+        const postLink = generatePostLink(user.data.username, cAct.id)
 
         return (
           <Block key={cAct.id} onClick={() => navigate(postLink)}>
-            <Link to={`/${actor.id}`} className="user__image">
+            <Link to={`/${actor.data.username}`} className="user__image">
               <UserImage
                 src={actor.data?.image}
                 alt={actor.data.name}
-                userId={actor.id}
+                username={actor.data.username}
               />
             </Link>
             <div className="user__details">
               <PostActorName
-                id={actor.id}
+                username={actor.data.username}
                 name={actor.data.name}
                 time={cAct.time}
               />
               <span className="user__reply-to">
-                Replying to <Link to={`/${user.id}`}>@{user.id}</Link>
+                Replying to{' '}
+                <Link to={`/${user.data.username}`}>@{user.data.username}</Link>
                 <p className="user__text">{cAct.text}</p>
               </span>
             </div>

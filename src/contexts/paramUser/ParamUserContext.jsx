@@ -1,21 +1,31 @@
 import React, { createContext, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useStreamContext } from 'react-activity-feed'
+import { getIdByUsername } from '../auth/AuthSlice'
 
 export const ParamUserContext = createContext(null)
 
 export const ParamUserProvider = ({ children }) => {
-  const { userId } = useParams()
+  const { username } = useParams()
   const { client } = useStreamContext()
   const [paramUser, setParamUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    const getUser = async () => {
-      if (!userId) return
+    const fetchUserIdAndUser = async () => {
+      if (!username) {
+        setLoading(false)
+        return
+      }
 
       try {
+        setLoading(true)
+        setError(null)
+        const userId = await getIdByUsername(username)
+        if (!userId) {
+          throw new Error('User not found')
+        }
         const paramUser = await client
           .user(userId)
           .get({ with_follow_counts: true })
@@ -28,8 +38,8 @@ export const ParamUserProvider = ({ children }) => {
       }
     }
 
-    getUser()
-  }, [client, userId])
+    fetchUserIdAndUser()
+  }, [client, username])
 
   const updateParamUser = (updatedUser) => {
     setParamUser(updatedUser)

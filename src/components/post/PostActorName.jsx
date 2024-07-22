@@ -57,9 +57,8 @@ const TextBlock = styled(Link)`
   }
 `
 
-export default function PostActorName({ time, name, id, site }) {
+export default function PostActorName({ time, name, username, site }) {
   const timeDiff = Date.now() - new Date(time).getTime()
-
   // convert ms to hours
   const hoursBetweenDates = timeDiff / (60 * 60 * 1000)
 
@@ -74,9 +73,9 @@ export default function PostActorName({ time, name, id, site }) {
     : format(new Date(time), 'MMM d')
 
   return (
-    <TextBlock to={`/${id}`}>
+    <TextBlock to={`/${username}`}>
       <span className="user--name">{name}</span>
-      <span className="user--id">@{id}</span>
+      <span className="user--id">@{username}</span>
       <span className="post-date">{timeText}</span>
       {site && <span className="site">{site}</span>}
     </TextBlock>

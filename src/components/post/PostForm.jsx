@@ -231,7 +231,7 @@ export default function PostForm({
           <UserImage
             src={feedUser?.data?.image}
             alt={feedUser?.data.name}
-            userId={feedUser.id}
+            username={feedUser?.data.username}
           />
         </div>
         <div className="input-section">

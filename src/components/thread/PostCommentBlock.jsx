@@ -80,19 +80,19 @@ export default function PostCommentBlock({ comment }) {
         <UserImage
           src={user.data?.image}
           alt={user.data.name}
-          userId={user.id}
+          username={user.data.username}
         />
       </div>
       <div className="comment-post">
         <div>
           <PostActorName
             name={user.data.name}
-            id={user.id}
+            username={user.data.username}
             time={comment.created_at}
           />
           <div className="post__details">
             <p className="comment-post__text">
-              {formatStringWithLink( postComment.text, 'post__text--link' )}
+              {formatStringWithLink(postComment.text, 'post__text--link')}
             </p>
             {images.length > 0 && (
               <div className="comment-post__image">

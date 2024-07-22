@@ -140,7 +140,7 @@ export default function PostBlock({ activity }) {
     hasLikedPost = Boolean(myReaction)
   }
 
-  const postLink = activity.id ? generatePostLink(actor.id, activity.id) : '#'
+  const postLink = activity.id ? generatePostLink(actor.data.username, activity.id) : '#'
 
   const onPostComment = async (text) => {
     await createComment(text, activity)
@@ -174,6 +174,7 @@ export default function PostBlock({ activity }) {
       'more-icon',
       'menu-item',
       'user-image',
+      'user--name',
       'post__igc',
       'post__image',
     ]
@@ -237,13 +238,13 @@ export default function PostBlock({ activity }) {
           <UserImage
             src={actor.data?.image}
             alt={actor.data.name}
-            userId={actor.id}
+            username={actor.data.username}
           />
         </div>
         <div className="post">
           <PostActorName
             name={actor.data.name}
-            id={actor.id}
+            username={actor.data.username}
             time={activity.time}
             site={site}
           />

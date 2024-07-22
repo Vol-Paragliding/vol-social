@@ -1,3 +1,3 @@
-export function generatePostLink(actorId, postActivityId) {
-  return `/${actorId}/status/${postActivityId}`
+export function generatePostLink(username, postActivityId) {
+  return `/${username}/status/${postActivityId}`
 }

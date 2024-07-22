@@ -54,7 +54,7 @@ const StartView = () => {
                   Sign In
                 </button>
                 <div className={styles.orSeparator}>or</div>
-                <GoogleSignInButton className={styles.googleLoginButton} />
+                <GoogleSignInButton className={styles.googleLoginButton} useOneTap />
               </div>
             </div>
           )}

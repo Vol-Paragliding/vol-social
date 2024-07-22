@@ -86,7 +86,8 @@ export default function LikeNotification({ likedActivities }) {
         const activities = likedGroup[groupKey]
         const otherCount = activities.length - 1
         const lastActivity = activities[0]
-        const postLink = `/${user.id}/status/${lastActivity.object.id}`
+        console.log('activities', activities)
+        const postLink = `/${user.data.username}/status/${lastActivity.id}`
 
         return (
           <Block
@@ -99,14 +100,14 @@ export default function LikeNotification({ likedActivities }) {
               <div className="liked-actors__images">
                 {activities.map((activity) => (
                   <Link
-                    to={`/${activity.actor.id}`}
+                    to={`/${activity.actor.data.username}`}
                     key={activity.id}
                     className="liked-actors__images__image"
                   >
                     <UserImage
                       src={activity.actor.data?.image}
                       alt={activity.actor.data.name}
-                      userId={activity.actor.id}
+                      username={activity.actor.data.username}
                     />
                   </Link>
                 ))}
@@ -114,7 +115,7 @@ export default function LikeNotification({ likedActivities }) {
               <span className="liked-actors__text">
                 <Link
                   className="liked-actor__name"
-                  to={`/${lastActivity.actor.id}`}
+                  to={`/${lastActivity.actor.data.username}`}
                 >
                   {lastActivity.actor.data.name}
                 </Link>{' '}

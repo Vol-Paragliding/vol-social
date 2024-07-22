@@ -19,7 +19,9 @@ export const ChatProvider = ({ children }) => {
             await client.connectUser(
               {
                 id: authState.authUser.user.id,
-                name: authState.authUser.user.username,
+                name:
+                  authState.authUser.user.name ||
+                  authState.authUser.user.username,
               },
               authState.authUser.chatToken
             )
