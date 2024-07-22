@@ -176,7 +176,7 @@ export default function ProfileBio() {
           <UserImage
             src={paramUser.data?.image}
             alt={paramUser.data.name}
-            userId={paramUser.id}
+            username={paramUser.data.username}
           />
         </div>
         <div className="actions">
@@ -199,7 +199,7 @@ export default function ProfileBio() {
       </div>
       <div className="details">
         <span className="user__name">{paramUser.data.name}</span>
-        <span className="user__id">@{paramUser.data.id}</span>
+        <span className="user__id">@{paramUser.data.username}</span>
         <span className="user__bio">
           {formatStringWithLink(paramUser.data.bio || '')}
         </span>

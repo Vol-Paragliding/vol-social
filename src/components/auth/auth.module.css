@@ -38,7 +38,7 @@
   margin: auto;
   position: relative;
   width: 400px;
-  min-height: 528px;
+  min-height: 572px;
 }
 
 .authFormTitle {
@@ -80,6 +80,29 @@
   width: 100%;
 }
 
+.backButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  color: #007bff;
+  background-color: black;
+  border: 1px solid rgb(51, 51, 51);
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  width: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform, box-shadow;
+  font-weight: 600;
+  height: 40px;
+}
+
+.backButton:hover {
+  background-color: rgb(26, 155, 240, 0.1);
+}
+
 .createLoginButton {
   display: flex;
   align-items: center;
@@ -114,8 +137,8 @@
 }
 
 .authButtonBottom {
-  margin-top: 95px;
-  height: 50px;
+  margin-top: 60px;
+  height: 40px;
 }
 
 .authCloseButton {
@@ -142,6 +165,11 @@
 .signupError {
   color: #ff0000;
   margin-bottom: 1rem;
+}
+
+.emptyErrorPlaceholder {
+  visibility: hidden;
+  min-height: 18px;
 }
 
 .googleLoginButton {

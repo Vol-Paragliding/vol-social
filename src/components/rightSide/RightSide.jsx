@@ -8,6 +8,7 @@ import FollowBtn from '../follow/FollowBtn'
 import Search from '../Icons/Search'
 import LoadingIndicator from '../loading/LoadingIndicator'
 import UserImage from '../profile/UserImage'
+import TruncateTooltip from '../tooltip/TruncateTooltip'
 import { useChat } from '../../contexts/chat/useChat'
 
 const Container = styled.div`
@@ -175,7 +176,7 @@ export default function RightSide() {
     },
     [chatClient]
   )
-console.log('users', users)
+
   const fetchUsers = useCallback(
     async (newOffset = 0, isLoadingMore = false) => {
       if (!chatClient || !chatClient.userID) {
@@ -286,17 +287,22 @@ console.log('users', users)
               whoToFollow.map((user) => {
                 return (
                   <div className="user" key={user.id}>
-                    <Link to={`/${user.id}`} className="user__details">
+                    <Link to={`/${user.username}`} className="user__details">
                       <div className="user__img">
                         <UserImage
                           src={user.image}
                           alt={user.name}
-                          userId={user.id}
+                          username={user.username}
                         />
                       </div>
                       <div className="user__info">
                         <span className="user__name">{user.name}</span>
-                        <span className="user__id">@{user.username}</span>
+                        <span className="user__id">
+                          <TruncateTooltip
+                            text={`@${user.username}`}
+                            maxLength={18}
+                          />
+                        </span>
                       </div>
                     </Link>
                     <FollowBtn userId={user.id} />

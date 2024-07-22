@@ -208,12 +208,12 @@ export default function PostContent({ activity }) {
             <UserImage
               src={postActor?.image}
               alt={postActor.name}
-              userId={postActor.id}
+              username={postActor.username}
             />
           </div>
           <div className="user__name">
             <span className="user__name--name">{postActor.name}</span>
-            <span className="user__name--id">@{postActor.id}</span>
+            <span className="user__name--id">@{postActor.username}</span>
           </div>
           <div className="user__option">
             <More color="#777" size={20} />
@@ -270,7 +270,7 @@ export default function PostContent({ activity }) {
             submitText="Reply"
             collapsedOnMount={true}
             placeholder="Post your reply"
-            replyingTo={postActor.id}
+            replyingTo={postActor.username}
           />
         </div>
         {activity.latest_reactions?.comment?.map((comment) => (

@@ -77,20 +77,23 @@ export default function FollowNotification({ followActivities }) {
         <div className="actors__images">
           {followActivities.map((follow) => (
             <Link
-              to={`/${follow.actor.id}`}
+              to={`/${follow.actor.data.username}`}
               className="actors__images__image"
               key={follow.id}
             >
               <UserImage
                 src={follow.actor.data.image}
                 alt={follow.actor.data.name}
-                userId={follow.actor.id}
+                username={follow.actor.data.username}
               />
             </Link>
           ))}
         </div>
         <p className="actors__text">
-          <Link className="actors__name" to={`/${firstActivity.actor.id}`}>
+          <Link
+            className="actors__name"
+            to={`/${firstActivity.actor.data.username}`}
+          >
             {firstActivity.actor.data.name}
           </Link>{' '}
           {getOtherFollowersText(otherCount)} followed you

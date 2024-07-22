@@ -60,6 +60,7 @@ const LogInView = ({ onClose }) => {
               pattern="^[a-zA-Z0-9_.\-]{3,25}$"
               title="Username must be 3-25 characters and can include letters, numbers, underscores, hyphens, and periods."
               required
+              autoFocus
             />
           </div>
           <div className={styles.authInputGroup}>
@@ -77,7 +78,7 @@ const LogInView = ({ onClose }) => {
           </button>
         </form>
         <div className={styles.orSeparator}>or</div>
-        <GoogleSignInButton className={styles.googleLoginButton} />
+        <GoogleSignInButton className={styles.googleLoginButton} useOneTap={false} />
       </div>
     </div>
   )

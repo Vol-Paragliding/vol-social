@@ -41,6 +41,43 @@ export const authReducer = (state, action) => {
   }
 }
 
+export async function checkAvailability(identifier) {
+  const response = await fetch(`${API_ENDPOINT}/auth/check-availability`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ identifier }),
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to check availability')
+  }
+
+  return data
+}
+
+export async function getIdByUsername(username) {
+  const response = await fetch(`${API_ENDPOINT}/auth/get-user-id`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username }),
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to get user ID')
+  }
+
+  return data.userId
+}
+
+
 export async function googleLogin(tokenId) {
   const response = await fetch(`${API_ENDPOINT}/auth/google`, {
     method: 'POST',
@@ -81,24 +118,24 @@ export async function login({ username, password }) {
   }
 }
 
-export async function signup({ username, password, email }) {
-  const userId = username.toLowerCase();
+export async function signup({ identifier, password, username, name }) {
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)
   const id = uuidv4().replace(/-/g, '').slice(0, 21)
+  const userId = isEmail ? id : identifier.toLowerCase()
+  const email = isEmail ? identifier.toLowerCase() : ''
 
   const response = await fetch(`${API_ENDPOINT}/auth/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username, password, email, userId, id }),
+    body: JSON.stringify({ identifier, password, email, userId, id, username, name }),
   })
 
   const data = await response.json()
 
   if (!response.ok) {
     if (data.message && data.message.code === 'SQLITE_CONSTRAINT') {
-      throw new Error('Username already exists. Please choose a different one.')
-    } else if (response.status === 409) {
       throw new Error(
         'User with given ID already exists. Please choose a different one.'
       )

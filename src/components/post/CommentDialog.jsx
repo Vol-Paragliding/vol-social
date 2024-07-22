@@ -131,21 +131,23 @@ export default function CommentDialog({
               <UserImage
                 src={postActor.data?.image}
                 alt={postActor.data.name}
-                userId={postActor.id}
+                username={postActor.data.username}
               />
             </div>
             <div className="details">
               <PostActorName
                 time={activity.time}
                 name={postActor.data.name}
-                id={postActor.data.id}
+                username={postActor.data.username}
               />
               <p className="post-text">
                 {formatStringWithLink(post.text, 'post__text--link', true)}
               </p>
               <div className="replying-info">
                 Replying to{' '}
-                <span className="replying-info--actor">@{postActor.id}</span>
+                <span className="replying-info--actor">
+                  @{postActor.data.username}
+                </span>
               </div>
             </div>
           </div>

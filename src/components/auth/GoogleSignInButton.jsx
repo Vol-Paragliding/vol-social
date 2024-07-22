@@ -4,7 +4,7 @@ import { googleLogin } from '../../contexts/auth/AuthSlice'
 import { useNavigate } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
 
-const GoogleSignInButton = ({ className }) => {
+const GoogleSignInButton = ({ className, useOneTap }) => {
   const { dispatch } = useAuth()
   const navigate = useNavigate()
   const [error, setError] = useState('')
@@ -32,7 +32,7 @@ const GoogleSignInButton = ({ className }) => {
       <GoogleLogin
         onSuccess={handleGoogleLoginSuccess}
         onError={handleGoogleLoginFailure}
-        useOneTap
+        useOneTap={useOneTap}
         width="334px"
         shape="pill"
         className={className}

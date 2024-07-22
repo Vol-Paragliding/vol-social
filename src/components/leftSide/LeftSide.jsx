@@ -1,21 +1,22 @@
 import classNames from 'classnames'
 import { useEffect, useState, useRef } from 'react'
 import { useStreamContext } from 'react-activity-feed'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import appIcon from '../../assets/appIcon.png'
 import { useAuth } from '../../contexts/auth/useAuth'
 import { useFeed } from '../../contexts/feed/useFeed'
 import { logout } from '../../contexts/auth/AuthSlice'
-import LoadingIndicator from '../loading/LoadingIndicator'
-import UserImage from '../profile/UserImage'
 import Bell from '../Icons/Bell'
 import Home from '../Icons/Home'
 import User from '../Icons/User'
 import More from '../Icons/More'
 import Plus from '../Icons/Plus'
 import Search from '../Icons/Search'
+import LoadingIndicator from '../loading/LoadingIndicator'
+import UserImage from '../profile/UserImage'
+import TruncateTooltip from '../tooltip/TruncateTooltip'
 
 const Container = styled.div`
   display: flex;
@@ -199,16 +200,18 @@ const Container = styled.div`
         }
       }
 
-      &__text {
-        span {
-          display: block;
-          margin-left: 10px;
-        }
+      &__username {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+      }
 
+      &__text {
         &__name {
           color: white;
           font-size: 16px;
           font-weight: bold;
+          margin-left: 10px;
         }
 
         &__id {
@@ -300,34 +303,35 @@ const Menu = styled.div`
 
 export default function LeftSide({ onClickPost }) {
   const location = useLocation()
+  const navigate = useNavigate()
   const { client, userData } = useStreamContext()
   const { feedUser } = useFeed()
   const { dispatch } = useAuth()
   const [newNotifications, setNewNotifications] = useState(0)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const profileSectionRef = useRef()
-// console.log('userData', userData)
+
   useEffect(() => {
     if (!userData || location.pathname === `/notifications`) return
 
     let notifFeed
 
-    // async function init() {
-    //   notifFeed = client.feed('notification', userData.id)
-    //   const notifications = await notifFeed.get()
+    async function init() {
+      notifFeed = client.feed('notification', userData.id)
+      const notifications = await notifFeed.get()
 
-    //   const unread = notifications.results.filter(
-    //     (notification) => !notification.is_seen
-    //   )
+      const unread = notifications.results.filter(
+        (notification) => !notification.is_seen
+      )
 
-    //   setNewNotifications(unread.length)
+      setNewNotifications(unread.length)
 
-    //   notifFeed.subscribe((data) => {
-    //     setNewNotifications((prev) => prev + data.new.length)
-    //   })
-    // }
+      notifFeed.subscribe((data) => {
+        setNewNotifications((prev) => prev + data.new.length)
+      })
+    }
 
-    // init()
+    init()
 
     return () => notifFeed?.unsubscribe()
   }, [userData, location.pathname, client])
@@ -374,7 +378,7 @@ export default function LeftSide({ onClickPost }) {
       id: 'profile',
       label: 'Profile',
       Icon: User,
-      link: `/${userData.id}`,
+      link: `/${userData.username}`,
     },
     {
       id: 'users',
@@ -387,6 +391,7 @@ export default function LeftSide({ onClickPost }) {
 
   const handleLogout = () => {
     logout(dispatch)
+    navigate('/')
   }
 
   return (
@@ -441,9 +446,17 @@ export default function LeftSide({ onClickPost }) {
               />
             </div>
             <div className="details__text">
-              <span className="details__text__name">{feedUser.data.name}</span>
-              {console.log('userData', userData)}
-              <span className="details__text__id">@{userData.username}</span>
+              <span className="details__text__name">
+                <TruncateTooltip text={feedUser.data.name} maxLength={18} />
+              </span>
+              <div className="details__username">
+                <span className="details__text__id">
+                  <TruncateTooltip
+                    text={`@${userData.username}`}
+                    maxLength={15}
+                  />
+                </span>
+              </div>
             </div>
           </div>
           <div className="profile-more">
@@ -452,7 +465,9 @@ export default function LeftSide({ onClickPost }) {
 
           {isDropdownOpen && (
             <Menu ref={profileSectionRef}>
-              <button onClick={handleLogout}>Logout @{feedUser.id}</button>
+              <button onClick={handleLogout}>
+                Logout @{userData.username}
+              </button>
             </Menu>
           )}
         </div>

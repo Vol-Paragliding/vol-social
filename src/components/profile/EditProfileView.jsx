@@ -92,11 +92,13 @@ export const EditProfileView = ({ onSave }) => {
   const { authState } = useAuth()
   const { feedUser } = useFeed()
   const { chatClient } = useChat()
-// console.log('feedUser:', feedUser, 'chatClient:', chatClient, 'authState:', authState)
+
   const [profileData, setProfileData] = useState({
     id: feedUser?.data?.id || authState.authUser?.user.id || '',
-    username: feedUser?.data?.username || authState.authUser?.user.username || '',
+    username:
+      feedUser?.data?.username || authState.authUser?.user.username || '',
     name: feedUser?.data?.name || '',
+    email: feedUser?.data?.email || '',
     bio: feedUser?.data?.bio || '',
     location: feedUser?.data?.location || '',
     image: feedUser?.data?.image || '',
@@ -132,7 +134,7 @@ export const EditProfileView = ({ onSave }) => {
         fileName,
         mimeType,
         file,
-        authState.authUser?.user.id || '',
+        profileData.id,
         authState.authUser?.feedToken || ''
       )
     } catch (error) {
@@ -162,14 +164,13 @@ export const EditProfileView = ({ onSave }) => {
 
       const updatedUser = await updateUser(
         updatedUserData,
-        authState.authUser?.user.id || '',
+        profileData.id,
         authState.authUser?.feedToken || ''
       )
 
-      const userId = authState.authUser?.user.id
-      if (chatClient && userId) {
+      if (chatClient && profileData.id) {
         await chatClient.upsertUser({
-          id: userId,
+          id: profileData.id,
           ...updatedUserData,
         })
       } else {
@@ -197,7 +198,7 @@ export const EditProfileView = ({ onSave }) => {
           onCoverImageChange={handleCoverImageChange}
         />
         <FormField style={{ marginTop: '80px' }}>
-          <FormLabel htmlFor="name">Name</FormLabel>
+          <FormLabel htmlFor="name">Display name</FormLabel>
           <FormInput
             id="name"
             name="name"
@@ -215,6 +216,16 @@ export const EditProfileView = ({ onSave }) => {
             value={profileData.username}
             onChange={(e) => handleInputChange(e, 'username')}
             placeholder="User ID"
+            maxLength="25"
+          />
+        </FormField>
+        <FormField>
+          <FormInput
+            id="email"
+            name="email"
+            value={profileData.email}
+            onChange={(e) => handleInputChange(e, 'email')}
+            placeholder="Email"
             maxLength="25"
           />
         </FormField>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useStreamContext } from 'react-activity-feed'
 import { logout } from '../../contexts/auth/AuthSlice'
@@ -89,6 +90,7 @@ const ConfirmContainer = styled.div`
 `
 
 export default function ProfileMoreMenu({ onClose }) {
+  const navigate = useNavigate()
   const { client } = useStreamContext()
   const { dispatch } = useAuth()
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false)
@@ -113,6 +115,7 @@ export default function ProfileMoreMenu({ onClose }) {
       }
 
       logout(dispatch)
+      navigate('/')
       console.log('Account deleted')
 
       setIsConfirmDeleteOpen(false)

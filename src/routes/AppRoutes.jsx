@@ -54,7 +54,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path="/:userId"
+        path="/:username"
         element={
           authState.isAuthenticated ? (
             <Layout>
@@ -68,7 +68,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path="/:userId/status/:id"
+        path="/:username/status/:id"
         element={
           authState.isAuthenticated ? (
             <Layout>
