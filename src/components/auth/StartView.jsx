@@ -54,7 +54,10 @@ const StartView = () => {
                   Sign In
                 </button>
                 <div className={styles.orSeparator}>or</div>
-                <GoogleSignInButton className={styles.googleLoginButton} useOneTap />
+                <GoogleSignInButton
+                  className={styles.googleLoginButton}
+                  useOneTap
+                />
               </div>
             </div>
           )}
@@ -62,6 +65,22 @@ const StartView = () => {
           {isSignUpPresented && <SignUpView onClose={handleClose} />}
         </section>
       </main>
+      <footer className={styles.footer}>
+        <div>
+          <a className={styles.aboutLink} href="/">
+            &copy; 2023 Vol
+          </a>
+          <a className={styles.aboutLink} href="/home.html">
+            Home
+          </a>
+          <a className={styles.aboutLink} href="/privacy-policy.html">
+            Privacy Policy
+          </a>
+          <a className={styles.aboutLink} href="/terms-of-service.html">
+            Terms of Service
+          </a>
+        </div>
+      </footer>
     </GoogleOAuthProvider>
   )
 }

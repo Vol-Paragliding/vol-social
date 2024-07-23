@@ -4,15 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terms of Service - Vol-Social</title>
+  <title>Vol</title>
   <style>
     body {
       background-color: #121212;
-      color: #ffffff;
+      color: #e0e0e0;
       font-family: Arial, sans-serif;
-      line-height: 1.6;
       margin: 0;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     h1,
@@ -41,31 +43,55 @@
       border-radius: 10px;
     }
 
+    .start-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .logo {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+
     .back-button {
       display: inline-block;
       margin-bottom: 20px;
       padding: 10px 20px;
       background-color: #333;
-      color: #ffffff;
+      color: #fff;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      text-align: center;
       text-decoration: none;
+      transition: background-color 0.3s, transform 0.2s;
+      font-size: 16px;
+      font-weight: bold;
     }
 
     .back-button:hover {
-      background-color: #555;
+      background-color: #444;
+      transform: scale(1.05);
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #777;
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <a href="/" class="back-button">Back</a>
-    <h1>Terms of Service for Vol-Social</h1>
-    <p>Effective Date: 7/22/24</p>
+    <div class="start-section">
+      <img src="appIcon.png" alt="Vol Logo" class="logo">
+      <a href="#" class="back-button" onclick="history.back()">Back</a>
+    </div>
+    <h1>Terms of Service for Vol</h1>
     <h2>1. Acceptance of Terms</h2>
-    <p>By accessing or using the Vol-Social app, you agree to be bound by these terms of service and all applicable laws
+    <p>By accessing or using the Vol app, you agree to be bound by these terms of service and all applicable laws
       and regulations. If you do not agree with any part of these terms, you must not use our app.</p>
     <h2>2. Changes to Terms</h2>
     <p>We reserve the right to modify these terms at any time. Any changes will be effective immediately upon posting on
@@ -88,7 +114,7 @@
     </p>
     <h2>6. Intellectual Property</h2>
     <p>All content and materials on the app, including text, graphics, logos, and software, are the property of
-      Vol-Social or its licensors and are protected by intellectual property laws. You agree not to copy, modify,
+      Vol or its licensors and are protected by intellectual property laws. You agree not to copy, modify,
       distribute, or create derivative works based on any content from the app without our prior written consent.</p>
     <h2>7. Disclaimers and Limitation of Liability</h2>
     <p>The app is provided on an "as is" and "as available" basis without any warranties of any kind. We do not warrant
@@ -96,7 +122,7 @@
       warranties, express or implied, and will not be liable for any damages of any kind arising from the use of the
       app.</p>
     <h2>8. Indemnification</h2>
-    <p>You agree to indemnify and hold Vol-Social, its affiliates, officers, agents, and employees harmless from any
+    <p>You agree to indemnify and hold Vol, its affiliates, officers, agents, and employees harmless from any
       claim or demand, including reasonable attorneys' fees, made by any third party due to or arising out of your use
       of the app, your violation of these terms, or your violation of any rights of another.</p>
     <h2>9. Governing Law</h2>
@@ -104,6 +130,10 @@
       its conflict of law principles.</p>
     <h2>10. Contact Us</h2>
     <p>If you have any questions about these terms, please contact us at zacheryconverse@gmail.com.</p>
+    <p>Effective Date: 7/22/24</p>
+  </div>
+  <div class="footer">
+    &copy; 2023 Vol-Social. All rights reserved.
   </div>
 </body>
 

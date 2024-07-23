@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid'
-
 import { API_ENDPOINT } from '../../config'
 
 export const initialState = {
@@ -77,7 +76,6 @@ export async function getIdByUsername(username) {
   return data.userId
 }
 
-
 export async function googleLogin(tokenId) {
   const response = await fetch(`${API_ENDPOINT}/auth/google`, {
     method: 'POST',
@@ -129,7 +127,15 @@ export async function signup({ identifier, password, username, name }) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ identifier, password, email, userId, id, username, name }),
+    body: JSON.stringify({
+      identifier,
+      password,
+      email,
+      userId,
+      id,
+      username,
+      name,
+    }),
   })
 
   const data = await response.json()
@@ -149,6 +155,25 @@ export async function signup({ identifier, password, username, name }) {
     feedToken: data.feedToken,
     chatToken: data.chatToken,
   }
+}
+
+export async function updateProfile(profileData, feedToken) {
+  const response = await fetch(`${API_ENDPOINT}/auth/update-profile`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${feedToken}`,
+    },
+    body: JSON.stringify(profileData),
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to update profile')
+  }
+
+  return data.user
 }
 
 export function logout(dispatch) {

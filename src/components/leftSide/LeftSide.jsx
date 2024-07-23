@@ -274,7 +274,7 @@ const Container = styled.div`
 const Menu = styled.div`
   position: absolute;
   bottom: calc(100% + 10px);
-  right: -40px;
+  right: -300%;
   background: black;
   border: 1px solid #555;
   border-radius: 30px;
@@ -283,6 +283,12 @@ const Menu = styled.div`
   z-index: 2;
   box-shadow: 0 0 10px rgba(0, 0, 0, 1.5);
   cursor: pointer;
+  text-wrap: nowrap;
+
+  @media (max-width: 868px) {
+    bottom: -60px;
+    right: 40px;
+  }
 
   &:hover {
     background: #333;

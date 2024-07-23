@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vol Home</title>
+  <link rel="icon" href="appIcon.png" type="image/png">
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    h1,
+    h2 {
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #b0b0b0;
+      line-height: 1.6;
+      margin: 0 0 20px 0;
+    }
+
+    a {
+      color: #bb86fc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    a:hover {
+      color: #fff;
+    }
+
+    .container {
+      max-width: 800px;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+      margin: 20px;
+    }
+
+    .start-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .logo {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background-color 0.3s, transform 0.2s;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .back-button:hover {
+      background-color: #444;
+      transform: scale(1.05);
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      text-align: left;
+    }
+
+    ul li {
+      background-size: 20px;
+      padding-left: 30px;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .policy-links {
+      margin-top: 20px;
+    }
+
+    .policy-links a {
+      margin: 0 10px;
+      display: inline-block;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #777;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+
+      .logo {
+        width: 60px;
+      }
+
+      .back-button {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="start-section">
+      <img src="appIcon.png" alt="Vol Logo" class="logo">
+      <a href="/" class="back-button">Log in</a>
+    </div>
+    <h1>Welcome to Vol</h1>
+    <p>Vol is a platform for paragliding enthusiasts to share their flights and connect with others in the
+      community.</p>
+
+    <h2>About Vol</h2>
+    <p>Vol is designed to bring paragliders together, allowing them to share their flying experiences, track
+      their flights, and stay connected with the community. Our platform offers detailed flight logs, interactive maps,
+      and a vibrant community forum.</p>
+
+    <h2>Features</h2>
+    <ul>
+      <li>Flight tracking and logging</li>
+      <li>Interactive maps to view flight paths</li>
+      <li>Community forum to connect with other paragliders</li>
+      <li>Personal profile to showcase your flying achievements</li>
+      <li>Secure and private data handling</li>
+    </ul>
+
+    <h2>Data Privacy</h2>
+    <p>We prioritize user privacy and data security. Please read our privacy policy to understand how we handle your
+      data. Our app only collects essential information to provide and improve our services.</p>
+
+    <h2>User Testimonials</h2>
+    <p>"Vol has revolutionized the way I track my flights and connect with fellow paragliders. Highly
+      recommended!" - A Happy User</p>
+
+    <p class="policy-links">
+      <a href="/privacy-policy.html">Privacy Policy</a> |
+      <a href="/terms-of-service.html">Terms of Service</a>
+    </p>
+  </div>
+  <div class="footer">
+    &copy; 2023 Vol. All rights reserved.
+  </div>
+</body>
+
+</html>

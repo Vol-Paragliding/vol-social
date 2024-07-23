@@ -47,13 +47,7 @@ const PostActions = ({ activity, hasLikedPost, setCommentDialogOpened }) => {
       Icon: Comment,
       alt: 'Comment',
       value: activity?.reaction_counts?.comment || 0,
-      onClick: () => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        })
-        setCommentDialogOpened(true)
-      },
+      onClick: () => setCommentDialogOpened(true),
     },
   ]
 

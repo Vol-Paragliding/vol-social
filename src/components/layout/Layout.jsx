@@ -96,15 +96,7 @@ export default function Layout({ children }) {
       <Container>
         <div className="content">
           <div className="left-side-bar">
-            <LeftSide
-              onClickPost={() => {
-                window.scrollTo({
-                  top: 0,
-                  behavior: 'smooth',
-                })
-                setCreateDialogOpened(true)
-              }}
-            />
+            <LeftSide onClickPost={() => setCreateDialogOpened(true)} />
           </div>
           <main className="main-content">
             {!user ? <LoadingIndicator /> : children}

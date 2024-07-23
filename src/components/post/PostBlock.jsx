@@ -72,11 +72,11 @@ const Block = styled.div`
 
     &__image {
       overflow: hidden;
-      width: calc(100% + 30px);
+      width: calc(100% + 40px);
     }
 
     &__igc {
-      width: calc(100% + 30px);
+      width: calc(100% + 40px);
     }
   }
 
@@ -140,7 +140,9 @@ export default function PostBlock({ activity }) {
     hasLikedPost = Boolean(myReaction)
   }
 
-  const postLink = activity.id ? generatePostLink(actor.data.username, activity.id) : '#'
+  const postLink = activity.id
+    ? generatePostLink(actor.data.username, activity.id)
+    : '#'
 
   const onPostComment = async (text) => {
     await createComment(text, activity)
@@ -279,7 +281,10 @@ export default function PostBlock({ activity }) {
           <More color="#777" size={20} />
         </button>
         {menuOpened && (
-          <PostMoreMenu activity={activity} onClose={() => setMenuOpened(false)} />
+          <PostMoreMenu
+            activity={activity}
+            onClose={() => setMenuOpened(false)}
+          />
         )}
       </Block>
       {activity.id && commentDialogOpened && (

@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/auth/useAuth'
 import { useFeed } from '../../contexts/feed/useFeed'
 import { useChat } from '../../contexts/chat/useChat'
 import { updateUser, uploadImage } from '../../services/FeedService'
+import { updateProfile } from '../../contexts/auth/AuthSlice'
 import { ProfileImageUpload } from './ProfileImageUpload'
 
 const ProfileContainer = styled.div`
@@ -176,6 +177,11 @@ export const EditProfileView = ({ onSave }) => {
       } else {
         console.error('Chat client is not initialized or userId is undefined.')
       }
+
+      await updateProfile(
+        updatedUserData,
+        authState.authUser?.feedToken || ''
+      )
 
       onSave(updatedUser)
     } catch (error) {

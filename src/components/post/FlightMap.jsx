@@ -1,16 +1,7 @@
 import React, { useEffect } from 'react'
 import { MapContainer, TileLayer, Polyline, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-import styled from 'styled-components'
 import localforage from 'localforage'
-
-const MapWrapper = styled.div`
-  .leafletMap {
-    height: 300px;
-    width: 100%;
-    z-index: 1;
-  }
-`
 
 const FitBounds = ({ flightPath }) => {
   const map = useMap()
@@ -94,31 +85,25 @@ const CachedTileLayer = ({ urlTemplate, ...props }) => {
 
 const FlightMap = ({ flightPath }) => {
   return (
-    <MapWrapper>
-      <MapContainer
-        className="leafletMap"
-        center={[0, 0]}
-        zoom={13}
-        zoomSnap={0.5}
-        zoomDelta={0.5}
-        zoomControl={false}
-      >
-        <CachedTileLayer
-          attribution="Maps © Thunderforest, Data © OpenStreetMap"
-          urlTemplate="https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=45ac3fefb46044158060be660e86b1bb"
-          // attribution="&copy; OSM"
-          // urlTemplate="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Polyline
-          positions={flightPath}
-          color="rgb(119, 119, 119)"
-          weight={7}
-        />
-        <Polyline positions={flightPath} color="#fc5200" weight={2} />
-        <Polyline positions={flightPath} color="#d9fe74" weight={1} />
-        <FitBounds flightPath={flightPath} />
-      </MapContainer>
-    </MapWrapper>
+    <MapContainer
+      className="leafletMap"
+      center={[0, 0]}
+      zoom={13}
+      zoomSnap={0.5}
+      zoomDelta={0.5}
+      zoomControl={false}
+    >
+      <CachedTileLayer
+        attribution="Maps © Thunderforest, Data © OpenStreetMap"
+        urlTemplate="https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=45ac3fefb46044158060be660e86b1bb"
+        // attribution="&copy; OSM"
+        // urlTemplate="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Polyline positions={flightPath} color="rgb(119, 119, 119)" weight={7} />
+      <Polyline positions={flightPath} color="#fc5200" weight={2} />
+      <Polyline positions={flightPath} color="#d9fe74" weight={1} />
+      <FitBounds flightPath={flightPath} />
+    </MapContainer>
   )
 }
 

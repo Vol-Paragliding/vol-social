@@ -6,8 +6,11 @@ import FlightMap from './FlightMap'
 
 const Container = styled.div`
   .leafletMap {
-    height: 300px;
-    width: 100%;
+    height: 400px;
+    z-index: 1;
+    width: calc(100% + 20px);
+    margin-left: -20px;
+    border-radius: 30px;
   }
 `
 
