@@ -8,7 +8,6 @@
   <link rel="icon" href="appIcon.png" type="image/png">
   <style>
     body {
-      background-color: #121212;
       color: #e0e0e0;
       font-family: 'Roboto', sans-serif;
       margin: 0;
@@ -19,163 +18,172 @@
       justify-content: center;
       min-height: 100vh;
       box-sizing: border-box;
+      background: url('home-background.jpg') center center / cover no-repeat;
     }
 
-    h1,
-    h2 {
-      color: #ffffff;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #b0b0b0;
-      line-height: 1.6;
-      margin: 0 0 20px 0;
-    }
-
-    a {
-      color: #bb86fc;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    a:hover {
-      color: #fff;
-    }
-
-    .container {
-      max-width: 800px;
-      padding: 20px;
-      background-color: #1e1e1e;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-      margin: 20px;
-    }
-
-    .start-section {
+    .header {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
     }
 
     .logo {
-      width: 80px;
-      margin-bottom: 20px;
+      width: 50px;
+      margin-right: auto;
     }
 
-    .back-button {
+    .dropdown {
+      position: relative;
       display: inline-block;
-      margin-bottom: 20px;
-      padding: 10px 20px;
+      margin: 0 10px;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
       background-color: #333;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      z-index: 1;
+      min-width: 160px;
+    }
+
+    .dropdown-content a {
+      color: white;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      border-bottom: 1px solid #444;
+    }
+
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #444;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown button {
+      background-color: #444;
+      background-color: transparent;
       color: #fff;
+      padding: 10px 16px;
+      font-size: 16px;
       border: none;
-      border-radius: 5px;
+      border-radius: 30px;
       cursor: pointer;
-      text-align: center;
+      transition: background-color 0.3s;
+    }
+
+    .dropdown button:hover {
+      background-color: #555;
+    }
+
+    .visit-button {
+      background-color: #444;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
       text-decoration: none;
       transition: background-color 0.3s, transform 0.2s;
-      font-size: 16px;
-      font-weight: bold;
+      display: inline-block;
     }
 
-    .back-button:hover {
-      background-color: #444;
+    .visit-button:hover {
+      background-color: #555;
       transform: scale(1.05);
     }
 
-    ul {
-      list-style-type: none;
-      padding: 0;
-      text-align: left;
+    .container {
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+      margin-top: 80px;
     }
 
-    ul li {
-      background-size: 20px;
-      padding-left: 30px;
-      margin-bottom: 10px;
-      color: #ffffff;
-    }
+    .logo-big {
+      width: 200px;
 
-    .policy-links {
-      margin-top: 20px;
-    }
-
-    .policy-links a {
-      margin: 0 10px;
-      display: inline-block;
-    }
-
-    .footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #777;
     }
 
     @media (max-width: 768px) {
-      .container {
-        padding: 15px;
-      }
-
       .logo {
-        width: 60px;
+        width: 40px;
       }
 
-      .back-button {
+      .dropdown button {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+
+      .visit-button {
         padding: 8px 16px;
         font-size: 14px;
       }
 
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      h2 {
-        font-size: 1.25rem;
+      .logo-big {
+        width: 150px;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="start-section">
-      <img src="appIcon.png" alt="Vol Logo" class="logo">
-      <a href="/" class="back-button">Log in</a>
+  <div class="header">
+    <div class="header-left">
+      <a href="/">
+        <img src="appIcon.png" alt="Vol Logo" class="logo">
+      </a>
     </div>
-    <h1>Welcome to Vol</h1>
-    <p>Vol is a platform for paragliding enthusiasts to share their flights and connect with others in the
-      community.</p>
-
-    <h2>About Vol</h2>
-    <p>Vol is designed to bring paragliders together, allowing them to share their flying experiences, track
-      their flights, and stay connected with the community. Our platform offers detailed flight logs, interactive maps,
-      and a vibrant community forum.</p>
-
-    <h2>Features</h2>
-    <ul>
-      <li>Flight tracking and logging</li>
-      <li>Interactive maps to view flight paths</li>
-      <li>Community forum to connect with other paragliders</li>
-      <li>Personal profile to showcase your flying achievements</li>
-      <li>Secure and private data handling</li>
-    </ul>
-
-    <h2>Data Privacy</h2>
-    <p>We prioritize user privacy and data security. Please read our privacy policy to understand how we handle your
-      data. Our app only collects essential information to provide and improve our services.</p>
-
-    <h2>User Testimonials</h2>
-    <p>"Vol has revolutionized the way I track my flights and connect with fellow paragliders. Highly
-      recommended!" - A Happy User</p>
-
-    <p class="policy-links">
-      <a href="/privacy-policy.html">Privacy Policy</a> |
-      <a href="/terms-of-service.html">Terms of Service</a>
-    </p>
+    <div class="header-right">
+      <div class="dropdown">
+        <button>About</button>
+        <div class="dropdown-content">
+          <a href="/about.html">About Vol</a>
+          <a href="/features.html">Features</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button>Policies</button>
+        <div class="dropdown-content">
+          <a href="/privacy-policy.html">Privacy Policy</a>
+          <a href="/terms-of-service.html">Terms of Service</a>
+        </div>
+      </div>
+      <a href="https://volflights.com" class="visit-button">Go to vol</a>
+    </div>
   </div>
-  <div class="footer">
-    &copy; 2023 Vol. All rights reserved.
+  <div class="container">
+    <a href="/">
+      <img src="startImage.png" alt="Vol Logo" class="logo-big">
+    </a>
   </div>
 </body>
 

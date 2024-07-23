@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vol Features</title>
+  <link rel="icon" href="appIcon.png" type="image/png">
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    h1,
+    h2 {
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #b0b0b0;
+      line-height: 1.6;
+      margin: 0 0 20px 0;
+    }
+
+    a {
+      color: #bb86fc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    a:hover {
+      color: #fff;
+    }
+
+    .container {
+      max-width: 800px;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+      margin-bottom: 20px;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background-color 0.3s, transform 0.2s;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .back-button:hover {
+      background-color: #444;
+      transform: scale(1.05);
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      text-align: left;
+    }
+
+    ul li {
+      background-size: 20px;
+      padding-left: 30px;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #777;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+
+      .back-button {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <a href="#" class="back-button" onclick="history.back()">Back</a>
+    <h1>Features</h1>
+    <ul>
+      <li>Flight tracking and logging</li>
+      <li>Interactive maps to view flight paths</li>
+      <li>Community forum to connect with other paragliders</li>
+      <li>Personal profile to showcase your flying achievements</li>
+      <li>Secure and private data handling</li>
+    </ul>
+    <div class="footer">
+      &copy; 2023 Vol. All rights reserved.
+    </div>
+  </div>
+</body>
+
+</html>
