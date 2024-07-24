@@ -73,6 +73,7 @@ const Block = styled.div`
     &__image {
       overflow: hidden;
       width: calc(100% + 40px);
+      border-radius: 10px;
     }
 
     &__igc {

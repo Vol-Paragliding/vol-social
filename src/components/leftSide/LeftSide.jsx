@@ -273,8 +273,8 @@ const Container = styled.div`
 
 const Menu = styled.div`
   position: absolute;
-  bottom: calc(100% + 10px);
-  right: -300%;
+  bottom: 100%;
+  right: -110%;
   background: black;
   border: 1px solid #555;
   border-radius: 30px;
@@ -472,7 +472,8 @@ export default function LeftSide({ onClickPost }) {
           {isDropdownOpen && (
             <Menu ref={profileSectionRef}>
               <button onClick={handleLogout}>
-                Logout @{userData.username}
+                Logout
+                {/* @{userData.username} */}
               </button>
             </Menu>
           )}

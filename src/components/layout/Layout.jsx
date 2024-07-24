@@ -27,6 +27,7 @@ const Container = styled.div`
     min-height: 100vh;
     border-left: none;
     border-right: none;
+    z-index: 1;
   }
 
   @media (max-width: 868px) {
@@ -63,6 +64,7 @@ const Container = styled.div`
       position: sticky;
       top: 0;
       transition: width 0.3s;
+      z-index: 10;
     }
 
     .main-content {

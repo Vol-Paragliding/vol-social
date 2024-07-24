@@ -73,8 +73,15 @@
       border-bottom: 1px solid #444;
     }
 
+    .dropdown-content a:first-child {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
     .dropdown-content a:last-child {
       border-bottom: none;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
     }
 
     .dropdown-content a:hover {
@@ -86,12 +93,11 @@
     }
 
     .dropdown button {
-      background-color: #444;
       background-color: transparent;
       color: #fff;
       padding: 10px 16px;
       font-size: 16px;
-      border: none;
+      border: 1px solid #333;
       border-radius: 30px;
       cursor: pointer;
       transition: background-color 0.3s;
@@ -102,11 +108,11 @@
     }
 
     .visit-button {
-      background-color: #444;
+      background-color: transparent;
       color: white;
       padding: 10px 20px;
       font-size: 16px;
-      border: none;
+      border: 1px solid #333;
       border-radius: 30px;
       cursor: pointer;
       text-decoration: none;
@@ -116,7 +122,7 @@
 
     .visit-button:hover {
       background-color: #555;
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
 
     .container {
@@ -156,35 +162,37 @@
 </head>
 
 <body>
-  <div class="header">
+  <header class="header">
     <div class="header-left">
-      <a href="/">
+      <a href="/" aria-label="sign in">
         <img src="appIcon.png" alt="Vol Logo" class="logo">
       </a>
     </div>
     <div class="header-right">
-      <div class="dropdown">
-        <button>About</button>
-        <div class="dropdown-content">
-          <a href="/about.html">About Vol</a>
-          <a href="/features.html">Features</a>
+      <nav>
+        <div class="dropdown">
+          <button aria-haspopup="true" aria-expanded="false">About</button>
+          <div class="dropdown-content" role="menu">
+            <a href="/about.html" role="menuitem">About Vol</a>
+            <a href="/features.html" role="menuitem">Features</a>
+          </div>
         </div>
-      </div>
-      <div class="dropdown">
-        <button>Policies</button>
-        <div class="dropdown-content">
-          <a href="/privacy-policy.html">Privacy Policy</a>
-          <a href="/terms-of-service.html">Terms of Service</a>
+        <div class="dropdown">
+          <button aria-haspopup="true" aria-expanded="false">Policies</button>
+          <div class="dropdown-content" role="menu">
+            <a href="/privacy-policy.html" role="menuitem">Privacy Policy</a>
+            <a href="/terms-of-service.html" role="menuitem">Terms of Service</a>
+          </div>
         </div>
-      </div>
-      <a href="https://volflights.com" class="visit-button">Go to vol</a>
+      </nav>
+      <a href="https://volflights.com" class="visit-button">Visit volflights.com</a>
     </div>
-  </div>
-  <div class="container">
-    <a href="/">
+  </header>
+  <main class="container">
+    <a href="/" aria-label="sign in">
       <img src="startImage.png" alt="Vol Logo" class="logo-big">
     </a>
-  </div>
+  </main>
 </body>
 
 </html>

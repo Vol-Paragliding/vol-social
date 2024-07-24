@@ -8,9 +8,9 @@ const Container = styled.div`
   .leafletMap {
     height: 400px;
     z-index: 1;
-    width: calc(100% + 20px);
-    margin-left: -20px;
-    border-radius: 30px;
+    // width: calc(100% + 30px);
+    // margin-left: -30px;
+    border-radius: 10px;
   }
 `
 

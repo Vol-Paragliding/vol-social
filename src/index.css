@@ -56,3 +56,8 @@ span {
 a {
   text-decoration: none;
 }
+
+.rfu-file-upload-button svg {
+  /* content: url('./assets/uploadIcon.svg'); */
+  margin-bottom: -10px;
+}
