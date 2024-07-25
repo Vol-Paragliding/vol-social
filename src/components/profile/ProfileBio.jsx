@@ -129,12 +129,12 @@ const Container = styled.div`
 
       .label {
         font-weight: bold;
-        color: white;
+        color: rgb(136, 136, 136);
       }
 
       .value {
         margin-left: 10px;
-        color: yellow;
+        color: var(--theme-color);
       }
     }
   }
@@ -146,11 +146,12 @@ const Container = styled.div`
       font-weight: bold;
       color: rgb(136, 136, 136);
       display: block;
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
 
     .value {
       color: var(--theme-color);
+      font-size: 14px;
     }
   }
 `
@@ -313,16 +314,39 @@ export default function ProfileBio() {
                 )}
               </CertificationContainer>
             </div>
-            {paramUser.data.profile?.favoriteSites?.length > 0 && (
-              <div className="extra-details-right">
-                <div className="label">Favorite Flying Sites:</div>
-                {paramUser.data.profile.favoriteSites.map((site, index) => (
-                  <div key={index} className="site">
-                    <span className="value">{site}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="extra-details-right">
+              {paramUser.data.profile?.wings?.length > 0 && (
+                <div>
+                  <div className="label">Wings:</div>
+                  {paramUser.data.profile.wings.map((wing, index) => (
+                    <div key={index} className="value">
+                      {wing}
+                    </div>
+                  ))}
+                </div>
+              )}
+              {paramUser.data.profile?.harnesses?.length > 0 && (
+                <div>
+                  <div className="label">Harnesses:</div>
+                  {paramUser.data.profile.harnesses.map((harness, index) => (
+                    <div key={index} className="value">
+                      {harness}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {paramUser.data.profile?.favoriteSites?.length > 0 && (
+                <div>
+                  <div className="label">Favorite Flying Sites:</div>
+                  {paramUser.data.profile.favoriteSites.map((site, index) => (
+                    <div key={index} className="site">
+                      <span className="value">{site}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -6,9 +6,9 @@ import { useFeed } from '../../contexts/feed/useFeed'
 import { useChat } from '../../contexts/chat/useChat'
 import { updateUser, uploadImage } from '../../services/FeedService'
 import { checkAvailability, updateProfile } from '../../contexts/auth/AuthSlice'
-import { ProfileImageUpload } from './ProfileImageUpload'
-import { FavoriteSites } from './FavoriteSites'
 import { Certifications } from './Certifications'
+import { ProfileImageUpload } from './ProfileImageUpload'
+import ProfileList from './ProfileList'
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -117,6 +117,8 @@ export const EditProfileView = ({ onSave }) => {
         t: '',
       },
       favoriteSites: [],
+      wings: [],
+      harnesses: [],
     },
   })
 
@@ -352,9 +354,10 @@ export const EditProfileView = ({ onSave }) => {
           certifications={profileData.profile.certifications}
           handleCertificationChange={handleCertificationChange}
         />
-        <FavoriteSites
-          favoriteSites={profileData.profile.favoriteSites}
-          setFavoriteSites={(favoriteSites) =>
+        <ProfileList
+          label="Favorite Flying Sites"
+          items={profileData.profile.favoriteSites}
+          setItems={(favoriteSites) =>
             setProfileData({
               ...profileData,
               profile: {
@@ -363,6 +366,34 @@ export const EditProfileView = ({ onSave }) => {
               },
             })
           }
+          placeholder="Favorite Flying Site"
+        />
+        <ProfileList
+          label="Gear"
+          items={profileData.profile.wings}
+          setItems={(wings) =>
+            setProfileData({
+              ...profileData,
+              profile: {
+                ...profileData.profile,
+                wings,
+              },
+            })
+          }
+          placeholder="Wing"
+        />
+        <ProfileList
+          items={profileData.profile.harnesses}
+          setItems={(harnesses) =>
+            setProfileData({
+              ...profileData,
+              profile: {
+                ...profileData.profile,
+                harnesses,
+              },
+            })
+          }
+          placeholder="Harness"
         />
         <ActionButton
           save
