@@ -3,12 +3,11 @@ import styled from 'styled-components'
 
 const FormField = styled.div`
   width: 100%;
-  margin-bottom: 10px;
 `
 
 const FormLabel = styled.label`
-  color: #ccc;
-  font-size: 16px;
+  color: var(--theme-color);
+  font-size: 18px;
 `
 
 const Dropdown = styled.select`
@@ -19,7 +18,7 @@ const Dropdown = styled.select`
   box-sizing: border-box;
   background-color: black;
   color: #fff;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   font-size: 16px;
 
   &:focus {
@@ -39,14 +38,14 @@ export const Certifications = ({
   return (
     <CertificationsContainer>
       <FormField>
-        <FormLabel htmlFor="pCertification">Paragliding</FormLabel>
+        <FormLabel htmlFor="pCertification">Certifications</FormLabel>
         <Dropdown
           id="pCertification"
           name="p"
           value={certifications.p}
           onChange={(e) => handleCertificationChange(e, 'p')}
         >
-          <option value="">Select Certification</option>
+          <option value="">Paragliding certification</option>
           <option value="P1">P1</option>
           <option value="P2">P2</option>
           <option value="P3">P3</option>
@@ -55,14 +54,13 @@ export const Certifications = ({
         </Dropdown>
       </FormField>
       <FormField>
-        <FormLabel htmlFor="hCertification">Hang Gliding</FormLabel>
         <Dropdown
           id="hCertification"
           name="h"
           value={certifications.h}
           onChange={(e) => handleCertificationChange(e, 'h')}
         >
-          <option value="">Select Certification</option>
+          <option value="">Hang gliding certification</option>
           <option value="H1">H1</option>
           <option value="H2">H2</option>
           <option value="H3">H3</option>
@@ -71,14 +69,13 @@ export const Certifications = ({
         </Dropdown>
       </FormField>
       <FormField>
-        <FormLabel htmlFor="sCertification">Speed Flying</FormLabel>
         <Dropdown
           id="sCertification"
           name="s"
           value={certifications.s}
           onChange={(e) => handleCertificationChange(e, 's')}
         >
-          <option value="">Select Certification</option>
+          <option value="">Speed flying certification</option>
           <option value="S1">S1</option>
           <option value="S2">S2</option>
           <option value="S3">S3</option>
@@ -86,7 +83,6 @@ export const Certifications = ({
         </Dropdown>
       </FormField>
       <FormField>
-        <FormLabel htmlFor="tCertification">Tandem</FormLabel>
         <Dropdown
           id="tCertification"
           name="t"

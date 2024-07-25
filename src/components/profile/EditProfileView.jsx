@@ -9,6 +9,7 @@ import { checkAvailability, updateProfile } from '../../contexts/auth/AuthSlice'
 import { Certifications } from './Certifications'
 import { ProfileImageUpload } from './ProfileImageUpload'
 import ProfileList from './ProfileList'
+import ProfileInput from './ProfileInput'
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -26,33 +27,6 @@ const ProfileHeader = styled.h2`
   margin-bottom: 10px;
 `
 
-const FormField = styled.div`
-  width: 100%;
-  margin-bottom: 10px;
-`
-
-const FormLabel = styled.label`
-  color: #ccc;
-  font-size: 16px;
-`
-
-const FormInput = styled.input`
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #555;
-  border-radius: 4px;
-  box-sizing: border-box;
-  background-color: black;
-  color: #fff;
-  margin-bottom: 16px;
-  font-size: 16px;
-  font-weight: bold;
-
-  &:focus {
-    outline: 2px solid var(--theme-color);
-  }
-`
-
 const TextArea = styled.textarea`
   width: 100%;
   padding: 10px;
@@ -61,7 +35,7 @@ const TextArea = styled.textarea`
   box-sizing: border-box;
   background-color: black;
   color: #fff;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   font-size: 14px;
   height: 100px;
 
@@ -119,6 +93,10 @@ export const EditProfileView = ({ onSave }) => {
       favoriteSites: [],
       wings: [],
       harnesses: [],
+      inReachSocial: '',
+      inReachEmail: '',
+      xContestProfile: '',
+      telegramUsername: '',
     },
   })
 
@@ -284,72 +262,49 @@ export const EditProfileView = ({ onSave }) => {
           onImageChange={handleImageChange}
           onCoverImageChange={handleCoverImageChange}
         />
-        <FormField style={{ marginTop: '80px' }}>
-          <FormLabel htmlFor="name">Display name</FormLabel>
-          <FormInput
-            id="name"
-            name="name"
-            value={profileData.name}
-            onChange={(e) => handleRootChange(e, 'name')}
-            placeholder="Name"
-            maxLength="25"
-          />
-        </FormField>
-        <FormField>
-          <FormLabel htmlFor="username">Username</FormLabel>
-          {usernameError && <div style={{ color: 'red' }}>{usernameError}</div>}
-          <FormInput
-            id="username"
-            name="username"
-            value={profileData.username}
-            onChange={(e) => handleRootChange(e, 'username')}
-            placeholder="User ID"
-            maxLength="25"
-            onBlur={(e) => handleAvailabilityCheck(e.target.value, 'username')}
-          />
-        </FormField>
+        <ProfileInput
+          style={{ marginTop: '80px' }}
+          label="Display Name"
+          value={profileData.name}
+          onChange={(e) => handleRootChange(e, 'name')}
+          placeholder="Name"
+        />
+        <ProfileInput
+          label="Username"
+          value={profileData.username}
+          onChange={(e) => handleRootChange(e, 'username')}
+          placeholder="User ID"
+          onBlur={(e) => handleAvailabilityCheck(e.target.value, 'username')}
+        />
+        {usernameError && <div style={{ color: 'red' }}>{usernameError}</div>}
+        <ProfileInput
+          value={profileData.email}
+          onChange={(e) => handleRootChange(e, 'email')}
+          placeholder="Email"
+          onBlur={(e) => handleAvailabilityCheck(e.target.value, 'email')}
+        />
         {emailError && <div style={{ color: 'red' }}>{emailError}</div>}
-        <FormField>
-          <FormInput
-            id="email"
-            name="email"
-            value={profileData.email}
-            onChange={(e) => handleRootChange(e, 'email')}
-            placeholder="Email"
-            maxLength="25"
-            onBlur={(e) => handleAvailabilityCheck(e.target.value, 'email')}
-          />
-        </FormField>
-        <FormField>
-          <FormInput
-            id="location"
-            name="location"
-            value={profileData.profile.location}
-            onChange={(e) => handleProfileChange(e, 'location')}
-            placeholder="Location"
-          />
-        </FormField>
-        <FormField>
-          <TextArea
-            id="bio"
-            name="bio"
-            value={profileData.profile.bio}
-            onChange={(e) => handleProfileChange(e, 'bio')}
-            placeholder="Bio"
-          />
-        </FormField>
-        <FormField>
-          <FormInput
-            id="yearStartedFlying"
-            name="yearStartedFlying"
-            value={profileData.profile.yearStartedFlying}
-            onChange={(e) => handleProfileChange(e, 'yearStartedFlying')}
-            placeholder="Year Started Flying"
-            type="number"
-            min="1900"
-            max={new Date().getFullYear()}
-          />
-        </FormField>
+        <ProfileInput
+          value={profileData.profile.location}
+          onChange={(e) => handleProfileChange(e, 'location')}
+          placeholder="Location"
+        />
+        <TextArea
+          id="bio"
+          name="bio"
+          value={profileData.profile.bio}
+          onChange={(e) => handleProfileChange(e, 'bio')}
+          placeholder="Bio"
+        />
+        <ProfileInput
+          style={{ marginBottom: '20px' }}
+          value={profileData.profile.yearStartedFlying}
+          onChange={(e) => handleProfileChange(e, 'yearStartedFlying')}
+          placeholder="Year Started Flying"
+          type="number"
+          min="1900"
+          max={new Date().getFullYear()}
+        />
         <Certifications
           certifications={profileData.profile.certifications}
           handleCertificationChange={handleCertificationChange}
@@ -394,6 +349,27 @@ export const EditProfileView = ({ onSave }) => {
             })
           }
           placeholder="Harness"
+        />
+        <ProfileInput
+          label="Contacts"
+          value={profileData.profile.inReachSocial || ''}
+          onChange={(e) => handleProfileChange(e, 'inReachSocial')}
+          placeholder="https://share.garmin.com/your_name"
+        />
+        <ProfileInput
+          value={profileData.profile.inReachEmail || ''}
+          onChange={(e) => handleProfileChange(e, 'inReachEmail')}
+          placeholder="john1234@inreach.garmin.com"
+        />
+        <ProfileInput
+          value={profileData.profile.xContestProfile || ''}
+          onChange={(e) => handleProfileChange(e, 'xContestProfile')}
+          placeholder="https://www.xcontest.org/world/en/pilots/detail:your_name"
+        />
+        <ProfileInput
+          value={profileData.profile.telegramUsername || ''}
+          onChange={(e) => handleProfileChange(e, 'telegramUsername')}
+          placeholder="Telegram Username"
         />
         <ActionButton
           save

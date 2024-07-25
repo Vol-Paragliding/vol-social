@@ -6,8 +6,8 @@ const ListContainer = styled.div`
   margin-bottom: 10px;
 `
 const FormLabel = styled.label`
-  color: #ccc;
-  font-size: 16px;
+  color: var(--theme-color);
+  font-size: 18px;
 `
 
 const ListInput = styled.input`
@@ -96,7 +96,7 @@ const ProfileList = ({ label, items = [], setItems, placeholder }) => {
           <RemoveButton onClick={() => handleRemoveItem(index)}>✕</RemoveButton>
         </ListItem>
       ))}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         <ListInput
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}

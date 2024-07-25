@@ -123,30 +123,16 @@ const Container = styled.div`
         margin-top: 15px;
       }
     }
-
-    .extra-details {
-      margin-top: 20px;
-
-      .label {
-        font-weight: bold;
-        color: rgb(136, 136, 136);
-      }
-
-      .value {
-        margin-left: 10px;
-        color: var(--theme-color);
-      }
-    }
   }
 
   .extra-details-right {
     margin-left: auto;
 
     .label {
-      font-weight: bold;
       color: rgb(136, 136, 136);
       display: block;
       margin-top: 10px;
+      font-size: 15px;
     }
 
     .value {
@@ -182,13 +168,29 @@ const CertificationContainer = styled.div`
     margin-bottom: 5px;
 
     .label {
-      font-weight: bold;
       margin-right: 10px;
+      font-size: 15px;
     }
 
     .value {
       color: var(--theme-color);
+      font-size: 14px;
     }
+  }
+`
+
+const ContactContainer = styled.div`
+  margin-top: 10px;
+
+  .label {
+    margin-right: 10px;
+    font-size: 15px;
+  }
+
+  .value {
+    color: var(--theme-color) !important;
+    margin-bottom: 5px;
+    font-size: 12px;
   }
 `
 
@@ -313,6 +315,40 @@ export default function ProfileBio() {
                   </div>
                 )}
               </CertificationContainer>
+              <ContactContainer>
+                {paramUser.data.profile?.inReachSocial && (
+                  <div>
+                    <div className="label">InReach Social:</div>
+                    <div className="value">
+                      {paramUser.data.profile.inReachSocial}
+                    </div>
+                  </div>
+                )}
+                {paramUser.data.profile?.inReachEmail && (
+                  <div>
+                    <div className="label">InReach Email:</div>
+                    <div className="value">
+                      {paramUser.data.profile.inReachEmail}
+                    </div>
+                  </div>
+                )}
+                {paramUser.data.profile?.xContestProfile && (
+                  <div>
+                    <div className="label">XContest Profile:</div>
+                    <div className="value">
+                      {paramUser.data.profile.xContestProfile}
+                    </div>
+                  </div>
+                )}
+                {paramUser.data.profile?.telegramUsername && (
+                  <div>
+                    <div className="label">Telegram Username:</div>
+                    <div className="value">
+                      {paramUser.data.profile.telegramUsername}
+                    </div>
+                  </div>
+                )}
+              </ContactContainer>
             </div>
             <div className="extra-details-right">
               {paramUser.data.profile?.wings?.length > 0 && (
