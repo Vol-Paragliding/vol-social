@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/auth/useAuth'
 import { useFeed } from '../../contexts/feed/useFeed'
 import { useChat } from '../../contexts/chat/useChat'
 import { updateUser, uploadImage } from '../../services/FeedService'
-import { updateProfile } from '../../contexts/auth/AuthSlice'
+import { checkAvailability, updateProfile } from '../../contexts/auth/AuthSlice'
 import { ProfileImageUpload } from './ProfileImageUpload'
 
 const ProfileContainer = styled.div`
@@ -191,28 +191,24 @@ export const EditProfileView = ({ onSave }) => {
   )
   const [isLoading, setIsLoading] = useState(false)
   const [newFavoriteSite, setNewFavoriteSite] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [usernameError, setUsernameError] = useState('')
 
-  const handleInputChange = (event, field, subField = null) => {
-    if (subField) {
-      setProfileData({
-        ...profileData,
-        profile: {
-          ...profileData.profile,
-          [field]: {
-            ...profileData.profile[field],
-            [subField]: event.target.value,
-          },
-        },
-      })
-    } else {
-      setProfileData({
-        ...profileData,
-        profile: {
-          ...profileData.profile,
-          [field]: event.target.value,
-        },
-      })
-    }
+  const handleProfileChange = (event, field) => {
+    setProfileData({
+      ...profileData,
+      profile: {
+        ...profileData.profile,
+        [field]: event.target.value,
+      },
+    })
+  }
+
+  const handleRootChange = (event, field) => {
+    setProfileData({
+      ...profileData,
+      [field]: event.target.value,
+    })
   }
 
   const handleFavoriteSiteChange = (event) => {
@@ -283,7 +279,51 @@ export const EditProfileView = ({ onSave }) => {
   }
 
   const handleCertificationChange = (event, category) => {
-    handleInputChange(event, 'certifications', category)
+    const value = event.target.value
+    setProfileData((prevState) => ({
+      ...prevState,
+      profile: {
+        ...prevState.profile,
+        certifications: {
+          ...prevState.profile.certifications,
+          [category]: value,
+        },
+      },
+    }))
+  }
+
+  const handleAvailabilityCheck = async (identifier, type) => {
+    if (
+      (type === 'email' && identifier !== authState.authUser?.user.email) ||
+      (type === 'username' && identifier !== authState.authUser?.user.username)
+    ) {
+      try {
+        const isAvailable = await checkAvailability(identifier)
+        if (!isAvailable) {
+          if (type === 'email') {
+            setEmailError('Email is already in use')
+          } else {
+            setUsernameError('Username is already in use')
+          }
+        } else {
+          if (type === 'email') {
+            setEmailError('')
+          } else {
+            setUsernameError('')
+          }
+        }
+        return isAvailable
+      } catch (error) {
+        console.error(`Error checking ${type} availability: `, error)
+        if (type === 'email') {
+          setEmailError('Error checking email availability')
+        } else {
+          setUsernameError('Error checking username availability')
+        }
+        return false
+      }
+    }
+    return true
   }
 
   const handleSubmit = async () => {
@@ -352,30 +392,34 @@ export const EditProfileView = ({ onSave }) => {
             id="name"
             name="name"
             value={profileData.name}
-            onChange={(e) => handleInputChange(e, 'name')}
+            onChange={(e) => handleRootChange(e, 'name')}
             placeholder="Name"
             maxLength="25"
           />
         </FormField>
         <FormField>
           <FormLabel htmlFor="username">Username</FormLabel>
+          {usernameError && <div style={{ color: 'red' }}>{usernameError}</div>}
           <FormInput
             id="username"
             name="username"
             value={profileData.username}
-            onChange={(e) => handleInputChange(e, 'username')}
+            onChange={(e) => handleRootChange(e, 'username')}
             placeholder="User ID"
             maxLength="25"
+            onBlur={(e) => handleAvailabilityCheck(e.target.value, 'username')}
           />
         </FormField>
+        {emailError && <div style={{ color: 'red' }}>{emailError}</div>}
         <FormField>
           <FormInput
             id="email"
             name="email"
             value={profileData.email}
-            onChange={(e) => handleInputChange(e, 'email')}
+            onChange={(e) => handleRootChange(e, 'email')}
             placeholder="Email"
             maxLength="25"
+            onBlur={(e) => handleAvailabilityCheck(e.target.value, 'email')}
           />
         </FormField>
         <FormField>
@@ -383,7 +427,7 @@ export const EditProfileView = ({ onSave }) => {
             id="location"
             name="location"
             value={profileData.profile.location}
-            onChange={(e) => handleInputChange(e, 'location')}
+            onChange={(e) => handleProfileChange(e, 'location')}
             placeholder="Location"
           />
         </FormField>
@@ -392,7 +436,7 @@ export const EditProfileView = ({ onSave }) => {
             id="bio"
             name="bio"
             value={profileData.profile.bio}
-            onChange={(e) => handleInputChange(e, 'bio')}
+            onChange={(e) => handleProfileChange(e, 'bio')}
             placeholder="Bio"
           />
         </FormField>
@@ -401,7 +445,7 @@ export const EditProfileView = ({ onSave }) => {
             id="yearStartedFlying"
             name="yearStartedFlying"
             value={profileData.profile.yearStartedFlying}
-            onChange={(e) => handleInputChange(e, 'yearStartedFlying')}
+            onChange={(e) => handleProfileChange(e, 'yearStartedFlying')}
             placeholder="Year Started Flying"
             type="number"
             min="1900"
@@ -517,7 +561,11 @@ export const EditProfileView = ({ onSave }) => {
             <AddSiteButton onClick={addFavoriteSite}>Add</AddSiteButton>
           </div>
         </FavoriteSitesContainer>
-        <ActionButton save onClick={handleSubmit} disabled={isLoading}>
+        <ActionButton
+          save
+          onClick={handleSubmit}
+          disabled={isLoading || usernameError || emailError}
+        >
           {isLoading ? 'Saving...' : 'Save'}
         </ActionButton>
       </form>

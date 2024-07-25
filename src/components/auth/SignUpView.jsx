@@ -112,7 +112,7 @@ const SignUpView = ({ onClose }) => {
   }
 
   const handleUsernameChange = (e) => {
-    const value = e.target.value.toLowerCase().replace(/[^a-z0-9_.\-]/g, '')
+    const value = e.target.value.toLowerCase().replace(/[^a-z0-9_.-]/g, '')
     setUsername(value)
     setIsAvailable(true)
   }

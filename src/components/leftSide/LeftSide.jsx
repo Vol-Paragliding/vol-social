@@ -274,7 +274,7 @@ const Container = styled.div`
 const Menu = styled.div`
   position: absolute;
   bottom: 100%;
-  right: -110%;
+  // right: -110%;
   background: black;
   border: 1px solid #555;
   border-radius: 30px;
@@ -395,9 +395,11 @@ export default function LeftSide({ onClickPost }) {
     },
   ]
 
-  const handleLogout = () => {
-    logout(dispatch)
+  const handleLogout = async () => {
+    console.log('logging out 1')
+    await logout(dispatch)
     navigate('/')
+    console.log('logged out 4')
   }
 
   return (

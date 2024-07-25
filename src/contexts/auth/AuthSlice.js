@@ -176,7 +176,9 @@ export async function updateProfile(profileData, feedToken) {
   return data.user
 }
 
-export function logout(dispatch) {
+export async function logout(dispatch) {
+  console.log('Logout start 2')
   dispatch({ type: 'SET_USER', payload: null })
   sessionStorage.removeItem('authUser')
+  console.log('Logout end 3')
 }
