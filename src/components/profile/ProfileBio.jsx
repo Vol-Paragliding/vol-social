@@ -144,7 +144,7 @@ const Container = styled.div`
 
     .label {
       font-weight: bold;
-      color: white;
+      color: rgb(136, 136, 136);
       display: block;
       margin-bottom: 10px;
     }
@@ -226,7 +226,7 @@ export default function ProfileBio() {
       <div className="top">
         <div className="image">
           <UserImage
-            src={paramUser.data?.image}
+            src={paramUser.data?.profile?.image}
             alt={paramUser.data.name}
             username={paramUser.data.username}
           />
@@ -254,9 +254,11 @@ export default function ProfileBio() {
           <div>
             <span className="user__name">{paramUser.data.name}</span>
             <span className="user__id">@{paramUser.data.username}</span>
-            <span className="user__bio">
-              {formatStringWithLink(paramUser.data.bio || '')}
-            </span>
+            {paramUser.data.profile?.bio && (
+              <span className="user__bio">
+                {formatStringWithLink(paramUser.data.profile.bio)}
+              </span>
+            )}
           </div>
           <div style={{ display: 'flex' }}>
             <div>
@@ -268,55 +270,59 @@ export default function ProfileBio() {
                   <b>{followersCount}</b> Followers
                 </span>
               </div>
-              <div className="user__joined">
-                <Calendar color="#777" size={20} />
-                <span className="user__joined--text">
-                  Started Flying: {paramUser.data.yearStartedFlying}
-                </span>
-              </div>
+              {paramUser.data.profile?.yearStartedFlying && (
+                <div className="user__joined">
+                  <Calendar color="#777" size={20} />
+                  <span className="user__joined--text">
+                    Flying since: {paramUser.data.profile.yearStartedFlying}
+                  </span>
+                </div>
+              )}
               <CertificationContainer>
-                {paramUser.data.certifications.p && (
+                {paramUser.data.profile?.certifications?.p && (
                   <div className="certification">
                     <span className="label">Paragliding:</span>
                     <span className="value">
-                      {paramUser.data.certifications.p}
+                      {paramUser.data.profile.certifications.p}
                     </span>
                   </div>
                 )}
-                {paramUser.data.certifications.h && (
+                {paramUser.data.profile?.certifications?.h && (
                   <div className="certification">
                     <span className="label">Hang Gliding:</span>
                     <span className="value">
-                      {paramUser.data.certifications.h}
+                      {paramUser.data.profile.certifications.h}
                     </span>
                   </div>
                 )}
-                {paramUser.data.certifications.s && (
+                {paramUser.data.profile?.certifications?.s && (
                   <div className="certification">
                     <span className="label">Speed Flying:</span>
                     <span className="value">
-                      {paramUser.data.certifications.s}
+                      {paramUser.data.profile.certifications.s}
                     </span>
                   </div>
                 )}
-                {paramUser.data.certifications.t && (
+                {paramUser.data.profile?.certifications?.t && (
                   <div className="certification">
                     <span className="label">Tandem:</span>
                     <span className="value">
-                      {paramUser.data.certifications.t}
+                      {paramUser.data.profile.certifications.t}
                     </span>
                   </div>
                 )}
               </CertificationContainer>
             </div>
-            <div className="extra-details-right">
-              <div className="label">Favorite Flying Sites:</div>
-              {paramUser.data.favoriteSites.map((site, index) => (
-                <div key={index} className="site">
-                  <span className="value">{site}</span>
-                </div>
-              ))}
-            </div>
+            {paramUser.data.profile?.favoriteSites?.length > 0 && (
+              <div className="extra-details-right">
+                <div className="label">Favorite Flying Sites:</div>
+                {paramUser.data.profile.favoriteSites.map((site, index) => (
+                  <div key={index} className="site">
+                    <span className="value">{site}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
