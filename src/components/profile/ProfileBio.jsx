@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { format } from 'date-fns'
 import { useStreamContext } from 'react-activity-feed'
 
 import { useFeed } from '../../contexts/feed/useFeed'
@@ -62,9 +61,15 @@ const Container = styled.div`
     }
   }
 
-  .details {
-    color: #888;
+  .details-container {
+    display: flex;
+    justify-content: space-between;
     margin-top: 20px;
+  }
+
+  .details {
+    flex: 1;
+    color: #888;
 
     .user {
       &__name {
@@ -118,6 +123,35 @@ const Container = styled.div`
         margin-top: 15px;
       }
     }
+
+    .extra-details {
+      margin-top: 20px;
+
+      .label {
+        font-weight: bold;
+        color: white;
+      }
+
+      .value {
+        margin-left: 10px;
+        color: yellow;
+      }
+    }
+  }
+
+  .extra-details-right {
+    margin-left: auto;
+
+    .label {
+      font-weight: bold;
+      color: white;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .value {
+      color: var(--theme-color);
+    }
   }
 `
 
@@ -138,6 +172,25 @@ const ActionButton = styled.button`
   }
 `
 
+const CertificationContainer = styled.div`
+  margin-top: 10px;
+
+  .certification {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+
+    .label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .value {
+      color: var(--theme-color);
+    }
+  }
+`
+
 export default function ProfileBio() {
   const { client } = useStreamContext()
   const { feedUser, setFeedUser } = useFeed()
@@ -147,7 +200,6 @@ export default function ProfileBio() {
 
   if (!feedUser?.data || !paramUser) return <LoadingIndicator />
 
-  const joinedDate = format(new Date(paramUser.created_at), 'MMMM RRRR')
   const isLoggedInUserProfile = paramUser.data.id === client.userId
 
   const handleEditProfile = () => {
@@ -197,23 +249,75 @@ export default function ProfileBio() {
           )}
         </div>
       </div>
-      <div className="details">
-        <span className="user__name">{paramUser.data.name}</span>
-        <span className="user__id">@{paramUser.data.username}</span>
-        <span className="user__bio">
-          {formatStringWithLink(paramUser.data.bio || '')}
-        </span>
-        <div className="user__joined">
-          <Calendar color="#777" size={20} />
-          <span className="user__joined--text">Joined {joinedDate}</span>
-        </div>
-        <div className="user__follows">
-          <span className="user__follows__following">
-            <b>{followingCount}</b> Following
-          </span>
-          <span className="user__follows__followers">
-            <b>{followersCount}</b> Followers
-          </span>
+      <div className="details-container">
+        <div className="details">
+          <div>
+            <span className="user__name">{paramUser.data.name}</span>
+            <span className="user__id">@{paramUser.data.username}</span>
+            <span className="user__bio">
+              {formatStringWithLink(paramUser.data.bio || '')}
+            </span>
+          </div>
+          <div style={{ display: 'flex' }}>
+            <div>
+              <div className="user__follows">
+                <span className="user__follows__following">
+                  <b>{followingCount}</b> Following
+                </span>
+                <span className="user__follows__followers">
+                  <b>{followersCount}</b> Followers
+                </span>
+              </div>
+              <div className="user__joined">
+                <Calendar color="#777" size={20} />
+                <span className="user__joined--text">
+                  Started Flying: {paramUser.data.yearStartedFlying}
+                </span>
+              </div>
+              <CertificationContainer>
+                {paramUser.data.certifications.p && (
+                  <div className="certification">
+                    <span className="label">Paragliding:</span>
+                    <span className="value">
+                      {paramUser.data.certifications.p}
+                    </span>
+                  </div>
+                )}
+                {paramUser.data.certifications.h && (
+                  <div className="certification">
+                    <span className="label">Hang Gliding:</span>
+                    <span className="value">
+                      {paramUser.data.certifications.h}
+                    </span>
+                  </div>
+                )}
+                {paramUser.data.certifications.s && (
+                  <div className="certification">
+                    <span className="label">Speed Flying:</span>
+                    <span className="value">
+                      {paramUser.data.certifications.s}
+                    </span>
+                  </div>
+                )}
+                {paramUser.data.certifications.t && (
+                  <div className="certification">
+                    <span className="label">Tandem:</span>
+                    <span className="value">
+                      {paramUser.data.certifications.t}
+                    </span>
+                  </div>
+                )}
+              </CertificationContainer>
+            </div>
+            <div className="extra-details-right">
+              <div className="label">Favorite Flying Sites:</div>
+              {paramUser.data.favoriteSites.map((site, index) => (
+                <div key={index} className="site">
+                  <span className="value">{site}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       {isEditProfileOpen && (

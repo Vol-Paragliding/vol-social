@@ -15,8 +15,6 @@ const Container = styled.div`
   padding: 0 15px 15px;
 
   .search-container {
-    z-index: 1;
-    position: sticky;
     background-color: black;
     width: var(--right);
     padding-right: 30px;
