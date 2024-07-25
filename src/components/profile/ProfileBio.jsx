@@ -190,7 +190,7 @@ const ContactContainer = styled.div`
   .value {
     color: var(--theme-color) !important;
     margin-bottom: 5px;
-    font-size: 12px;
+    font-size: 13px;
   }
 `
 

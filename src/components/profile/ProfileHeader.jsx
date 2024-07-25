@@ -91,8 +91,8 @@ export default function ProfileHeader() {
         </div>
       </div>
       <div className="cover">
-        {paramUser.data?.coverPhoto ? (
-          <img src={paramUser.data.coverPhoto} alt="Cover" />
+        {paramUser.data?.profile?.coverPhoto ? (
+          <img src={paramUser.data.profile?.coverPhoto} alt="Cover" />
         ) : (
           <div style={{ backgroundColor: '#555', height: '200px' }} />
         )}

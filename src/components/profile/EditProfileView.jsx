@@ -101,10 +101,10 @@ export const EditProfileView = ({ onSave }) => {
   })
 
   const [selectedFile, setSelectedFile] = useState(null)
-  const [imageSrc, setImageSrc] = useState(feedUser?.data?.profile?.image)
+  const [imageSrc, setImageSrc] = useState(feedUser?.data?.profile?.image || '')
   const [coverFile, setCoverFile] = useState(null)
   const [coverImageSrc, setCoverImageSrc] = useState(
-    feedUser?.data?.profile?.coverPhoto || null
+    feedUser?.data?.profile?.coverPhoto || ''
   )
   const [isLoading, setIsLoading] = useState(false)
   const [emailError, setEmailError] = useState('')
@@ -219,8 +219,8 @@ export const EditProfileView = ({ onSave }) => {
         ...profileData,
         profile: {
           ...profileData.profile,
-          image: imageUrl?.toString() ?? profileData.profile.image,
-          coverPhoto: coverUrl?.toString() ?? profileData.profile.coverPhoto,
+          image: imageUrl?.toString() ?? profileData.profile?.image,
+          coverPhoto: coverUrl?.toString() ?? profileData.profile?.coverPhoto,
         },
       }
 
@@ -285,14 +285,14 @@ export const EditProfileView = ({ onSave }) => {
         />
         {emailError && <div style={{ color: 'red' }}>{emailError}</div>}
         <ProfileInput
-          value={profileData.profile.location}
+          value={profileData.profile?.location}
           onChange={(e) => handleProfileChange(e, 'location')}
           placeholder="Location"
         />
         <TextArea
           id="bio"
           name="bio"
-          value={profileData.profile.bio}
+          value={profileData.profile?.bio}
           onChange={(e) => handleProfileChange(e, 'bio')}
           placeholder="Bio"
         />

@@ -105,7 +105,7 @@ export default function LikeNotification({ likedActivities }) {
                     className="liked-actors__images__image"
                   >
                     <UserImage
-                      src={activity.actor.data?.image}
+                      src={activity.actor.data?.profile?.image}
                       alt={activity.actor.data.name}
                       username={activity.actor.data.username}
                     />

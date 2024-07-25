@@ -82,7 +82,7 @@ export default function FollowNotification({ followActivities }) {
               key={follow.id}
             >
               <UserImage
-                src={follow.actor.data.image}
+                src={follow.actor.data.profile?.image}
                 alt={follow.actor.data.name}
                 username={follow.actor.data.username}
               />

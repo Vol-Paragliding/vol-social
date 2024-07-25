@@ -239,7 +239,7 @@ export default function PostBlock({ activity }) {
       >
         <div className="user-image" onClick={(e) => e.stopPropagation()}>
           <UserImage
-            src={actor.data?.image}
+            src={actor.data?.profile?.image}
             alt={actor.data.name}
             username={actor.data.username}
           />

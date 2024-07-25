@@ -206,7 +206,7 @@ export default function PostContent({ activity }) {
         <Link className="user">
           <div className="user__image">
             <UserImage
-              src={postActor?.image}
+              src={postActor?.profile?.image}
               alt={postActor.name}
               username={postActor.username}
             />

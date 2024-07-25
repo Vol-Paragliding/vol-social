@@ -78,7 +78,7 @@ export default function PostCommentBlock({ comment }) {
     <Block to="/">
       <div className="user-image">
         <UserImage
-          src={user.data?.image}
+          src={user.data?.profile?.image}
           alt={user.data.name}
           username={user.data.username}
         />

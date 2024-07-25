@@ -229,7 +229,7 @@ export default function PostForm({
       >
         <div className="user">
           <UserImage
-            src={feedUser?.data?.image}
+            src={feedUser?.data?.profile?.image}
             alt={feedUser?.data.name}
             username={feedUser?.data.username}
           />

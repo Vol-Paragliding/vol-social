@@ -288,7 +288,7 @@ export default function RightSide() {
                     <Link to={`/${user.username}`} className="user__details">
                       <div className="user__img">
                         <UserImage
-                          src={user.image}
+                          src={user.profile?.image}
                           alt={user.name}
                           username={user.username}
                         />

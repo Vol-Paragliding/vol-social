@@ -448,7 +448,7 @@ export default function LeftSide({ onClickPost }) {
           <div className="details">
             <div className="details__img">
               <UserImage
-                src={feedUser.data?.image}
+                src={feedUser.data?.profile?.image}
                 alt={feedUser.data?.name}
                 clickable={false}
               />
