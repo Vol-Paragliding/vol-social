@@ -20,6 +20,7 @@ const ListInput = styled.input`
   color: #fff;
   margin-right: 8px;
   font-size: 16px;
+  font-weight: bold;
 
   &:focus {
     outline: 2px solid var(--theme-color);

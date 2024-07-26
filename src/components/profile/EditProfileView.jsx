@@ -273,7 +273,7 @@ export const EditProfileView = ({ onSave }) => {
           label="Username"
           value={profileData.username}
           onChange={(e) => handleRootChange(e, 'username')}
-          placeholder="User ID"
+          placeholder="username"
           onBlur={(e) => handleAvailabilityCheck(e.target.value, 'username')}
         />
         {usernameError && <div style={{ color: 'red' }}>{usernameError}</div>}
@@ -359,7 +359,7 @@ export const EditProfileView = ({ onSave }) => {
         <ProfileInput
           value={profileData.profile.inReachEmail || ''}
           onChange={(e) => handleProfileChange(e, 'inReachEmail')}
-          placeholder="john1234@inreach.garmin.com"
+          placeholder="johndoe@inreach.garmin.com"
         />
         <ProfileInput
           value={profileData.profile.xContestProfile || ''}

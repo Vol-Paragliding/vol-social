@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 const FormField = styled.div`
@@ -17,9 +17,10 @@ const Dropdown = styled.select`
   border-radius: 4px;
   box-sizing: border-box;
   background-color: black;
-  color: #fff;
+  color: ${(props) => (props.isDefault ? '#888' : '#fff')};
   margin-bottom: 10px;
   font-size: 16px;
+  font-weight: bold;
 
   &:focus {
     outline: 2px solid var(--theme-color);
@@ -35,6 +36,18 @@ export const Certifications = ({
   certifications,
   handleCertificationChange,
 }) => {
+  const [colors, setColors] = useState({
+    p: certifications.p === '',
+    h: certifications.h === '',
+    s: certifications.s === '',
+    t: certifications.t === '',
+  })
+
+  const handleChange = (e, category) => {
+    handleCertificationChange(e, category)
+    setColors({ ...colors, [category]: e.target.value === '' })
+  }
+
   return (
     <CertificationsContainer>
       <FormField>
@@ -43,7 +56,8 @@ export const Certifications = ({
           id="pCertification"
           name="p"
           value={certifications.p}
-          onChange={(e) => handleCertificationChange(e, 'p')}
+          onChange={(e) => handleChange(e, 'p')}
+          isDefault={colors.p}
         >
           <option value="">Paragliding certification</option>
           <option value="P1">P1</option>
@@ -58,7 +72,8 @@ export const Certifications = ({
           id="hCertification"
           name="h"
           value={certifications.h}
-          onChange={(e) => handleCertificationChange(e, 'h')}
+          onChange={(e) => handleChange(e, 'h')}
+          isDefault={colors.h}
         >
           <option value="">Hang gliding certification</option>
           <option value="H1">H1</option>
@@ -73,7 +88,8 @@ export const Certifications = ({
           id="sCertification"
           name="s"
           value={certifications.s}
-          onChange={(e) => handleCertificationChange(e, 's')}
+          onChange={(e) => handleChange(e, 's')}
+          isDefault={colors.s}
         >
           <option value="">Speed flying certification</option>
           <option value="S1">S1</option>
@@ -87,9 +103,10 @@ export const Certifications = ({
           id="tCertification"
           name="t"
           value={certifications.t}
-          onChange={(e) => handleCertificationChange(e, 't')}
+          onChange={(e) => handleChange(e, 't')}
+          isDefault={colors.t}
         >
-          <option value="">Select Certification</option>
+          <option value="">Tandem certification</option>
           <option value="T1">T1</option>
           <option value="T3">T3</option>
         </Dropdown>

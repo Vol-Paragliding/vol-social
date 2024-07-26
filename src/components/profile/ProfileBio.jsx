@@ -232,6 +232,7 @@ export default function ProfileBio() {
             src={paramUser.data?.profile?.image}
             alt={paramUser.data.name}
             username={paramUser.data.username}
+            clickable={false}
           />
         </div>
         <div className="actions">

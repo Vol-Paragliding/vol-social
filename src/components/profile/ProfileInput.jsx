@@ -18,7 +18,6 @@ const FormInput = styled.input`
   box-sizing: border-box;
   background-color: black;
   color: #fff;
-  // margin-bottom: 16px;
   font-size: 16px;
   font-weight: bold;
 
@@ -27,7 +26,7 @@ const FormInput = styled.input`
   }
 `
 
-const ProfileInput = ({ label, value, onChange, placeholder, style }) => {
+const ProfileInput = ({ label, value, onChange, onBlur, placeholder, style }) => {
   return (
     <FormField style={style}>
       <FormLabel>{label}</FormLabel>
@@ -35,6 +34,7 @@ const ProfileInput = ({ label, value, onChange, placeholder, style }) => {
         type="text"
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
         placeholder={placeholder}
       />
     </FormField>

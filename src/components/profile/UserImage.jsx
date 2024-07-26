@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Lightbox from 'react-image-lightbox'
+import 'react-image-lightbox/style.css'
 
 const PlaceholderSVG = ({ onClick }) => (
   <svg
@@ -19,23 +21,43 @@ const PlaceholderSVG = ({ onClick }) => (
 
 const UserImage = ({ src, alt, username, clickable = true }) => {
   const navigate = useNavigate()
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false)
+  const [key, setKey] = useState(0)
+
+    useEffect(() => {
+      setTimeout(() => setKey(key + 1))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLightboxOpen])
 
   const handleClick = (e) => {
     if (clickable && username) {
       e.stopPropagation()
       navigate(`/${username}`)
+    } else {
+      setIsLightboxOpen(true)
     }
   }
 
-  return src ? (
-    <img
-      style={{ objectFit: 'cover', cursor: 'pointer' }}
-      src={src}
-      alt={alt}
-      onClick={handleClick}
-    />
-  ) : (
-    <PlaceholderSVG onClick={handleClick} />
+  return (
+    <div>
+      {src ? (
+        <img
+          style={{ objectFit: 'cover', cursor: 'pointer' }}
+          src={src}
+          alt={alt}
+          onClick={handleClick}
+        />
+      ) : (
+        <PlaceholderSVG onClick={handleClick} />
+      )}
+      {isLightboxOpen && (
+        <Lightbox
+          key={src}
+          mainSrc={src}
+          onCloseRequest={() => setIsLightboxOpen(false)}
+        />
+      )}
+    </div>
   )
 }
 

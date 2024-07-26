@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 const TextBlock = styled(Link)`
   display: flex;
-  // flex-direction: column;
 
   &:hover .user--name {
     text-decoration: underline;
@@ -18,12 +17,17 @@ const TextBlock = styled(Link)`
     &--id {
       margin-left: 5px;
       color: #777;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      // white-space: nowrap;
+      // max-width: 100px;
     }
   }
   .post-date {
     margin-left: 15px;
     color: #777;
     position: relative;
+    align-content: center;
 
     &::after {
       content: '';
@@ -42,6 +46,10 @@ const TextBlock = styled(Link)`
     margin-left: 15px;
     color: #777;
     position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // white-space: nowrap;
+    // max-width: 100px;
 
     &::before {
       content: '';

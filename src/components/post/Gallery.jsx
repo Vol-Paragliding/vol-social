@@ -10,6 +10,7 @@ export const Gallery = ({ images = [], className }) => {
 
   useEffect(() => {
     setTimeout(() => setKey(key + 1))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLightboxOpen])
 
   return (
