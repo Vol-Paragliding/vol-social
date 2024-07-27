@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid'
+import { nanoid } from 'nanoid'
 import { API_ENDPOINT } from '../../config'
 
 export const initialState = {
@@ -128,7 +128,7 @@ export async function signup({
   profile,
 }) {
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)
-  const id = uuidv4().replace(/-/g, '').slice(0, 21)
+  const id = nanoid()
   const userId = isEmail ? id : identifier.toLowerCase()
   const email = isEmail ? identifier.toLowerCase() : ''
 
