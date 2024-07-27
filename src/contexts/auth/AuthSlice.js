@@ -91,7 +91,11 @@ export async function googleLogin(tokenId) {
     throw new Error(data.message || 'Failed to log in with Google')
   }
 
-  return data
+  return {
+    user: data.user,
+    feedToken: data.feedToken,
+    chatToken: data.chatToken,
+  }
 }
 
 export async function login({ username, password }) {
@@ -116,7 +120,13 @@ export async function login({ username, password }) {
   }
 }
 
-export async function signup({ identifier, password, username, name }) {
+export async function signup({
+  identifier,
+  password,
+  username,
+  name,
+  profile,
+}) {
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)
   const id = uuidv4().replace(/-/g, '').slice(0, 21)
   const userId = isEmail ? id : identifier.toLowerCase()
@@ -135,6 +145,7 @@ export async function signup({ identifier, password, username, name }) {
       id,
       username,
       name,
+      profile,
     }),
   })
 

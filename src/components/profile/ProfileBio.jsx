@@ -233,6 +233,7 @@ export default function ProfileBio() {
             alt={paramUser.data.name}
             username={paramUser.data.username}
             clickable={false}
+            expandable={!!paramUser.data?.profile?.image}
           />
         </div>
         <div className="actions">
