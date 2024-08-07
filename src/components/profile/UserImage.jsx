@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useStreamContext } from 'react-activity-feed'
 import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css'
 import styled from 'styled-components'
+import axios from 'axios'
+
+import { updateProfileImage } from '../../contexts/auth/AuthSlice'
+import { useAuth } from '../../contexts/auth/useAuth'
 
 const PlaceholderSVG = ({ onClick }) => (
   <StyledPlaceholderSVG
@@ -23,17 +28,64 @@ const UserImage = ({
   src,
   alt,
   username,
+  userId,
   clickable = true,
   expandable = false,
 }) => {
   const navigate = useNavigate()
+  const { authState } = useAuth()
+  const { client } = useStreamContext()
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
-    const [key, setKey] = useState(0)
+  const [imageSrc, setImageSrc] = useState(src)
 
-    useEffect(() => {
-      setTimeout(() => setKey(key + 1))
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLightboxOpen])
+  useEffect(() => {
+    const handleImageRefresh = async () => {
+      console.log('handleImageRefresh triggered')
+      if (!client || !client.images) {
+        console.error(
+          'Feed client is not initialized or missing images property'
+        )
+        return
+      }
+
+      if (imageSrc && imageSrc.includes('googleusercontent.com')) {
+        console.log('Google image detected, replacing with Stream image')
+        const newImageUrl = await uploadImageToStream(
+          imageSrc,
+          userId,
+          client,
+          authState.authUser.feedToken
+        )
+        setImageSrc(newImageUrl)
+      } else if (imageSrc && imageSrc.includes('stream-io-cdn.com')) {
+        console.log('Stream image detected, checking for expiration')
+        const url = new URL(imageSrc)
+        const params = new URLSearchParams(url.search)
+        const expires = params.get('Expires')
+        const now = Math.floor(Date.now() / 1000)
+
+        console.log(
+          'expires',
+          expires,
+          'now',
+          now,
+          'url',
+          url,
+          'params',
+          params,
+          'client',
+          client
+        )
+        if (expires && now > parseInt(expires)) {
+          console.log('Stream image URL expired, refreshing')
+          const newImageUrl = await refreshStreamImageUrl(imageSrc, client)
+          setImageSrc(newImageUrl)
+        }
+      }
+    }
+
+    handleImageRefresh()
+  }, [imageSrc, userId, client, authState.authUser.feedToken])
 
   const handleClick = (e) => {
     if (clickable && username) {
@@ -46,20 +98,62 @@ const UserImage = ({
 
   return (
     <Container>
-      {src ? (
-        <StyledImage src={src} alt={alt} onClick={handleClick} />
+      {imageSrc ? (
+        <StyledImage src={imageSrc} alt={alt} onClick={handleClick} />
       ) : (
         <PlaceholderSVG onClick={handleClick} />
       )}
       {isLightboxOpen && (
         <Lightbox
-          key={src}
-          mainSrc={src}
+          key={imageSrc}
+          mainSrc={imageSrc}
           onCloseRequest={() => setIsLightboxOpen(false)}
         />
       )}
     </Container>
   )
+}
+
+const uploadImageToStream = async (imageUrl, userId, client, feedToken) => {
+  try {
+    const response = await axios({
+      url: imageUrl,
+      method: 'GET',
+      responseType: 'blob',
+    })
+
+    const file = new File([response.data], 'profile.jpg', {
+      type: response.data.type,
+    })
+
+    const streamResponse = await client.images.upload(file)
+    const streamImageUrl = streamResponse.file
+
+    await updateProfileImage({ userId, imageUrl: streamImageUrl }, feedToken)
+
+    return streamImageUrl
+  } catch (error) {
+    console.error(
+      'Error uploading image to Stream:',
+      error.response ? error.response.data : error.message
+    )
+    return imageUrl // Fallback to the original URL if there's an error
+  }
+}
+
+const refreshStreamImageUrl = async (imageUrl, client) => {
+  try {
+    console.log('Refreshing Stream image URL:', imageUrl)
+    const newImageUrl = await client.images.refreshUrl(imageUrl)
+    console.log('Stream image URL refreshed:', newImageUrl)
+    return newImageUrl
+  } catch (error) {
+    console.error(
+      'Error refreshing Stream image URL:',
+      error.response ? error.response.data : error.message
+    )
+    return imageUrl // Fallback to the original URL if there's an error
+  }
 }
 
 export default UserImage

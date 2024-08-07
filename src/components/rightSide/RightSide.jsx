@@ -115,8 +115,8 @@ const Container = styled.div`
         margin-right: 10px;
 
         img {
-          width: 100%;
-          height: 100%;
+          width: 40px;
+          height: 40px;
         }
       }
 
@@ -291,6 +291,7 @@ export default function RightSide() {
                           src={user.profile?.image}
                           alt={user.name}
                           username={user.username}
+                          userId={user.id}
                         />
                       </div>
                       <div className="user__info">

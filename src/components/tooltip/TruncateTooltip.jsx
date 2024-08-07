@@ -55,7 +55,7 @@ const TruncateTooltip = ({ text, maxLength, className }) => {
     }
   }, [])
 
-  if (text.length <= maxLength) return <span>{text}</span>
+  if (text?.length <= maxLength) return <span>{text}</span>
 
   return (
     <TooltipContainer
@@ -63,7 +63,7 @@ const TruncateTooltip = ({ text, maxLength, className }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <span>{text.slice(0, maxLength) + '...'}</span>
+      <span>{text?.slice(0, maxLength) + '...'}</span>
       <TooltipText className="tooltipText" visible={visible}>
         {text}
       </TooltipText>

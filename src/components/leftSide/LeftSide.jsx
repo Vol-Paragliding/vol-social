@@ -194,8 +194,8 @@ const Container = styled.div`
         overflow: hidden;
 
         img {
-          width: 100%;
-          height: 100%;
+          width: 40px;
+          height: 40px;
           object-fit: cover;
         }
       }
@@ -451,6 +451,7 @@ export default function LeftSide({ onClickPost }) {
                 src={feedUser.data?.profile?.image}
                 alt={feedUser.data?.name}
                 clickable={false}
+                userId={feedUser.id}
               />
             </div>
             <div className="details__text">

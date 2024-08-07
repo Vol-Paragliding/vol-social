@@ -46,7 +46,7 @@ const TextBlock = styled(Link)`
     margin-left: 15px;
     color: #777;
     position: relative;
-    overflow: hidden;
+    // overflow: hidden; // TODO: format location
     text-overflow: ellipsis;
     // white-space: nowrap;
     // max-width: 100px;
@@ -67,11 +67,8 @@ const TextBlock = styled(Link)`
 
 export default function PostActorName({ time, name, username, site }) {
   const timeDiff = Date.now() - new Date(time).getTime()
-  // convert ms to hours
   const hoursBetweenDates = timeDiff / (60 * 60 * 1000)
-
   const lessThan24hrs = hoursBetweenDates < 24
-
   const lessThan1hr = hoursBetweenDates < 1
 
   const timeText = lessThan1hr
@@ -85,7 +82,7 @@ export default function PostActorName({ time, name, username, site }) {
       <span className="user--name">{name}</span>
       <span className="user--id">@{username}</span>
       <span className="post-date">{timeText}</span>
-      {site && <span className="site">{site}</span>}
+      {site && site !== '?' && <span className="site">{site}</span>}
     </TextBlock>
   )
 }

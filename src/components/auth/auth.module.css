@@ -175,6 +175,7 @@
 .googleLoginButton {
   display: flex;
   justify-content: center;
+  color: red;
 }
 
 .footer {

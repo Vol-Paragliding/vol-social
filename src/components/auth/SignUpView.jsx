@@ -82,7 +82,7 @@ const SignUpView = ({ onClose }) => {
 
     try {
       const user = await signup({
-        identifier: identifier.toLowerCase(),
+        identifier: identifier.toLowerCase(), // lowercase or no?
         password,
         email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)
           ? identifier.toLowerCase()

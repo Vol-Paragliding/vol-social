@@ -94,6 +94,7 @@ export default function ProfileMoreMenu({ onClose }) {
   const { client } = useStreamContext()
   const { dispatch } = useAuth()
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleDeleteAccount = () => {
     setIsConfirmDeleteOpen(true)
@@ -101,13 +102,17 @@ export default function ProfileMoreMenu({ onClose }) {
 
   const handleConfirmDelete = async () => {
     try {
-      const response = await fetch(`${API_ENDPOINT}/auth/user/${client.userId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${client.userToken}`,
-          'Content-Type': 'application/json',
-        },
-      })
+      setIsLoading(true)
+      const response = await fetch(
+        `${API_ENDPOINT}/auth/user/${client.userId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${client.userToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
 
       if (!response.ok) {
         const error = await response.json()
@@ -141,7 +146,7 @@ export default function ProfileMoreMenu({ onClose }) {
             </div>
             <div className="buttons">
               <button className="confirm" onClick={handleConfirmDelete}>
-                Confirm
+                {isLoading ? 'Deleting...' : 'Confirm'}
               </button>
               <button
                 className="cancel"

@@ -68,7 +68,7 @@ const StartView = () => {
       <footer className={styles.footer}>
         <div>
           <a className={styles.aboutLink} href="/">
-            &copy; 2023 Vol
+            &copy; 2024 Vol
           </a>
           <a className={styles.aboutLink} href="/home.html">
             Home

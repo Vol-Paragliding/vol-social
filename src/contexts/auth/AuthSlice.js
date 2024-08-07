@@ -187,6 +187,25 @@ export async function updateProfile(profileData, feedToken) {
   return data.user
 }
 
+export async function updateProfileImage({ userId, imageUrl }, feedToken) {
+  const response = await fetch(`${API_ENDPOINT}/auth/update-profile-image`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${feedToken}`,
+    },
+    body: JSON.stringify({ userId, imageUrl }),
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to update profile image')
+  }
+
+  return data
+}
+
 export async function logout(dispatch) {
   console.log('Logout start 2')
   dispatch({ type: 'SET_USER', payload: null })
