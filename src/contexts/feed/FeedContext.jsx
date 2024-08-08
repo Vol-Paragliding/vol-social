@@ -23,7 +23,9 @@ export const FeedProvider = ({ children }) => {
 
   useEffect(() => {
     if (authState.isAuthenticated && authState.authUser && !feedClient) {
-      const client = connect(apiKey, authState.authUser.feedToken, appId)
+      const client = connect(apiKey, authState.authUser.feedToken, appId, {
+        location: 'us-west',
+      })
       const userFeed = client.feed('user', authState.authUser.user.id)
 
       setFeedClient(userFeed)

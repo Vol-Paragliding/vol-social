@@ -3,25 +3,21 @@ import styled from 'styled-components'
 
 const StatsContainer = styled.div`
   .flight-stats {
-    display: flex;
-    justify-content: space-between;
-    align-content: space-around;
-    flex-wrap: wrap;
-    min-height: ${(props) => (props.expanded ? '140px' : '40px')};
+    display: grid;
+    grid-template-columns: ${(props) =>
+      props.expanded
+        ? 'repeat(auto-fit, minmax(120px, 1fr))'
+        : 'repeat(6, auto)'};
+    gap: 10px;
     color: #fff;
-    margin-bottom: 10px;
-    transition: min-height 0.5s ease;
-
-    p {
-      margin: 0;
-    }
+    margin-bottom: ${(props) => (props.expanded ? '10px' : '0')};
+    transition: height 0.5s ease 0.05s;
+    height: ${(props) => (props.expanded ? '175px' : '40px')};
 
     .stat {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      min-width: 75px;
-      margin-left: -3px;
+      height: fit-content;
 
       &-value {
         font-weight: bold;
@@ -35,16 +31,14 @@ const StatsContainer = styled.div`
     }
 
     .expand-stats {
+      grid-column: ${(props) => (props.expanded ? 'auto' : '6 / 7')};
+      justify-self: end;
       font-size: 14px;
       color: var(--theme-color);
       background: none;
       border: none;
       cursor: pointer;
-      margin-top: 10px;
-
-      &.expanded {
-        margin-left: auto;
-      }
+      align-self: center;
 
       &:hover {
         text-decoration: underline;
@@ -57,7 +51,6 @@ const FlightStats = ({ igc }) => {
   const [expanded, setExpanded] = useState(false)
 
   if (!igc?.data) return null
-  // console.log('igc.data', igc.data)
 
   const handleToggleExpand = (e) => {
     e.preventDefault()
@@ -90,30 +83,36 @@ const FlightStats = ({ igc }) => {
           <span className="stat-value">{Math.trunc(igc.data.score)}</span>
         </div>
         <div className="stat">
-          <span className="stat-label">Flight time</span>
-          <span className="stat-value">{igc.data.flightDuration}</span>
+          <span className="stat-label">Route distance</span>
+          <span className="stat-value">{routeDistance} km</span>
         </div>
         <div className="stat">
-          <span className="stat-label">Free Distance</span>
-          <span className="stat-value">
-            {Math.floor(igc.data.freeDistance)} km
-          </span>
+          <span className="stat-label">Route time</span>
+          <span className="stat-value">{igc.data.routeDuration}</span>
         </div>
         <div className="stat">
-          <span className="stat-label">Avg. speed</span>
+          <span className="stat-label">Route avg</span>
           <span className="stat-value">
             {Math.floor(igc.data.avgSpeed)} km/h
           </span>
         </div>
+        <div className="stat">
+          <span className="stat-label">Flight time</span>
+          <span className="stat-value">{igc.data.flightDuration}</span>
+        </div>
         {expanded && (
           <>
             <div className="stat">
-              <span className="stat-label">Date</span>
-              <span className="stat-value">{igc.data.date}</span>
+              <span className="stat-label">Free Distance</span>
+              <span className="stat-value">
+                {Math.floor(igc.data.freeDistance)} km
+              </span>
             </div>
             <div className="stat">
-              <span className="stat-label">Max alt.</span>
-              <span className="stat-value">{igc.data.maxAltitude} m</span>
+              <span className="stat-label">Flight avg</span>
+              <span className="stat-value">
+                {Math.floor(igc.data.avgSpeed)} km/h
+              </span>
             </div>
             <div className="stat">
               <span className="stat-label">Max climb</span>
@@ -124,22 +123,8 @@ const FlightStats = ({ igc }) => {
               <span className="stat-value">{igc.data.maxSink} m/s</span>
             </div>
             <div className="stat">
-              <span className="stat-label">Type</span>
-              <span className="stat-value">{igc.data.classification}</span>
-            </div>
-            <div className="stat">
-              <span className="stat-label">Route Distance</span>
-              <span className="stat-value">{routeDistance} km</span>
-            </div>
-            <div className="stat">
-              <span className="stat-label">Route time</span>
-              <span className="stat-value">{igc.data.routeDuration}</span>
-            </div>
-            <div className="stat">
-              <span className="stat-label">Route avg</span>
-              <span className="stat-value">
-                {Math.floor(igc.data.avgSpeed)} km/h
-              </span>
+              <span className="stat-label">Max alt</span>
+              <span className="stat-value">{igc.data.maxAltitude} m</span>
             </div>
             <div className="stat">
               <span className="stat-label">Max speed</span>
@@ -154,15 +139,26 @@ const FlightStats = ({ igc }) => {
               </span>
             </div>
             <div className="stat">
+              <span className="stat-label">Score type</span>
+              <span style={{ fontSize: '12px' }} className="stat-value">
+                {igc.data.classification}
+              </span>
+            </div>
+            <div className="stat">
               <span className="stat-label">Wing</span>
-              <span className="stat-value">{igc.data.gliderType}</span>
+              <span style={{ fontSize: '12px' }} className="stat-value">
+                {igc.data.gliderType}
+              </span>
+            </div>
+            <div className="stat">
+              <span className="stat-label">Date</span>
+              <span style={{ fontSize: '14px' }} className="stat-value">
+                {igc.data.date}
+              </span>
             </div>
           </>
         )}
-        <button
-          className={`expand-stats ${expanded && 'expanded'}`}
-          onClick={handleToggleExpand}
-        >
+        <button className="expand-stats" onClick={handleToggleExpand}>
           {expanded ? 'Show Less' : 'Show More'}
         </button>
       </div>
